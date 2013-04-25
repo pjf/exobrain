@@ -1,0 +1,16 @@
+EXOBRAIN
+    GEO
+        FOURSQUARE
+        FACEBOOK
+        ...
+    SUBSCRIBER          # Should join these. How?
+        FACEBOOK
+        TWITTER
+        ...
+    SUBSCRIBED
+        FACEBOOK
+        TWITTER
+        ...
+
+
+Eg: EXOBRAIN_GEO_FOURSQUARE

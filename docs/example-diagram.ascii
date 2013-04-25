@@ -1,0 +1,82 @@
+$VAR1 = [
+          bless( {
+                   'NAME' => 'example-network.ascii',
+                   'END_X' => 0,
+                   'COLORS' => {},
+                   'SELECTED' => 1,
+                   'END_Y' => 3,
+                   'EDITABLE' => 1,
+                   'STRIPES' => [
+                                  {
+                                    'HEIGHT' => 4,
+                                    'TEXT' => '|
+|
+|
+v',
+                                    'WIDTH' => 1,
+                                    'Y_OFFSET' => 0,
+                                    'X_OFFSET' => 0
+                                  }
+                                ],
+                   'Y_OFFSET' => 0,
+                   'X_OFFSET' => 0,
+                   'ARROW_TYPE' => [
+                                     [
+                                       'Up',
+                                       '|',
+                                       '|',
+                                       '^',
+                                       1
+                                     ],
+                                     [
+                                       '45',
+                                       '/',
+                                       '/',
+                                       '^',
+                                       1
+                                     ],
+                                     [
+                                       'Right',
+                                       '-',
+                                       '-',
+                                       '>',
+                                       1
+                                     ],
+                                     [
+                                       '135',
+                                       '\\',
+                                       '\\',
+                                       'v',
+                                       1
+                                     ],
+                                     [
+                                       'Down',
+                                       '|',
+                                       '|',
+                                       'v',
+                                       1
+                                     ],
+                                     [
+                                       '225',
+                                       '/',
+                                       '/',
+                                       'v',
+                                       1
+                                     ],
+                                     [
+                                       'Left',
+                                       '-',
+                                       '-',
+                                       '<',
+                                       1
+                                     ],
+                                     [
+                                       '315',
+                                       '\\',
+                                       '\\',
+                                       '^',
+                                       1
+                                     ]
+                                   ]
+                 }, 'App::Asciio::stripes::editable_arrow2' )
+        ];

@@ -1,0 +1,8 @@
+
+* Check-in to 4SQ
+    * Broadcasts 4SQ check-in on bus
+    * Classifer checks to see if:
+        * Check-in from me
+        * At time of dance lesson
+        * If so, sends to bmndr a +1 on dance
+        * SHOULD broadcast success
