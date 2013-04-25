@@ -4,15 +4,10 @@ use strict;
 use warnings;
 use autodie;
 
-use ZMQ::LibZMQ2;
-use ZMQ::Constants qw(ZMQ_FORWARDER ZMQ_SUBSCRIBE ZMQ_PUB ZMQ_SUB);
+use App::Exobrain::Router;
 
-my $zmq = zmq_init;
-my $sub = zmq_socket($zmq, ZMQ_SUB);
-zmq_bind($sub, 'tcp://127.0.0.1:3456');
-zmq_setsockopt($sub, ZMQ_SUBSCRIBE, '');    # Sub everything
+my $router = App::Exobrain::Router->new(
+    server => 1,
+);
 
-my $pub = zmq_socket($zmq, ZMQ_PUB);
-zmq_bind($pub, 'tcp://127.0.0.1:3457');
-
-zmq_device(ZMQ_FORWARDER, $pub, $sub);
+$router->start;
