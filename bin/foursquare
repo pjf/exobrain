@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+use 5.010;
+use strict;
+use warnings;
+use autodie qw(:all);
+use WWW::Mechanize;
+use Config::Tiny;
+use JSON::Any;
+use Data::Dumper;
+use utf8::all;
+
+use constant DEBUG => 1;
+
+my $config = Config::Tiny->read("$ENV{HOME}/.rtbmrc");
+my $TOKEN  = "oauth_token=$config->{FourSquare}{auth_token}&v=20130425";
+my $BASE   = 'https://api.foursquare.com/v2';
+
+my $mech = WWW::Mechanize->new();
+my $json = JSON::Any->new;
+
+# $mech->get("$BASE/users/self/checkins?$TOKEN");
+$mech->get("$BASE/checkins/recent?$TOKEN");
+
+my $checkins = $json->decode($mech->content)->{response}{recent};
+
+foreach my $checkin (@$checkins) {
+     say "[". localtime($checkin->{createdAt})."] $checkin->{user}{firstName} $checkin->{user}{lastName} -> $checkin->{venue}{name}";
+}
