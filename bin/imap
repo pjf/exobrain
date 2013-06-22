@@ -1,0 +1,58 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+
+use Net::IMAP::Client;
+use Term::ReadKey;
+
+use App::Exobrain::Bus;
+use App::Exobrain::Message;
+
+my $user    = shift || die "Usage: $0 user server";
+my $server  = shift || die "Usage: $0 user server";
+
+say "Password?";
+
+ReadMode('noecho');
+my $password = ReadLine(0);
+ReadMode(0); # Reset term
+chomp($password);
+
+my $imap = Net::IMAP::Client->new(
+    server => $server,
+    user   => $user,
+    pass   => $password,
+    ssl    => 1,
+    port   => 993,
+) or die "Could not connect to IMAP server";
+
+$imap->login or die "Can't login " . $imap->last_error;
+
+say "Connected...";
+
+my $bus = App::Exobrain::Bus->new(
+    type => 'PUB',
+);
+
+while (1) {
+    my $data = $imap->status('INBOX');
+
+    my $count = $data->{MESSAGES};
+
+    my $msg = App::Exobrain::Message->new(
+        namespace => 'EMAIL',
+        timestamp => time(),
+        source    => 'IMAP',
+        data      => { count => $count, user => $user, server => $server },
+        raw       => $data,
+        summary   => "$user on $server has $count messages in inbox",
+    );
+
+    $msg->send( $bus->_socket );
+
+    say $msg->summary;
+
+    sleep(60);
+}
