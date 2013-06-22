@@ -1,0 +1,43 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+
+use App::Exobrain::Bus;
+use WebService::Beeminder;
+use JSON::Any;
+
+my $goal  = shift || die "Usage: $0 goal token";
+my $token = shift || die "Usage: $0 goal token";
+
+my $bee = WebService::Beeminder->new( token => $token );
+
+my $last_count = -1;
+
+my $bus = App::Exobrain::Bus->new(
+    type => 'SUB',
+);
+
+my $json = JSON::Any->new;
+
+while (1) {
+    my $msg = $bus->get;
+
+    if ($msg->namespace eq 'EMAIL') {
+        my $count = $json->decode($msg->data)->{count};
+
+        # Count updated, send to bmndr
+        if ($count != $last_count) {
+            $bee->add_datapoint(
+                goal => $goal,
+                value => $count,
+                comment => "Submitted via exobrain",
+            );
+            say "Updating beeminder goal $goal to $count msgs"
+        }
+    }
+    else {
+        say "Non email packet received";
+    }
+}
