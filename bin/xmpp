@@ -1,0 +1,44 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+
+use AnyEvent::XMPP::Client;
+use AnyEvent;
+use IO::Handle;
+
+my $user  = $ENV{HXMPP_USER}  || shift || die "Usage $0 user pass owner\n";
+my $pass  = $ENV{HXMPP_PASS}  || shift || die "Usage $0 user pass owner\n";
+my $owner = $ENV{HXMPP_OWNER} || shift || die "Usage $0 user pass owner\n";
+
+use App::Exobrain::Bus;
+
+my $bus = App::Exobrain::Bus->new(
+    type => 'SUB',
+);
+
+my $xmpp = AnyEvent::XMPP::Client->new( debug => 1 );
+
+$xmpp->add_account($user, $pass);
+
+$xmpp->reg_cb(
+    session_ready => sub {
+        say "Exobrain connected";
+        $xmpp->send_message("Exobrain connected", $owner);
+
+        # This shouldn't be an idle event. It should depend
+        # upon data being available from our bus.
+
+        state $idle_w = AnyEvent->idle( cb => sub {
+            my $msg = $bus->get;
+            say $msg->summary;
+            $xmpp->send_message($msg->summary, $owner);
+        });
+    }
+);
+
+$xmpp->start;
+
+# Go do our main loop.
+AnyEvent->condvar->wait;
