@@ -6,3 +6,15 @@
         * At time of dance lesson
         * If so, sends to bmndr a +1 on dance
         * SHOULD broadcast success
+
+* See new friend on Facebook
+    * XMPP me asking how I know them.
+    * Updates contact info.
+
+* Imap information to check mailbox size
+    * Points for responding to email
+    * Bmndr submissions of inbox size
+
+* Twitter events
+    * Record in idonethis if there's enough activity
+
