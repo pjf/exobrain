@@ -5,8 +5,10 @@ use warnings;
 use autodie qw(:all);
 use WWW::Mechanize;
 use Config::Tiny;
+use Try::Tiny;
 use JSON::Any;
 use Data::Dumper;
+use App::Exobrain::Bus;
 use utf8::all;
 
 use constant DEBUG => 1;
@@ -18,11 +20,35 @@ my $BASE   = 'https://api.foursquare.com/v2';
 my $mech = WWW::Mechanize->new();
 my $json = JSON::Any->new;
 
-# $mech->get("$BASE/users/self/checkins?$TOKEN");
-$mech->get("$BASE/checkins/recent?$TOKEN");
+my $bus  = App::Exobrain::Bus->new( type => 'PUB' );
+my $time = time() - 86400;
 
-my $checkins = $json->decode($mech->content)->{response}{recent};
+while (1) {
+    my $checktime = time();
 
-foreach my $checkin (@$checkins) {
-     say "[". localtime($checkin->{createdAt})."] $checkin->{user}{firstName} $checkin->{user}{lastName} -> $checkin->{venue}{name}";
+    try {
+        $mech->get("$BASE/checkins/recent?afterTimestamp=$time&$TOKEN");
+    }
+    catch {
+        warn "No connection, or connection failed: $_";
+        sleep(60);
+    };
+
+    $time = $checktime;
+
+    my $checkins = $json->decode($mech->content)->{response}{recent};
+
+    # Checkins come in most-recent first, so we reverse them and make
+    # them chronological.
+
+    foreach my $checkin (reverse @$checkins) {
+        my $name = ( $checkin->{user}{firstName} // "" ) . " "
+                 . ( $checkin->{user}{lastName}  // "" );
+
+        my $time = localtime($checkin->{createdAt});
+
+        $bus->send( "[$time] $name -> $checkin->{venue}{name}" );
+    }
+
+    sleep(60);
 }
