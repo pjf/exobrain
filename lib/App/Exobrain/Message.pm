@@ -3,8 +3,23 @@ use v5.10.0;
 use Moose;
 use ZMQ::Constants qw(ZMQ_SNDMORE);
 use ZMQ::LibZMQ2;
+use JSON::Any;
 use Method::Signatures;
 use warnings;
+
+use Moose::Util::TypeConstraints;
+
+my $json = JSON::Any->new;
+
+subtype 'JSON',
+    as 'Str',
+    where { $json->decode($_) }
+;
+
+coerce 'JSON',
+    from 'Ref',
+    via { $json->encode($_) }
+;
 
 # Message format:
 # * Header string for pub/sub filtering (EXOBRAIN + NAMESPACE + SOURCE)
@@ -17,8 +32,8 @@ use warnings;
 has namespace => ( is => 'ro', isa => 'Str', required => 1 );
 has timestamp => ( is => 'ro', isa => 'Int'                );  # Epoch
 has source    => ( is => 'ro', isa => 'Str', required => 1 );
-has data      => ( is => 'ro',               required => 1 );  # JSON
-has raw       => ( is => 'ro',                             );  # JSON
+has data      => ( is => 'ro', isa => 'JSON', coerce => 1  );
+has raw       => ( is => 'ro', isa => 'JSON', coerce => 1  );
 has summary   => ( is => 'ro', isa => 'Str'                );  # Human readable
 
 around BUILDARGS => sub {
