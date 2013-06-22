@@ -4,14 +4,27 @@ use strict;
 use warnings;
 use autodie;
 
+use Getopt::Std;
 use App::Exobrain::Bus;
 
 my $bus = App::Exobrain::Bus->new(
     type => 'SUB',
 );
 
-while (1) {
-    say $bus->get->summary;
+say @ARGV;
 
-    # say $bus->get->dump;      # If we want too much info
+my %opts = ( v => 0 );
+
+getopts('v', \%opts);
+
+if ($opts{v}) { say "Verbose mode enabled"; }
+
+while (1) {
+    if ($opts{v}) {
+        say $bus->get->dump;      # Verbose
+        say "-" x 50;
+    }
+    else {
+        say $bus->get->summary;
+    }
 }
