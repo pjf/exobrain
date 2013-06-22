@@ -71,4 +71,14 @@ method frames() {
     return @frames;
 }
 
+method dump() {
+    my $dumpstr = "";
+
+    foreach my $method ( qw(namespace timestamp source data raw summary)) {
+        $dumpstr .= "$method : " . $self->$method . "\n";
+    }
+
+    return $dumpstr;
+}
+
 1;
