@@ -11,5 +11,7 @@ my $bus = App::Exobrain::Bus->new(
 );
 
 while (1) {
-    say $bus->get->dump;
+    say $bus->get->summary;
+
+    # say $bus->get->dump;      # If we want too much info
 }
