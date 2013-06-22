@@ -48,7 +48,7 @@ while (1) {
 
         my $time = localtime($checkin->{createdAt});
 
-        my $summary = "[$time] $name -> $checkin->{venue}{name}";
+        my $summary = "$name is at $checkin->{venue}{name}";
 
 #        $bus->send( "[$time] $name -> $checkin->{venue}{name}" );
 
