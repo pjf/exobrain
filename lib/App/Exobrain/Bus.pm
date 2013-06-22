@@ -4,12 +4,13 @@ use strict;
 use warnings;
 
 use ZMQ::LibZMQ2;
-use ZMQ::Constants qw(ZMQ_SUB ZMQ_PUB ZMQ_SUBSCRIBE);
+use ZMQ::Constants qw(ZMQ_SUB ZMQ_PUB ZMQ_SUBSCRIBE ZMQ_RCVMORE);
 
 use Moose;
 use Method::Signatures;
 
 use App::Exobrain::Router;
+use App::Exobrain::Message;
 
 my $context  = zmq_init();                  # Context is always shared.
 my $endpoint = 'tcp://localhost:3568/';     # TODO: From config file?
@@ -46,8 +47,18 @@ sub BUILD {
 }
 
 method get() {
-    my $packet = zmq_msg_data( zmq_recv( $self->_socket ) );
-    return $packet;
+    my @frames;
+    my $more = 1;
+    while ($more) {
+        push(@frames, zmq_msg_data( zmq_recv( $self->_socket ) ) );
+
+        # Check to see if there's more...
+        $more = zmq_getsockopt($self->_socket, ZMQ_RCVMORE);
+    }
+
+    my $message = App::Exobrain::Message->new(\@frames);
+
+    return $message;
 }
 
 method send($msg) {

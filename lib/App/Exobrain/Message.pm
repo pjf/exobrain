@@ -21,6 +21,28 @@ has data      => ( is => 'ro',               required => 1 );  # JSON
 has raw       => ( is => 'ro',                             );  # JSON
 has summary   => ( is => 'ro', isa => 'Str'                );  # Human readable
 
+around BUILDARGS => sub {
+    my ($orig, $class, @args) = @_;
+
+    # If called with an arrayref, then we're reconstituting a packet
+    # off the wire
+
+    if (@args == 1 and ref($args[0]) eq 'ARRAY') {
+        my $frames = $args[0];
+        my (undef, $namespace, $source) = split(/_/, $frames->[0]);
+        return $class->$orig(
+            namespace => $namespace,
+            source    => $source,
+            timestamp => time(), # XXX - This should be off the wire
+            summary   => $frames->[2],
+            data      => $frames->[3],
+            raw       => $frames->[4],
+        );
+    }
+
+    return $class->$orig(@args);
+};
+
 method send($socket) {
     # For some reason multipart sends don't work right now,
     # $socket->ZMQ::Socket::send_multipart( $self->frames );
