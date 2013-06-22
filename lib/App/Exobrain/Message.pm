@@ -1,6 +1,8 @@
 package App::Exobrain::Message;
 use v5.10.0;
 use Moose;
+use ZMQ::Constants qw(ZMQ_SNDMORE);
+use ZMQ::LibZMQ2;
 use Method::Signatures;
 use warnings;
 
@@ -20,19 +22,31 @@ has raw       => ( is => 'ro',                             );  # JSON
 has summary   => ( is => 'ro', isa => 'Str'                );  # Human readable
 
 method send($socket) {
-    $socket->send_multipart( $self->frames );
+    # For some reason multipart sends don't work right now,
+    # $socket->ZMQ::Socket::send_multipart( $self->frames );
+
+    my @frames = $self->frames;
+    my $last   = pop(@frames);
+
+    foreach my $frame ( @frames) {
+        zmq_send($socket, $frame, ZMQ_SNDMORE);
+    }
+
+    zmq_send($socket,$last);
+    
+    return;
 }
 
 method frames() {
     my @frames;
 
-    push(@frames, join("_", $self->namespace, $self->namespace, $self->source));
+    push(@frames, join("_", "EXOBRAIN", $self->namespace, $self->source));
     push(@frames, "XXX - JSON - timestamp => " . $self->timestamp);
     push(@frames, $self->summary // "");
     push(@frames, $self->data); # XXX - JSONify
     push(@frames, $self->raw);  # XXX - JSONify
 
-    return \@frames;
+    return @frames;
 }
 
 1;

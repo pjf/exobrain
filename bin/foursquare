@@ -9,6 +9,7 @@ use Try::Tiny;
 use JSON::Any;
 use Data::Dumper;
 use App::Exobrain::Bus;
+use App::Exobrain::Message;
 use utf8::all;
 
 use constant DEBUG => 1;
@@ -47,7 +48,20 @@ while (1) {
 
         my $time = localtime($checkin->{createdAt});
 
-        $bus->send( "[$time] $name -> $checkin->{venue}{name}" );
+        my $summary = "[$time] $name -> $checkin->{venue}{name}";
+
+#        $bus->send( "[$time] $name -> $checkin->{venue}{name}" );
+
+        # say Dumper $bus->_socket;
+
+        my $msg = App::Exobrain::Message->new(
+            namespace => 'GEO',
+            timestamp => $checkin->{createdAt},
+            source    => 'FOURSQUARE',
+            data      => '',
+            raw       => '',
+            summary   => $summary,
+        )->send( $bus->_socket );
     }
 
     sleep(60);
