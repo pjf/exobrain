@@ -1,0 +1,124 @@
+#!/usr/bin/perl
+use 5.010;
+use strict;
+use warnings;
+use utf8::all;
+use autodie qw(:all);
+
+use App::Exobrain::Bus;
+use App::Exobrain::Message;
+use JSON::Any;
+use Config::Tiny;
+use Date::Manip::Date;
+
+use Net::Twitter;
+
+use constant DEBUG => 1;
+
+my $config = Config::Tiny->read("$ENV{HOME}/.rtbmrc");
+
+my $twitter = Net::Twitter->new(
+    traits   => [qw(API::RESTv1_1)],
+    consumer_key        => $config->{Twitter}{consumer_key},
+    consumer_secret     => $config->{Twitter}{consumer_secret},
+    access_token        => $config->{Twitter}{access_token},
+    access_token_secret => $config->{Twitter}{access_token_secret},
+);
+
+my $bus  = App::Exobrain::Bus->new( type => 'PUB' );
+
+my $last_id = $twitter->mentions({count => 1})->[0]{id};
+
+say "Benchmarking on $last_id\n\n" if DEBUG;
+
+while (1) {
+
+    sleep(90);
+
+    my $statuses = $twitter->mentions({since_id => $last_id});
+
+    for my $status ( @$statuses ) {
+        my $text = $status->{text};
+        my @tags;
+
+        while ($text =~ m{\#(?<tag>\w+)}g) {
+            push @tags, $+{tag};
+        }
+
+        my $epoch_time = do {
+            my $dmd = Date::Manip::Date->new;
+            my $timestamp = $status->{created_at};
+            $dmd->parse($timestamp) and die "Can't parse $timestamp";
+            $dmd->printf("%s");
+        };
+
+        print "[$status->{id}] $epoch_time <$status->{user}{screen_name}> $status->{text} (Tags: @tags)\n" if DEBUG;
+
+        my $msg = App::Exobrain::Message->new(
+            namespace => 'SOCIAL',
+            timestamp => $epoch_time,
+            source    => 'TWITTER',
+            data      => {
+                            # TODO: Users should be their own objects.
+                            #       Then we can translate between idents
+                            user  => $status->{user}{screen_name},
+                            to_me => 1,  # XXX - Needed?
+                            tags  => \@tags,
+                         },
+            raw       => $status,
+            summary   => "<$status->{user}{screen_name}> $status->{text}",
+        )->send( $bus->_socket );
+
+        if ($status->{id} > $last_id) {
+            $last_id = $status->{id};
+        }
+    }
+
+    say "---";
+}
+
+
+__END__
+
+while (1) {
+    my $checktime = time();
+
+    try {
+        $mech->get("$BASE/checkins/recent?afterTimestamp=$time&$TOKEN");
+    }
+    catch {
+        warn "No connection, or connection failed: $_";
+        sleep(60);
+    };
+
+    $time = $checktime;
+
+    my $checkins = $json->decode($mech->content)->{response}{recent};
+
+    # Checkins come in most-recent first, so we reverse them and make
+    # them chronological.
+
+    foreach my $checkin (reverse @$checkins) {
+        my $name = ( $checkin->{user}{firstName} // "" ) . " "
+                 . ( $checkin->{user}{lastName}  // "" );
+
+        my $time = localtime($checkin->{createdAt});
+
+        my $summary = "$name is at $checkin->{venue}{name}";
+
+#        $bus->send( "[$time] $name -> $checkin->{venue}{name}" );
+
+        # say Dumper $bus->_socket;
+
+        my $msg = App::Exobrain::Message->new(
+            namespace => 'GEO',
+            timestamp => $checkin->{createdAt},
+            source    => 'FOURSQUARE',
+            data      => $checkin,
+            raw       => $checkin,
+            summary   => $summary,
+        )->send( $bus->_socket );
+    }
+
+    sleep(60);
+}
