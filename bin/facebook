@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+use 5.010;
+use strict;
+use warnings;
+use utf8::all;
+use autodie qw(:all);
+
+use App::Exobrain::Bus;
+use App::Exobrain::Message;
+use JSON::Any;
+use Config::Tiny;
+use Date::Manip::Date;
+
+use Facebook::Graph;
+
+use constant DEBUG => 1;
+
+my $config = Config::Tiny->read("$ENV{HOME}/.rtbmrc");
+
+my $fb = Facebook::Graph->new(
+    app_id => $config->{Facebook}{app_id},
+    secret => $config->{Facebook}{secret},
+);
+
+# For easy access_token generation, set your application to be type
+# 'desktop' on developers.facebook.com, and then request the token
+# using the API explorer. It should last for months.
+
+$fb->access_token($config->{Facebook}{access_token});
+
+# Proof of concept retrieving messages.
+
+use Data::Dumper;
+
+say Dumper $fb->query->from('my_news')->select_fields(qw(
+    description link name caption id from created_time message
+))->where_since(time() - 3600)->request->as_hashref;
+
+__END__
+
+my $quote = q{
+Humans are not designed to be improved, either by outside neuroscientists, or by recursive self-improvement internally. Natural selection did not build the human brain to be humanly hackable. All complex machinery in the brain has adapted to operate within narrow parameters of brain design. Suppose you can make the human smarter, let alone superintelligent; does the human remain sane?
+
+— Eliezer Yudkowski, Artificial Intelligence as a Positive and Negative Factor in Global Risk
+};
+
+$fb->add_post
+   ->set_message($quote)
+   ->set_privacy('EVERYONE', {})        # Validates but does not work
+   ->publish
+;
+
