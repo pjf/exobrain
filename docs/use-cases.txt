@@ -10,6 +10,7 @@
 * See new friend on Facebook
     * XMPP me asking how I know them.
     * Updates contact info.
+    * Generated anki cards
 
 * Imap information to check mailbox size
     * Points for responding to email
@@ -18,3 +19,5 @@
 * Twitter events
     * Record in idonethis if there's enough activity
 
+* idonethis
+    * Send EVERYTHING to idonethis, or similar history logger
