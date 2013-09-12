@@ -10,6 +10,7 @@ use App::Exobrain::Message;
 use JSON::Any;
 use Config::Tiny;
 use Date::Manip::Date;
+use Try::Tiny;
 
 use Net::Twitter;
 
@@ -35,7 +36,14 @@ while (1) {
 
     sleep(90);
 
-    my $statuses = $twitter->mentions({since_id => $last_id});
+    my $statuses;
+
+    try { 
+        $statuses = $twitter->mentions({since_id => $last_id});
+    }
+    catch {
+        next;
+    };
 
     for my $status ( @$statuses ) {
         my $text = $status->{text};
