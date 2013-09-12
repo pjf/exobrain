@@ -1,0 +1,78 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+use POSIX qw(strftime);
+
+use Getopt::Std;
+use App::Exobrain::Bus;
+use App::Exobrain::Config;
+use WebService::RTMAgent;
+use Data::Dumper;
+
+use constant DEBUG => 1;
+
+my $bus       = App::Exobrain::Bus->new( type => 'SUB' );
+my $responder = App::Exobrain::Bus->new( type => 'PUB' );
+
+my $config = App::Exobrain::Config->new;
+
+my $rtm = WebService::RTMAgent->new;
+my $list = $config->{'RTM-ADDER'}{list};
+
+say "Adding to list: $list" if DEBUG;
+
+$rtm->api_key(    $config->{RTBM}{api_key}    );
+$rtm->api_secret( $config->{RTBM}{api_secret} );
+$rtm->init;
+
+while (my $event = $bus->get) {
+    if (my $tags = $event->data->{tags}) {
+        if (grep { /^todo$/i } @$tags) {
+            say "TODO event: " . $event->summary;
+
+            my $res = $rtm->tasks_add(
+                "name=".$event->summary,
+                "list_id=$list",
+            );
+
+            my $time = strftime("%Y-%m-%d %H:%M:%S UTC", gmtime($event->timestamp));
+
+            if (not defined $res) { 
+                say $rtm->error;
+                respond($event, "Sorry, I couldn't add your TODO item posted at $time " . q{(cc/@pjf)});
+            }
+            else { 
+                say Dumper $res;
+                respond($event, "Thanks! I've added your TODO item posted at $time " . q{(cc/@pjf)});
+            }
+        }
+    }
+}
+
+sub respond {
+    my ($event, $text) = @_;
+
+    say "Source from [" . $event->source . "]" if DEBUG;
+
+    # We only respond to tweets right now
+    return if $event->source ne 'TWITTER';
+
+    my $user = $event->data->{user};
+    my $time = time();
+    my $content = "@".$user.": $text";
+
+    say "Responding: $content" if DEBUG;
+
+    my $msg = App::Exobrain::Message->new(
+        namespace => 'PUBLISH+TWEET',
+        timestamp => $time,
+        source    => 'RTM-ADDER',
+        data      => { summary => $content },
+        raw       => { summary => $content },
+        summary   => $content,
+    )->send( $responder->_socket );
+
+    return;
+}
