@@ -11,6 +11,7 @@ use JSON::Any;
 use Config::Tiny;
 use Date::Manip::Date;
 use Data::Dumper;
+use Try::Tiny;
 
 use Facebook::Graph;
 
@@ -39,9 +40,17 @@ while (1) {
 
     say "Last poll - $last_poll";
 
-    my $stories = $fb->query->from('my_news')->select_fields(qw(
-        description link name caption id from created_time message
-    ))->where_since($last_poll)->request->as_hashref;
+    my $stories;
+
+    try {
+        $stories = $fb->query->from('my_news')->select_fields(qw(
+            description link name caption id from created_time message
+        ))->where_since($last_poll)->request->as_hashref;
+    }
+    catch {
+        sleep($POLL_INTERVAL);
+        next;
+    };
 
     $last_poll = $new_polltime;
 
