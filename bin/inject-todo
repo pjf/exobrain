@@ -1,0 +1,27 @@
+#!/usr/bin/perl
+use 5.010;
+use strict;
+use warnings;
+use utf8::all;
+use autodie qw(:all);
+
+use App::Exobrain::Bus;
+use App::Exobrain::Message;
+use JSON::Any;
+use Config::Tiny;
+use Date::Manip::Date;
+
+my $bus  = App::Exobrain::Bus->new( type => 'PUB' );
+
+my $todo = "@ARGV";
+my $epoch_time = time();
+
+my $msg = App::Exobrain::Message->new(
+    namespace => 'TODO',
+    timestamp => $epoch_time,
+    source    => 'CMDLINE',
+    data      => { tags => ['todo'], },
+    raw       => { tags => ['todo'], text => $todo },
+    summary   => $todo,
+)->send( $bus->_socket );
+
