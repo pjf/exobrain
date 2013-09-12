@@ -1,0 +1,10 @@
+* Trigger things from things
+* IFTTT
+* Build our own
+* Message bus
+
+
+* TODO:
+    * Loop avoidance (x triggers y which triggers z which triggers x)
+    * Auth?
+    * Identity mapping!!!
