@@ -25,7 +25,7 @@ $xmpp->add_account($user, $pass);
 $xmpp->reg_cb(
     session_ready => sub {
         say "Exobrain connected";
-        $xmpp->send_message("Exobrain connected", $owner);
+        $xmpp->send_message("<start> Exobrain connected <end>", $owner);
 
         # This shouldn't be an idle event. It should depend
         # upon data being available from our bus.
@@ -33,7 +33,8 @@ $xmpp->reg_cb(
         state $idle_w = AnyEvent->idle( cb => sub {
             my $msg = $bus->get;
             say $msg->summary;
-            $xmpp->send_message($msg->summary, $owner);
+            my $cooked = $msg->summary;
+            $xmpp->send_message($cooked, $owner);
         });
     }
 );
