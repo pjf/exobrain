@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+use 5.10.0;
+use strict;
+use warnings;
+use autodie;
+
+use Net::Twitter;
+use App::Exobrain::Config;
+
+my $config = App::Exobrain::Config->new;
+ 
+my $nt = Net::Twitter->new(
+     traits          => ['API::RESTv1_1', 'OAuth'],
+     consumer_key    => $config->{Twitter}{consumer_key},
+     consumer_secret => $config->{Twitter}{consumer_secret},
+);
+
+say $nt->get_authorization_url;
+
+my $pin = <STDIN>; # wait for input
+chomp $pin;
+
+my($access_token, $access_token_secret, $user_id, $screen_name) = $nt->request_access_token(verifier => $pin);
+
+say "Token: $access_token";
+say "Secret: $access_token_secret";
