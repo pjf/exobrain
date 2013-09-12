@@ -32,8 +32,8 @@ coerce 'JSON',
 has namespace => ( is => 'ro', isa => 'Str', required => 1 );
 has timestamp => ( is => 'ro', isa => 'Int'                );  # Epoch
 has source    => ( is => 'ro', isa => 'Str', required => 1 );
-has data      => ( is => 'ro', isa => 'JSON', coerce => 1  );
-has raw       => ( is => 'ro', isa => 'JSON', coerce => 1  );
+has data      => ( is => 'ro', isa => 'Ref'                );
+has raw       => ( is => 'ro', isa => 'Ref'                );
 has summary   => ( is => 'ro', isa => 'Str'                );  # Human readable
 
 around BUILDARGS => sub {
@@ -50,8 +50,8 @@ around BUILDARGS => sub {
             source    => $source,
             timestamp => time(), # XXX - This should be off the wire
             summary   => $frames->[2],
-            data      => $frames->[3],
-            raw       => $frames->[4],
+            data      => $json->decode( $frames->[3] ),
+            raw       => $json->decode( $frames->[4] ),
         );
     }
 
@@ -80,8 +80,8 @@ method frames() {
     push(@frames, join("_", "EXOBRAIN", $self->namespace, $self->source));
     push(@frames, "XXX - JSON - timestamp => " . $self->timestamp);
     push(@frames, $self->summary // "");
-    push(@frames, $self->data); # XXX - JSONify
-    push(@frames, $self->raw);  # XXX - JSONify
+    push(@frames, $json->encode( $self->data ));
+    push(@frames, $json->encode( $self->raw  ));
 
     return @frames;
 }
