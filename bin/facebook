@@ -10,10 +10,16 @@ use App::Exobrain::Message;
 use JSON::Any;
 use Config::Tiny;
 use Date::Manip::Date;
+use Data::Dumper;
 
 use Facebook::Graph;
 
 use constant DEBUG => 1;
+
+my $POLL_INTERVAL = 60; 
+my $last_poll = time() - 3600;
+
+my $bus = App::Exobrain::Bus->new( type => 'PUB' );
 
 my $config = Config::Tiny->read("$ENV{HOME}/.rtbmrc");
 
@@ -28,13 +34,35 @@ my $fb = Facebook::Graph->new(
 
 $fb->access_token($config->{Facebook}{access_token});
 
-# Proof of concept retrieving messages.
+while (1) {
+    my $new_polltime = time();
 
-use Data::Dumper;
+    say "Last poll - $last_poll";
 
-say Dumper $fb->query->from('my_news')->select_fields(qw(
-    description link name caption id from created_time message
-))->where_since(time() - 3600)->request->as_hashref;
+    my $stories = $fb->query->from('my_news')->select_fields(qw(
+        description link name caption id from created_time message
+    ))->where_since($last_poll)->request->as_hashref;
+
+    $last_poll = $new_polltime;
+
+    foreach my $story (@{ $stories->{data} }) {
+        my $msg = App::Exobrain::Message->new(
+            namespace => 'SOCIAL',
+            timestamp => $last_poll,    # XXX - Wrong. Get from msg
+            source    => 'FACEBOOK',
+            data      => {
+                user_display => $story->{from}{name},
+                user_id      => $story->{from}{id},
+            },
+            summary   => "$story->{from}{name}: " . ( $story->{message} || "$story->{name} ($story->{caption})" ),
+            raw       => $story,
+        )->send( $bus->_socket );
+        
+        say Dumper $story;
+    }
+
+    sleep($POLL_INTERVAL);
+}
 
 __END__
 
