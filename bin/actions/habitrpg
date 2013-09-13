@@ -1,0 +1,96 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+use POSIX qw(strftime);
+
+use Getopt::Std;
+use App::Exobrain::Bus;
+use App::Exobrain::Config;
+use WebService::HabitRPG;
+use Data::Dumper;
+
+use constant DEBUG => 1;
+
+my $bus       = App::Exobrain::Bus->new( type => 'SUB' );
+my $responder = App::Exobrain::Bus->new( type => 'PUB' );
+
+my $config = App::Exobrain::Config->new;
+
+my $hrpg = WebService::HabitRPG->new(
+    api_token => $config->{HabitRPG}{api_token},
+    user_id   => $config->{HabitRPG}{user_id},
+);
+
+while (my $event = $bus->get) {
+    if ($event->namespace eq 'ACTION+HRPG') {
+
+        debug(Dumper $event->data);
+
+        my $task      = $event->data->{task};
+        my $direction = $event->data->{direction};
+        my $public    = $event->data->{public} || 0;
+
+        my $stats = $hrpg->user->{stats};
+
+        my $result;
+
+        if ($task and $direction) {
+            debug("Moving $task $direction");
+            $result = $hrpg->updown($task, $direction);
+            debug("Completed move");
+        }
+
+        if ($public) {
+            my $name = $hrpg->get_task($task)->{text};
+
+            my $msg;
+
+            if ($direction eq "up") {
+                $msg = sprintf(
+                    "Congrats! You gained %+.2f XP and %+.2f GP for completing: $name",
+                    $result->{exp} - $stats->{exp},
+                    $result->{gp}  - $stats->{gp},
+                );
+            }
+            else {
+                # Must be down
+                $msg = sprintf(
+                    "Oh no! You lost %+.2f HP for: $name",
+                    $result->{hp} - $stats->{hp},
+                )
+            }
+
+            debug("Sending: $msg");
+            respond($config->{Identity}, $msg);
+        }
+    }
+}
+
+sub respond {
+    my ($ident, $text) = @_;
+
+    my $user = $ident->{Twitter};
+    my $content = "@".$user.": $text";
+
+    say "Responding: $content" if DEBUG;
+
+    my $time = time();
+
+    my $msg = App::Exobrain::Message->new(
+        namespace => 'PUBLISH+TWEET',
+        timestamp => $time,
+        source    => $0,
+        data      => { summary => $content },
+        raw       => { summary => $content },
+        summary   => $content,
+    )->send( $responder->_socket );
+
+    return;
+}
+
+sub debug {
+    say "@_" if DEBUG;
+    return;
+}
