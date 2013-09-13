@@ -61,8 +61,16 @@ method get() {
     return $message;
 }
 
+# This should probably be retired. Messages come with their own
+# send functionality.
 method send($msg) {
     zmq_send($self->_socket, $msg);
+}
+
+method send_msg(%opts) {
+    my $msg = App::Exobrain::Message->new( %opts );
+
+    return $msg->send( $self->_socket );
 }
 
 1;
