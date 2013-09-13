@@ -7,8 +7,8 @@ use autodie qw(:all);
 
 use App::Exobrain::Bus;
 use App::Exobrain::Message;
+use App::Exobrain::Config;
 use JSON::Any;
-use Config::Tiny;
 use Date::Manip::Date;
 use Data::Dumper;
 use Try::Tiny;
@@ -22,7 +22,7 @@ my $last_poll = time() - 3600;
 
 my $bus = App::Exobrain::Bus->new( type => 'PUB' );
 
-my $config = Config::Tiny->read("$ENV{HOME}/.rtbmrc");
+my $config = App::Exobrain::Config->new;
 
 my $fb = Facebook::Graph->new(
     app_id => $config->{Facebook}{app_id},
@@ -48,6 +48,7 @@ while (1) {
         ))->where_since($last_poll)->request->as_hashref;
     }
     catch {
+        warn "$0: $_\n";
         sleep($POLL_INTERVAL);
         next;
     };
@@ -55,7 +56,7 @@ while (1) {
     $last_poll = $new_polltime;
 
     foreach my $story (@{ $stories->{data} }) {
-        my $msg = App::Exobrain::Message->new(
+        $bus->send_msg(
             namespace => 'SOCIAL',
             timestamp => $last_poll,    # XXX - Wrong. Get from msg
             source    => 'FACEBOOK',
@@ -65,7 +66,7 @@ while (1) {
             },
             summary   => "$story->{from}{name}: " . ( $story->{message} || "$story->{name} ($story->{caption})" ),
             raw       => $story,
-        )->send( $bus->_socket );
+        );
         
         say Dumper $story;
     }
