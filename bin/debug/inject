@@ -17,12 +17,27 @@ my $namespace = shift @ARGV;
 my $summary   = "@ARGV";
 my $epoch_time = time();
 
-my $msg = App::Exobrain::Message->new(
-    namespace => $namespace,
-    timestamp => $epoch_time,
-    source    => 'CMDLINE',
-    data      => { text => $summary },
-    raw       => { text => $summary },
-    summary   => $summary,
-)->send( $bus->_socket );
+my $j = JSON::Any->new;
 
+if (my $data = $j->decode($summary)) {
+
+    my $msg = App::Exobrain::Message->new(
+        namespace => $namespace,
+        timestamp => $epoch_time,
+        source    => 'CMDLINE',
+        data      => $data,
+        raw       => $data,
+        summary   => $data->{summary} || $summary,
+    )->send( $bus->_socket );
+}
+
+else {
+    my $msg = App::Exobrain::Message->new(
+        namespace => $namespace,
+        timestamp => $epoch_time,
+        source    => 'CMDLINE',
+        data      => { text => $summary },
+        raw       => { text => $summary },
+        summary   => $summary,
+    )->send( $bus->_socket );
+}
