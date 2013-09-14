@@ -1,0 +1,90 @@
+#!/usr/bin/perl
+use v5.10.0;
+use strict;
+use warnings;
+use autodie;
+use App::Exobrain::Bus;
+use Dancer;
+
+use Data::Dumper;
+use constant DEBUG => 1;
+
+set port => 3000;
+set logger => 'console';
+set log => 'debug';
+
+debug("Debug from dancer");
+
+=begin example
+
+This is what a set of params look like when they come in.
+
+'params' => {
+            'source' => 'pjf/test',
+            'urtext' => '2013 09 14.5 1 "Testy test test"',
+            'value' => '1.0',
+            'splat' => $VAR1->{'_route_params'}{'splat'},
+            'origin' => 'web',
+            'created' => '1379125551',
+            'comment' => 'Testy test test',
+            'action' => 'ADD',
+            'id' => '5233c92fcc19310bb5000008',
+            'daystamp' => '15962'
+},
+
+=end example
+
+=cut
+
+# Catch all requests.
+any qr{.*} => sub {
+    my $src       = param('source');
+    my $timestamp = param('created');
+    my $id        = param('id');
+
+    $src //= "";
+
+    my ($user, $goal) = split(q{/},$src);
+
+    if (DEBUG) {
+        warn Dumper scalar params();
+        warn Dumper [ $user, $goal, $timestamp, $id ];
+    }
+
+    # If we have these things, we'll consider the request valid
+    # and broadcast it.
+
+    if ($user and $goal and $timestamp and $id) {
+        my $bus = App::Exobrain::Bus->new( type => "PUB" );
+
+        my $summary = "$user added beemnder $goal data: " . param('urtext');
+
+        warn "About to send msg: $summary\n" if DEBUG;
+
+        $bus->send_msg(
+            namespace => 'MEASUREMENT',
+            timestamp => $timestamp,
+            source    => 'BEEMINDER',
+            data      => {
+                user => $user,
+                goal => $goal,
+                id   => $id,
+            },
+            raw => scalar( params() ),
+            summary => $summary,
+        );
+
+        warn "MSG sent - $summary\n " if DEBUG;
+
+        return "OK";
+    }
+
+    # Meh, we didn't have everything we want. Probably just someone
+    # port-scanning, right?
+
+    warn "Invalid msg, ignoring\n" if DEBUG;
+
+    redirect 'http://www.youtube.com/watch?v=dQw4w9WgXcQ';
+};
+
+dance;
