@@ -30,7 +30,7 @@ my $bus  = App::Exobrain::Bus->new( type => 'SUB' );
 
 while (my $event = $bus->get) {
     say "Examining " . $event->namespace;
-    next unless $event->namespace eq "PUBLISH+TWEET";
+    next unless $event->namespace eq "INTENT+TWEET";
     say "Sending: " . $event->summary;
     $twitter->update($event->summary);
 }
