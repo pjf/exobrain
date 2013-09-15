@@ -1,6 +1,7 @@
 Installing:
 
-    apt-get install libzmq-dev expat-dev libnet-ssleay-perl libnet-libidn-perl
+    apt-get install libzmq-dev expat-dev libnet-ssleay-perl \
+        libnet-libidn-perl  libcrypt-ssleay-perl
 
     dzil listdeps | cpanm
 
