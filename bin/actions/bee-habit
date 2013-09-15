@@ -17,16 +17,12 @@ my $responder = App::Exobrain::Bus->new( type => 'PUB' );
 
 my $config = App::Exobrain::Config->new;
 
-# TODO: Move to config
-my %hrpg_task = (
-    floss  => 'a670fc50-4e04-4b0f-9583-e4ee55fced02',
-    weight => 'c5199061-a5cc-4013-810d-0e3314bdbbca',
-    test   => 'Test goal',
-);
+# Habits are in the config file in 'bmndr-id = hrpg-uuid' pairs
+my $hrpg_task = $config->{'Beeminder-Habits'};
 
 while (my $event = $bus->get) {
     if ($event->source eq "BEEMINDER") {
-        if (my $task = $hrpg_task{ $event->data->{goal} }) {
+        if (my $task = $hrpg_task->{ $event->data->{goal} }) {
             App::Exobrain::Intent::HabitRPG->new(
                 task => $task,
                 direction => 'up',
