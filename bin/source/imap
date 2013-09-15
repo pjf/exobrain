@@ -37,6 +37,16 @@ my $bus = App::Exobrain::Bus->new(
 );
 
 while (1) {
+
+    measure($imap, 'INBOX');
+    measure($imap, 'Sent');
+
+    sleep(60);
+}
+
+sub measure {
+    my ($imap, $mailbox) = @_;
+
     my $data = $imap->status('INBOX');
 
     my $count = $data->{MESSAGES};
@@ -45,14 +55,9 @@ while (1) {
         namespace => 'EMAIL',
         timestamp => time(),
         source    => 'IMAP',
-        data      => { count => $count, user => $user, server => $server },
+        data      => { count => $count, user => $user, server => $server, mailbox => $mailbox },
         raw       => $data,
-        summary   => "$user on $server has $count messages in inbox",
-    );
+        summary   => "$user on $server has $count messages in $mailbox",
+    )->send( $bus->_socket );
 
-    $msg->send( $bus->_socket );
-
-    say $msg->summary;
-
-    sleep(60);
 }
