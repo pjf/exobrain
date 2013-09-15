@@ -8,6 +8,7 @@ use POSIX qw(strftime);
 use Getopt::Std;
 use App::Exobrain::Bus;
 use App::Exobrain::Config;
+use App::Exobrain::Intent::Tweet;
 use WebService::HabitRPG;
 use Data::Dumper;
 
@@ -24,7 +25,7 @@ my $hrpg = WebService::HabitRPG->new(
 );
 
 while (my $event = $bus->get) {
-    if ($event->namespace eq 'ACTION+HRPG') {
+    if ($event->namespace eq 'INTENT+HABITRPG') {
 
         debug(Dumper $event->data);
 
@@ -78,13 +79,8 @@ sub respond {
 
     my $time = time();
 
-    my $msg = App::Exobrain::Message->new(
-        namespace => 'PUBLISH+TWEET',
-        timestamp => $time,
-        source    => $0,
-        data      => { summary => $content },
-        raw       => { summary => $content },
-        summary   => $content,
+    App::Exobrain::Intent::Tweet->new(
+        tweet => $content,
     )->send( $responder->_socket );
 
     return;

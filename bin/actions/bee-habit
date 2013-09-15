@@ -1,0 +1,33 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+
+use Getopt::Std;
+use App::Exobrain::Bus;
+use App::Exobrain::Config;
+use App::Exobrain::Intent::HabitRPG;
+use Data::Dumper;
+
+use constant DEBUG => 1;
+
+my $bus       = App::Exobrain::Bus->new( type => 'SUB' );
+my $responder = App::Exobrain::Bus->new( type => 'PUB' );
+
+my $config = App::Exobrain::Config->new;
+
+# Habits are in the config file in 'bmndr-id = hrpg-uuid' pairs
+my $hrpg_task = $config->{'Beeminder-Habits'};
+
+while (my $event = $bus->get) {
+    if ($event->source eq "BEEMINDER") {
+        if (my $task = $hrpg_task->{ $event->data->{goal} }) {
+            App::Exobrain::Intent::HabitRPG->new(
+                task => $task,
+                direction => 'up',
+                public => 1,
+            )->send( $responder->_socket );
+        }
+    }
+}

@@ -27,7 +27,7 @@ This is what a set of params look like when they come in.
             'origin' => 'web',
             'created' => '1379125551',
             'comment' => 'Testy test test',
-            'action' => 'ADD',
+            'action' => 'ADD',      # Have also seen 'DEL'
             'id' => '5233c92fcc19310bb5000008',
             'daystamp' => '15962'
 },
@@ -38,6 +38,13 @@ This is what a set of params look like when they come in.
 
 # Catch all requests.
 any qr{.*} => sub {
+
+    # If we see what could be a valid response, but it's not
+    # an 'ADD', then ignore it.
+    if( param('action') and param('action') ne 'ADD') {
+        return "OK";
+    }
+
     my $src       = param('source');
     my $timestamp = param('created');
     my $id        = param('id');

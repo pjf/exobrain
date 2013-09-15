@@ -1,0 +1,52 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+use POSIX qw(strftime);
+
+use Getopt::Std;
+use App::Exobrain::Bus;
+use App::Exobrain::Config;
+use App::Exobrain::Intent::Tweet;
+use Data::Dumper;
+
+use constant DEBUG => 1;
+
+my $bus       = App::Exobrain::Bus->new( type => 'SUB' );
+my $responder = App::Exobrain::Bus->new( type => 'PUB' );
+
+my $config = App::Exobrain::Config->new;
+
+App::Exobrain::Intent::Tweet->new(
+    tweet => "Ping debugger started",
+)->send( $responder->_socket );
+
+while (my $event = $bus->get) {
+    if (my $tags = $event->data->{tags}) {
+        if (grep { /^ping$/i } @$tags) {
+            respond($event, "Ack");
+        }
+    }
+}
+
+sub respond {
+    my ($event, $text) = @_;
+
+    say "Source from [" . $event->source . "]" if DEBUG;
+
+    # We only respond to tweets right now
+    return if $event->source ne 'TWITTER';
+
+    my $user = $event->data->{user};
+    my $time = time();
+    my $content = "@".$user.": $text";
+
+    say "Responding: $content" if DEBUG;
+
+    my $msg = App::Exobrain::Intent::Tweet->new(
+        tweet => $content,
+    )->send( $responder->_socket );
+
+    return;
+}
