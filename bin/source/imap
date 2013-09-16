@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use autodie;
 
+use IO::Socket::SSL qw(debug1);
 use Net::IMAP::Client;
 use Term::ReadKey;
 
@@ -36,10 +37,18 @@ my $bus = App::Exobrain::Bus->new(
     type => 'PUB',
 );
 
+my $sent_box;
+
+# These really should be configured or auto-sniffed on a per-server
+# baiss.
+
+if ($server =~ /gmail/) { $sent_box = '[Gmail]/Sent Mail'; }
+else                    { $sent_box = 'Sent'; }
+
 while (1) {
 
     measure($imap, 'INBOX');
-    measure($imap, 'Sent');
+    measure($imap, $sent_box);
 
     sleep(60);
 }
@@ -47,7 +56,7 @@ while (1) {
 sub measure {
     my ($imap, $mailbox) = @_;
 
-    my $data = $imap->status('INBOX');
+    my $data = $imap->status($mailbox);
 
     my $count = $data->{MESSAGES};
 
