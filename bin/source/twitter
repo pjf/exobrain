@@ -84,6 +84,4 @@ while (1) {
             $last_id = $status->{id};
         }
     }
-
-    say "---";
 }
