@@ -1,0 +1,23 @@
+#!/usr/bin/perl
+use v5.10.0;
+use strict;
+use warnings;
+use autodie qw(:all);
+
+use FindBin qw($Bin);
+
+my @start = qw(
+    route.pl
+    source/twitter
+    source/beeminder-callback
+    actions/rtm-adder
+    actions/twitter-send
+    actions/tweet-ping
+    actions/habitrpg
+);
+
+foreach my $cmd (@start) {
+    say "= $cmd = ";
+    system("$Bin/$cmd &");
+    sleep(1);
+}

@@ -5,6 +5,7 @@ use warnings;
 use utf8::all;
 use autodie qw(:all);
 
+use App::Exobrain;
 use App::Exobrain::Bus;
 use App::Exobrain::Message;
 use JSON::Any;
@@ -16,14 +17,16 @@ use Net::Twitter;
 
 use constant DEBUG => 1;
 
-my $config = Config::Tiny->read("$ENV{HOME}/.rtbmrc");
+my $exobrain = App::Exobrain->new;
+
+my $config = $exobrain->config->{Twitter};
 
 my $twitter = Net::Twitter->new(
     traits   => [qw(API::RESTv1_1)],
-    consumer_key        => $config->{Twitter}{consumer_key},
-    consumer_secret     => $config->{Twitter}{consumer_secret},
-    access_token        => $config->{Twitter}{access_token},
-    access_token_secret => $config->{Twitter}{access_token_secret},
+    consumer_key        => $config->{consumer_key},
+    consumer_secret     => $config->{consumer_secret},
+    access_token        => $config->{access_token},
+    access_token_secret => $config->{access_token_secret},
 );
 
 my $bus  = App::Exobrain::Bus->new( type => 'PUB' );
@@ -83,50 +86,4 @@ while (1) {
     }
 
     say "---";
-}
-
-
-__END__
-
-while (1) {
-    my $checktime = time();
-
-    try {
-        $mech->get("$BASE/checkins/recent?afterTimestamp=$time&$TOKEN");
-    }
-    catch {
-        warn "No connection, or connection failed: $_";
-        sleep(60);
-    };
-
-    $time = $checktime;
-
-    my $checkins = $json->decode($mech->content)->{response}{recent};
-
-    # Checkins come in most-recent first, so we reverse them and make
-    # them chronological.
-
-    foreach my $checkin (reverse @$checkins) {
-        my $name = ( $checkin->{user}{firstName} // "" ) . " "
-                 . ( $checkin->{user}{lastName}  // "" );
-
-        my $time = localtime($checkin->{createdAt});
-
-        my $summary = "$name is at $checkin->{venue}{name}";
-
-#        $bus->send( "[$time] $name -> $checkin->{venue}{name}" );
-
-        # say Dumper $bus->_socket;
-
-        my $msg = App::Exobrain::Message->new(
-            namespace => 'GEO',
-            timestamp => $checkin->{createdAt},
-            source    => 'FOURSQUARE',
-            data      => $checkin,
-            raw       => $checkin,
-            summary   => $summary,
-        )->send( $bus->_socket );
-    }
-
-    sleep(60);
 }
