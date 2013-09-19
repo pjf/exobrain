@@ -17,6 +17,7 @@ Ubic::Multiservice::Simple->new({
         twitter  => Ubic::Service::SimpleDaemon->new(bin=>"twitter"),
         facebook => Ubic::Service::SimpleDaemon->new(bin=>"facebook"),
         beeminder => Ubic::Service::SimpleDaemon->new(bin=>"beeminder-callback"),
+        foursquare => Ubic::Service::SimpleDaemon->new(bin=>"foursquare"),
     }),
 
     classify => Ubic::Multiservice::Simple->new({
