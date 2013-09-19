@@ -8,14 +8,13 @@ use autodie qw(:all);
 use App::Exobrain;
 use App::Exobrain::Bus;
 use App::Exobrain::Message;
-use JSON::Any;
-use Config::Tiny;
 use Date::Manip::Date;
 use Try::Tiny;
 
 use Net::Twitter;
 
 use constant DEBUG => 1;
+use constant LAST_CHECK => 'last_check';
 
 my $exobrain = App::Exobrain->new;
 
@@ -29,11 +28,15 @@ my $twitter = Net::Twitter->new(
     access_token_secret => $config->{access_token_secret},
 );
 
-my $bus  = App::Exobrain::Bus->new( type => 'PUB' );
+my $bus   = App::Exobrain::Bus->new( type => 'PUB' );
+my $cache = App::Exobrain::Cache->new( namespace => $0 );
 
-my $last_id = $twitter->mentions({count => 1})->[0]{id};
+# Fetch our last ID from the cache, or otherwise just pick
+# the last mention we've seen.
 
-say "Benchmarking on $last_id\n\n" if DEBUG;
+my $last_id = $cache->computer(LAST_CHECK, undef,
+    sub { $twitter->mentions({count => 1})->[0]{id} }
+);
 
 while (1) {
 
@@ -82,6 +85,7 @@ while (1) {
 
         if ($status->{id} > $last_id) {
             $last_id = $status->{id};
+            $cache->set(LAST_CHECK, $last_id);
         }
     }
 }
