@@ -34,7 +34,7 @@ while (my $event = $bus->get) {
             say "TODO event: " . $event->summary;
 
             if ($event->summary =~ /sudo make me a sandwich/i) {
-                respond($event, "Sorry, try again.");
+                respond($event, "User not in the sudoers file. This incident will be reported.");
                 next;
             }
             elsif ($event->summary =~ /make me a sandwich/i) {
