@@ -4,40 +4,69 @@ use strict;
 use warnings;
 use autodie;
 
-use App::Exobrain::Bus;
+use App::Exobrain;
+use App::Exobrain::Cache;
+use App::Exobrain::Intent::Beeminder;
 use WebService::Beeminder;
-use JSON::Any;
+use POSIX qw(tzset);
 
-my $goal  = shift || die "Usage: $0 goal token";
-my $token = shift || die "Usage: $0 goal token";
+my $exobrain = App::Exobrain->new;
+my $bus = $exobrain->sub;
+my $cache = App::Exobrain::Cache->new(namespace => $0);
+my $tz = $exobrain->config->{General}{timezone};
 
-my $bee = WebService::Beeminder->new( token => $token );
+if ($tz) {
+    say "Setting timezone to $tz";
+    $ENV{TZ} = $tz;
+    tzset();
+}
 
-my $last_count = -1;
-
-my $bus = App::Exobrain::Bus->new(
-    type => 'SUB',
+my %inbox_goal = (
+    'perltraining.com.au' => 'inbox',
 );
-
-my $json = JSON::Any->new;
 
 while (1) {
     my $msg = $bus->get;
 
     if ($msg->namespace eq 'EMAIL') {
-        my $count = $json->decode($msg->data)->{count};
 
-        # Count updated, send to bmndr
-        if ($count != $last_count) {
-            $bee->add_datapoint(
+        my $data = $msg->data;
+
+        # Only process INBOX states which we have goals
+        # for...
+        next unless $data->{mailbox} eq "INBOX";
+
+        my $server = $data->{server};
+        my $goal   = $inbox_goal{$server} or next;
+        my $count  = $data->{count};
+        my $key    = ['INBOX', $server];
+
+        my $old_count = $cache->get($key);
+
+        # If we don't have a count yet, or if our new count is
+        # smaller, then cache it, and send it to beeminder!
+
+        # Our cache expires at midnight, so we always push a
+        # new measurement each day.
+
+        if (! $old_count or $count < $old_count) {
+            App::Exobrain::Intent::Beeminder->new(
                 goal => $goal,
                 value => $count,
                 comment => "Submitted via exobrain",
-            );
-            say "Updating beeminder goal $goal to $count msgs"
+            )->send( $exobrain->pub->_socket);
+
+            # TODO: Fix the awful syntax above. Surely intents
+            # could just take an exobrain parameter?
+
+            say "Updating beeminder goal $goal to $count msgs";
+
+            $cache->set($key, $count, seconds_until_tomorrow());
         }
     }
-    else {
-        say "Non email packet received";
-    }
+}
+
+sub seconds_until_tomorrow {
+    my ($s, $m, $h) = localtime;
+    return 86400 - ($h * 60 * 60) - ($m * 60) - $s;
 }

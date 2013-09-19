@@ -22,6 +22,7 @@ Ubic::Multiservice::Simple->new({
     classify => Ubic::Multiservice::Simple->new({
         'tweet-ping' => Ubic::Service::SimpleDaemon->new(bin=>'tweet-ping'),
         'bee-habit'  => Ubic::Service::SimpleDaemon->new(bin=>'bee-habit'),
+        'bee-inbox'  => Ubic::Service::SimpleDaemon->new(bin=>'bee-inbox'),
         'rtm-adder'  => Ubic::Service::SimpleDaemon->new(bin=>'rtm-adder'),
         'sentbox-reward'  => Ubic::Service::SimpleDaemon->new(bin=>'sentbox-reward'),
     }),
