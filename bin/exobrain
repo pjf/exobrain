@@ -29,6 +29,7 @@ Ubic::Multiservice::Simple->new({
     sink => Ubic::Multiservice::Simple->new({
         twitter  => Ubic::Service::SimpleDaemon->new(bin=>"twitter-send"),
         habitrpg => Ubic::Service::SimpleDaemon->new(bin=>'habitrpg'),
+        beeminder => Ubic::Service::SimpleDaemon->new(bin=>'beeminder'),
     }),
 
     core => Ubic::Multiservice::Simple->new({

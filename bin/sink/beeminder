@@ -1,0 +1,39 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+
+use Getopt::Std;
+
+use App::Exobrain;
+use App::Exobrain::Intent::Beeminder;
+use WebService::Beeminder;
+
+use constant DEBUG => 1;
+
+my $exobrain = App::Exobrain->new;
+
+my $config = $exobrain->config->{Beeminder};
+
+my $bee = WebService::Beeminder->new(
+    token => $config->{auth_token},
+);
+
+my $bus = $exobrain->sub;
+
+while (my $event = $bus->get) {
+
+    say "$0 debug: Looking at ".$event->namespace;
+
+    if ($event->namespace eq 'INTENT+BEEMINDER') {
+
+        my $goal      = $event->data->{goal};
+        my $value     = $event->data->{value};
+        my $comment   = $event->data->{comment} // "";
+
+        $bee->add_datapoint( goal => $goal, value => $value, comment => $comment );
+
+        say "bmndr: Updated $goal to $value ($comment)" if DEBUG;
+    }
+}
