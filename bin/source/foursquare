@@ -14,12 +14,13 @@ use App::Exobrain::Message;
 use App::Exobrain::Cache;
 use utf8::all;
 
-use constant DEBUG => 1;
+use constant DEBUG => 0;
 use constant LAST_CHECK => 'last_check';
 
-my $config = App::Exobrain->config->{FourSquare}
-my $TOKEN  = "oauth_token=$config->{auth_token}&v=20130425";
-my $BASE   = 'https://api.foursquare.com/v2';
+my $exobrain = App::Exobrain->new;
+my $config   = $exobrain->config->{FourSquare};
+my $TOKEN    = "oauth_token=$config->{auth_token}&v=20130425";
+my $BASE     = 'https://api.foursquare.com/v2';
 
 my $mech = WWW::Mechanize->new();
 my $json = JSON::Any->new;
