@@ -5,6 +5,7 @@ use warnings;
 use autodie;
 
 use IO::Socket::SSL qw(debug1);
+use Socket qw( SO_KEEPALIVE );
 use Net::IMAP::Client;
 use Term::ReadKey;
 
@@ -21,12 +22,28 @@ my $password = ReadLine(0);
 ReadMode(0); # Reset term
 chomp($password);
 
+# Horrible, horrible hack that allows us to avoid
+# self-signed cert errors, at the expense of not
+# checking certs at all.
+
+my $socket = IO::Socket::SSL->new(
+    PeerAddr => $server,
+    PeerPort => 993,
+    Timeout  => 90,
+    Proto    => 'tcp',
+    Blocking => 1,
+    SSL_verify_mode => SSL_VERIFY_NONE,
+);
+
+$socket->sockopt(SO_KEEPALIVE, 1);
+
 my $imap = Net::IMAP::Client->new(
     server => $server,
     user   => $user,
     pass   => $password,
     ssl    => 1,
     port   => 993,
+    socket => $socket,
 ) or die "Could not connect to IMAP server";
 
 $imap->login or die "Can't login " . $imap->last_error;
