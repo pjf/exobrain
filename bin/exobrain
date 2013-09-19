@@ -15,7 +15,7 @@ Ubic::Multiservice::Simple->new({
 
     source => Ubic::Multiservice::Simple->new({
         twitter  => Ubic::Service::SimpleDaemon->new(bin=>"twitter"),
-#        facebook => Ubic::Service::SimpleDaemon->new(bin=>"facebook"),
+        facebook => Ubic::Service::SimpleDaemon->new(bin=>"facebook"),
         beeminder => Ubic::Service::SimpleDaemon->new(bin=>"beeminder-callback"),
     }),
 
