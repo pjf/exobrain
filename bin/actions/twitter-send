@@ -14,7 +14,7 @@ use Date::Manip::Date;
 
 use Net::Twitter;
 
-use constant DEBUG => 1;
+use constant DEBUG => 0;
 
 my $config = App::Exobrain::Config->new;
 
@@ -29,8 +29,8 @@ my $twitter = Net::Twitter->new(
 my $bus  = App::Exobrain::Bus->new( type => 'SUB' );
 
 while (my $event = $bus->get) {
-    say "Examining " . $event->namespace;
+    say "Examining " . $event->namespace if DEBUG;
     next unless $event->namespace eq "INTENT+TWEET";
-    say "Sending: " . $event->summary;
+    say "Sending: " . $event->summary if DEBUG;
     $twitter->update($event->summary);
 }
