@@ -8,6 +8,7 @@ use POSIX qw(strftime);
 use Getopt::Std;
 use App::Exobrain::Bus;
 use App::Exobrain::Config;
+use App::Exobrain::Intent::Tweet;
 use WebService::RTMAgent;
 use Data::Dumper;
 
@@ -40,11 +41,9 @@ while (my $event = $bus->get) {
             my $time = strftime("%Y-%m-%d %H:%M:%S UTC", gmtime($event->timestamp));
 
             if (not defined $res) { 
-                say $rtm->error;
                 respond($event, "Sorry, I couldn't add your TODO item posted at $time " . q{(cc/@pjf)});
             }
             else { 
-                say Dumper $res;
                 respond($event, "Thanks! I've added your TODO item posted at $time " . q{(cc/@pjf)});
             }
         }
@@ -65,13 +64,8 @@ sub respond {
 
     say "Responding: $content" if DEBUG;
 
-    my $msg = App::Exobrain::Message->new(
-        namespace => 'PUBLISH+TWEET',
-        timestamp => $time,
-        source    => 'RTM-ADDER',
-        data      => { summary => $content },
-        raw       => { summary => $content },
-        summary   => $content,
+    App::Exobrain::Intent::Tweet->new(
+        tweet => $content,
     )->send( $responder->_socket );
 
     return;
