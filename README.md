@@ -1,7 +1,7 @@
 Installing:
 
     apt-get install libzmq-dev expat-dev libnet-ssleay-perl \
-        libnet-libidn-perl  libcrypt-ssleay-perl
+        libnet-libidn-perl  libcrypt-ssleay-perl ubic
 
     dzil listdeps | cpanm
 
@@ -10,11 +10,19 @@ of a changed network configuration. Force install it with:
 
     cpanm -f WebService::RTMAgent
 
-Install:
+Set up ubic (if you haven't already done so):
+
+    ubic-admin setup
+
+Install exobrain:
 
     dzil install
 
-The config file is in `~/.rtbmrc` for historical reasons. This will
+Copy the `exobrain` file into your ubic services:
+
+    cp `which exobrain` ~/ubic/service
+
+Now write a config file. It's `~/.rtbmrc` for historical reasons. This will
 change in the future:
 
     [RTBM]
@@ -50,13 +58,23 @@ change in the future:
 You need to also have a valid ~/.rtmagent file for RTM integration. I need to
 write something which sets this up for you.
 
-Command names may change.  But start with starting the routing
-infrastructure:
+You can now start your exobrain. Start with the core:
 
-    route.pl        # Start routing infrastructure
+    ubic start exobrain.core
 
-Start twitter TODO routing infrastructure:
+To get some data flowing through your exobrain, you can try starting
+the end-points:
 
-    twitter         # Watches twitter
-    twitter-send    # Allows sending messages to twitter
-    rtm-adder       # Allows adding to RememberTheMilk
+    ubic start exobrain.source
+    ubic start exobrain.sink
+
+And to get intelligence, you can bring on-line the classifers:
+
+    ubic start exobrain.classify
+
+Of course, you can get *EVERYTHING* online in one go with just:
+
+    ubic start exobrain
+
+You probably won't use all the components, though, so it's recommended
+that you only configure and switch on the ones you need.
