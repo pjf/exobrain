@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+
+use v5.10.0;
+use strict;
+use warnings;
+
+# You must have Ubic installed.
+# Place this in your ubic/service directory.
+# Then 'ubic start exobrain' to start.
+
+use Ubic::Multiservice::Simple;
+use Ubic::Service::SimpleDaemon;
+
+Ubic::Multiservice::Simple->new({
+
+    source => Ubic::Multiservice::Simple->new({
+        twitter  => Ubic::Service::SimpleDaemon->new(bin=>"twitter"),
+#        facebook => Ubic::Service::SimpleDaemon->new(bin=>"facebook"),
+        beeminder => Ubic::Service::SimpleDaemon->new(bin=>"beeminder-callback"),
+    }),
+
+    classify => Ubic::Multiservice::Simple->new({
+        'tweet-ping' => Ubic::Service::SimpleDaemon->new(bin=>'tweet-ping'),
+        'bee-habit'  => Ubic::Service::SimpleDaemon->new(bin=>'bee-habit'),
+        'rtm-adder'  => Ubic::Service::SimpleDaemon->new(bin=>'rtm-adder'),
+        'sentbox-reward'  => Ubic::Service::SimpleDaemon->new(bin=>'sentbox-reward'),
+    }),
+
+    sink => Ubic::Multiservice::Simple->new({
+        twitter  => Ubic::Service::SimpleDaemon->new(bin=>"twitter-send"),
+        habitrpg => Ubic::Service::SimpleDaemon->new(bin=>'habitrpg'),
+    }),
+
+    core => Ubic::Multiservice::Simple->new({
+        router => Ubic::Service::SimpleDaemon->new(bin=> "router"),
+    }),
+});
