@@ -1,0 +1,46 @@
+
+
+
+my $sub = App::Exobrain::Bus->subscribe(
+    ...
+);
+
+App::Exobrain::Measurement->subscribe( type => 'IMAP' );
+
+App::Exobrain::Intent->subscribe( type => 'TWITTER' );
+
+$exobrain->measure(...);
+$exobrain->intent(...);
+$exobrain->tweet(...);
+
+# Config file for loading modules:
+
+~/.config/exobrain/sources
+
+[Facebook]      # Loads App::Exobrain::Measure::Facebook
+(auth details)
+
+while (my $tweet = $exobrain->twitter->read) {
+    next if not $tweet->tags ~~ 'todo';
+    next if not $tweet->to_me;
+
+    ...
+
+    $exobrain->habitRPG->up(task => '...', public => 1);
+
+}
+
+while (my $msg = $exobrain->any('social')->read) {
+
+}
+
+while (my $msg = $exobrain->any('geo')->read) {
+
+}
+
+
+~/.config/exobrian/actions
+
+[RememberTheMilk]
+(auth details)  # Loads App::Exobrain::Action::RememberTheMilk
+                # And Intent as well?

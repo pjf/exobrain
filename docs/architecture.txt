@@ -1,0 +1,25 @@
+Providers will always need:
+
+    * Bus to send on
+
+    * Cache for last time/msg-id
+
+    * May also have registered sources/namespaces etc, so we can check
+      for typos and make sure we don't have two ways to represent the
+      same thingie.
+
+    * Producers should somehow attach an ID to objects they send,
+      so we can track for repeats.
+
+Rather than using internal timers, some processes may wish to listen
+for an external timing signal. This allows us to "bump" sources, to
+encourage them to re-read from their upstream source.
+
+Identity Discovery
+
+* We want to identify the same person across services.
+* Foursquare leaks this info like crazy.
+* Can probably trust info people put in their Facebook info
+    * Phone
+    * Twitter, etc
+
