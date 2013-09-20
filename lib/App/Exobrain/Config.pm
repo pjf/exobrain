@@ -7,7 +7,7 @@ use parent 'Config::Tiny';
 sub new {
     my ($class) = @_;
 
-    my $self = $class->read("$ENV{HOME}/.rtbmrc");
+    my $self = $class->read("$ENV{HOME}/.exobrainrc");
 
     $self or die "Cannot read config - " . Config::Tiny->errstr;
 
