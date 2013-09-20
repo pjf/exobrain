@@ -6,7 +6,6 @@ use utf8::all;
 use autodie qw(:all);
 
 use App::Exobrain;
-use App::Exobrain::Bus;
 use App::Exobrain::Message;
 use Date::Manip::Date;
 use Try::Tiny;
@@ -28,7 +27,7 @@ my $twitter = Net::Twitter->new(
     access_token_secret => $config->{access_token_secret},
 );
 
-my $bus   = App::Exobrain::Bus->new( type => 'PUB' );
+my $bus   = $exobrain->pub;
 my $cache = App::Exobrain::Cache->new( namespace => $0 );
 
 # Fetch our last ID from the cache, or otherwise just pick
@@ -78,6 +77,7 @@ while (1) {
                             user  => $status->{user}{screen_name},
                             to_me => 1,  # XXX - Needed?
                             tags  => \@tags,
+                            message => $status->{text},
                          },
             raw       => $status,
             summary   => "<$status->{user}{screen_name}> $status->{text}",
