@@ -7,6 +7,7 @@ use autodie qw(:all);
 
 use App::Exobrain;
 use App::Exobrain::Message;
+use App::Exobrain::Cache;
 use Date::Manip::Date;
 use Try::Tiny;
 
@@ -33,7 +34,7 @@ my $cache = App::Exobrain::Cache->new( namespace => $0 );
 # Fetch our last ID from the cache, or otherwise just pick
 # the last mention we've seen.
 
-my $last_id = $cache->computer(LAST_CHECK, undef,
+my $last_id = $cache->compute(LAST_CHECK, undef,
     sub { $twitter->mentions({count => 1})->[0]{id} }
 );
 
