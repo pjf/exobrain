@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use autodie;
 use Moose;
+use Method::Signatures;
 
 # ABSTRACT: Bloop de bloop blah
 
@@ -41,6 +42,21 @@ has 'sub' => (
 sub _build_config { return App::Exobrain::Config->new; };
 sub _build_pub    { return App::Exobrain::Bus->new(type => 'PUB') }
 sub _build_sub    { return App::Exobrain::Bus->new(type => 'SUB') }
+
+=method message
+
+    $exobrain->message( ... )->send;
+
+Shortcut message creator.
+
+=cut
+
+method message() {
+    return App::Exobrain::Message->new(
+        exobrain => $self,
+        @_,
+    );
+}
 
 =for Pod::Coverage BUILD DEMOLISH
 

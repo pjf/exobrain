@@ -5,9 +5,12 @@ use ZMQ::Constants qw(ZMQ_SNDMORE);
 use ZMQ::LibZMQ2;
 use JSON::Any;
 use Method::Signatures;
+use Carp;
 use warnings;
 
 use Moose::Util::TypeConstraints;
+
+# Automatic conversion between JSON and Perl Refs.
 
 my $json = JSON::Any->new;
 
@@ -35,6 +38,7 @@ has source    => ( is => 'ro', isa => 'Str', required => 1 );
 has data      => ( is => 'ro', isa => 'Ref'                );
 has raw       => ( is => 'ro', isa => 'Ref'                );
 has summary   => ( is => 'ro', isa => 'Str'                );  # Human readable
+has exobrain  => ( is => 'ro', isa => 'App::Exobrain',     );
 
 around BUILDARGS => sub {
     my ($orig, $class, @args) = @_;
@@ -58,7 +62,20 @@ around BUILDARGS => sub {
     return $class->$orig(@args);
 };
 
-method send($socket) {
+method send($socket?) {
+
+    # If we don't have a socket, grab it from our exobrain object
+    # (if it exists)
+
+    if (not $socket) {
+        if (my $exobrain = $self->exobrain) {
+            $socket = $exobrain->pub->_socket;
+        }
+        else {
+            croak "send() is missing a socket or exobrain";
+        }
+    }
+
     # For some reason multipart sends don't work right now,
     # $socket->ZMQ::Socket::send_multipart( $self->frames );
 
