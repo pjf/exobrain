@@ -8,9 +8,9 @@ use Method::Signatures;
 use Moose::Role;
 use Moose::Util::TypeConstraints;
 
-# has timestamp => ( is => 'ro', isa => 'Int' );
-# has exobrain  => ( is => 'ro', isa => 'App::Exobrain');
-# has raw       => ( is => 'ro', isa => 'Ref' );
+has timestamp => ( is => 'ro', isa => 'Int', default => sub { time() } );
+has exobrain  => ( is => 'ro', isa => 'App::Exobrain');
+has raw       => ( is => 'ro', isa => 'Ref' );
 
 # Many classes will provide their own way of getting summary
 # data.
