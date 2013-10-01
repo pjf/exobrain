@@ -41,7 +41,8 @@ has raw       => ( is => 'ro', isa => 'Ref' );
     payload size => ( isa => 'Int' );
 
 Convenience method which sets the 'payload' trait on an attribute,
-as well as marking it as 'ro' by default (this can be overridden).
+as well as marking it as 'ro' and required by default (these
+can be overridden).
 
 =cut
 
