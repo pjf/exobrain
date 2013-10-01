@@ -15,10 +15,11 @@ has raw       => ( is => 'ro', isa => 'Ref' );
 # Many classes will provide their own way of getting summary
 # data.
 
-# requires qw(summary data);
+# requires qw(summary);
 
 {
     # Automatic conversion between JSON and Perl Refs.
+    # TODO: Move elsewhere?
 
     use JSON::Any;
 
@@ -59,6 +60,38 @@ func payload($name, @args) {
 
     no strict 'refs';
     return $uphas->( $name => (traits => [qw(Payload)], is => 'ro', @args) );
+}
+
+# TODO: Add method to automatically provide data from payloads.
+
+=method data
+
+    my $data = $message->data;
+
+Messages automatically create a data method (needed for transmitting
+over the exobrain bus) by tallying payload attributes.
+
+=cut
+
+use constant PAYLOAD_CLASS => 'App::Exobrain::Message::Trait::Payload';
+
+method data() {
+    my $meta     = $self->meta;
+    my @attrs    = $self->meta->get_attribute_list;
+
+    my @payloads = grep 
+        { $meta->get_attribute($_)->does( PAYLOAD_CLASS ) } @attrs
+    ;
+
+    my $data = {};
+
+    # Walk through all our attributes and populate them into a hash.
+
+    foreach my $attr (@payloads) {
+        $data->{ $attr } = $self->$attr;
+    }
+
+    return $data;
 }
 
 package App::Exobrain::Message::Trait::Payload;

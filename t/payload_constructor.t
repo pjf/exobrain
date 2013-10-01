@@ -23,6 +23,9 @@ is($obj->foo, 'Foo', "foo is set");
 is($obj->bar, 42,    "bar is set");
 is($obj->timestamp, 1000, "Timestamp manual setting works");
 
+is($obj->data->{foo}, 'Foo', "Foo is in data packet");
+is(scalar (keys $obj->data), 1, "Only one attribute in data packet");
+
 ok(
     ! $meta->get_attribute('bar')->does('App::Exobrain::Message::Trait::Payload'),
     "Bar is not a payload attribute"
