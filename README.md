@@ -1,4 +1,25 @@
-Installing:
+# What is this?
+
+Exobrain is a collection of agents which collect, classify, and act
+upon data. They share a common bus for communication. Examples of
+things that exobrain can currently do:
+
+* Give you XP in HabitRPG when you update your beeminder goals
+* Let others add items to your RememberTheMilk TODO lists via twitter
+* Update beeminder by checking your inbox sizes using IMAP
+* Reward you for responding to email
+
+While the core of exobrain is currently written in Perl, the shared
+message bus (0MQ) and packet format (JSON) are designed to make it
+easy to connect components from other languages.
+
+# How easy is this to use?
+
+Not going to lie, it's pretty rough at the moment, as it's essentially
+@pjf's personal-use software. Patches, or even a definitive list of
+bugs and issues related to installation and use are very welcome.
+
+# Installation
 
     apt-get install libzmq-dev expat-dev libnet-ssleay-perl \
         libnet-libidn-perl  libcrypt-ssleay-perl ubic
@@ -78,3 +99,7 @@ Of course, you can get *EVERYTHING* online in one go with just:
 
 You probably won't use all the components, though, so it's recommended
 that you only configure and switch on the ones you need.
+
+# LICENSE
+
+Same as Perl 5 itself.
