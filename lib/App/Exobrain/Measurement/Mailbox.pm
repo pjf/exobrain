@@ -43,6 +43,8 @@ has summary => (
     isa => 'Str', builder => '_build_summary', lazy => 1, is => 'ro'
 );
 
+has '+namespace' => ( is => 'ro', isa => 'Str', default => 'MAILBOX' );
+
 method _build_summary() {
     return join(" ",
         $self->user, '@', $self->server, "/", $self->folder,

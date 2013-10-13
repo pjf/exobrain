@@ -17,7 +17,13 @@ has     'bar' => (isa => 'Int', is => 'ro');
 package main;
 use Test::More;
 
-my $obj = App::Exobrain::Test->new(foo=> 'Foo', bar => 42, timestamp=>1000);
+my $obj = App::Exobrain::Test->new(
+    foo=> 'Foo',
+    bar => 42,
+    timestamp=>1000,
+    namespace => 'TEST',
+    source => 'TEST',
+);
 
 my $meta = $obj->meta;
 
@@ -39,7 +45,12 @@ ok(
 );
 
 my $time = time();
-my $obj2 = App::Exobrain::Test->new(foo=> 'Foo', bar => 42);
+my $obj2 = App::Exobrain::Test->new(
+    foo=> 'Foo',
+    bar => 42,
+    namespace => 'TEST',
+    source => 'TEST',
+);
 
 ok (
     abs($time - $obj2->timestamp) < 1000,

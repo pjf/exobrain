@@ -3,38 +3,31 @@ package App::Exobrain::Message;
 use 5.010;
 use strict;
 use warnings;
-use autodie;
 use Method::Signatures;
 use Moose::Role;
 use Moose::Util::TypeConstraints;
+use Carp;
+use ZMQ::Constants qw(ZMQ_SNDMORE);
+use ZMQ::LibZMQ2;
+use JSON::Any;
 
 has timestamp => ( is => 'ro', isa => 'Int', default => sub { time() } );
 has exobrain  => ( is => 'ro', isa => 'App::Exobrain');
 has raw       => ( is => 'ro', isa => 'Ref' );
+has namespace => ( is => 'ro', isa => 'Str', required => 1 );
+has source    => ( is => 'ro', isa => 'Str', required => 1 );
 
 # Many classes will provide their own way of getting summary
 # data.
 
-# requires qw(summary);
+requires qw(summary);
 
-{
-    # Automatic conversion between JSON and Perl Refs.
-    # TODO: Move elsewhere?
+# Automatic conversion between JSON and Perl Refs.
 
-    use JSON::Any;
+my $json = JSON::Any->new;
 
-    my $json = JSON::Any->new;
-
-    subtype 'JSON',
-        as 'Str',
-        where { $json->decode($_) }
-    ;
-
-    coerce 'JSON',
-        from 'Ref',
-        via { $json->encode($_) }
-    ;
-}
+subtype 'JSON', as   'Str', where { $json->decode($_) } ;
+coerce  'JSON', from 'Ref', via   { $json->encode($_) } ;
 
 =method payload
 
@@ -93,6 +86,75 @@ method data() {
     }
 
     return $data;
+}
+
+=method send($socket?)
+
+Sends the message across the exobrain bus. If no socket is provided,
+the one from the exobrain object (if we were built with one) is used.
+
+=cut
+
+method send($socket?) {
+
+    # If we don't have a socket, grab it from our exobrain object
+    # (if it exists)
+
+    if (not $socket) {
+        if (my $exobrain = $self->exobrain) {
+            $socket = $exobrain->pub->_socket;
+        }
+        else {
+            croak "send() is missing a socket or exobrain";
+        }
+    }
+
+    # For some reason multipart sends don't work right now,
+    # $socket->ZMQ::Socket::send_multipart( $self->frames );
+
+    my @frames = $self->_frames;
+    my $last   = pop(@frames);
+
+    foreach my $frame ( @frames) {
+        zmq_send($socket, $frame, ZMQ_SNDMORE);
+    }
+
+    zmq_send($socket,$last);
+
+    return;
+}
+
+# Internal method for creating the required frame structure
+
+method _frames() {
+    my @frames;
+
+    push(@frames, join("_", "EXOBRAIN", $self->namespace, $self->source));
+    push(@frames, "XXX - JSON - timestamp => " . $self->timestamp);
+    push(@frames, $self->summary // "");
+    push(@frames, $json->encode( $self->data ));
+    push(@frames, $json->encode( $self->raw  ));
+
+    return @frames;
+}
+
+=method dump()
+
+    my $pkt_debug = $msg->dump;
+
+Provides a string containing a dump of universal packet attributes.
+Intended for debugging.
+
+=cut
+
+method dump() {
+    my $dumpstr = "";
+
+    foreach my $method ( qw(namespace timestamp source data raw summary)) {
+        $dumpstr .= "$method : " . $self->$method . "\n";
+    }
+
+    return $dumpstr;
 }
 
 package App::Exobrain::Message::Trait::Payload;
