@@ -9,8 +9,11 @@ use Socket qw( SO_KEEPALIVE );
 use Net::IMAP::Client;
 use Term::ReadKey;
 
+use App::Exobrain;
 use App::Exobrain::Bus;
 use App::Exobrain::Message;
+
+my $exobrain = App::Exobrain->new;
 
 my $user    = shift || die "Usage: $0 user server";
 my $server  = shift || die "Usage: $0 user server";
@@ -50,9 +53,7 @@ $imap->login or die "Can't login " . $imap->last_error;
 
 say "Connected...";
 
-my $bus = App::Exobrain::Bus->new(
-    type => 'PUB',
-);
+my $bus = $exobrain->pub;
 
 my $sent_box;
 
@@ -77,13 +78,12 @@ sub measure {
 
     my $count = $data->{MESSAGES};
 
-    my $msg = App::Exobrain::Message->new(
-        namespace => 'EMAIL',
-        timestamp => time(),
+    my $msg = $exobrain->measure('Mailbox',
         source    => 'IMAP',
-        data      => { count => $count, user => $user, server => $server, mailbox => $mailbox },
+        count     => $count,
+        user      => $user,
+        server    => $server,
+        mailbox   => $mailbox,
         raw       => $data,
-        summary   => "$user on $server has $count messages in $mailbox",
-    )->send( $bus->_socket );
-
+    )->send;
 }

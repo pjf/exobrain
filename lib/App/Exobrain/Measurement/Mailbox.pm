@@ -43,7 +43,7 @@ has summary => (
     isa => 'Str', builder => '_build_summary', lazy => 1, is => 'ro'
 );
 
-has '+namespace' => ( is => 'ro', isa => 'Str', default => 'MAILBOX' );
+has '+namespace' => ( is => 'ro', isa => 'Str', default => 'EMAIL' );
 
 method _build_summary() {
     return join(" ",
