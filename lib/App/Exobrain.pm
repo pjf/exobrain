@@ -58,6 +58,20 @@ method message() {
     );
 }
 
+use constant MEASURE_PREFIX => 'App::Exobrain::Measurement::';
+
+method measure($type, @args) {
+    my $class = MEASURE_PREFIX . $type;
+
+    eval "require $class";
+    die $@ if $@;
+
+    return $class->new(
+        exobrain => $self,
+        @args,
+    );
+}
+
 =for Pod::Coverage BUILD DEMOLISH
 
 =cut

@@ -21,7 +21,7 @@ POP, Facebook API, or otherwise.
 
 Eg:
 
-    $exobrain->measure('Mailbox')->new(
+    $exobrain->measure('Mailbox',
         server => 'imap.example.com',
         user   => 'pjf',
         folder => 'INBOX',
