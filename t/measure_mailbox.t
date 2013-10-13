@@ -38,6 +38,9 @@ foreach my $msg ($msg1, $msg2) {
     # No does_ok in Test::More?
     ok($msg->DOES('App::Exobrain::Message'), 'does Exobrain::Message');
 
+    can_ok($msg, qw(send_msg data dump _frames));
+    can_ok('App::Exobrain::Message', 'send_msg');
+
     foreach my $attr (keys %raw) {
         is ($msg->$attr, $raw{$attr}, "Attribute $attr");
     }

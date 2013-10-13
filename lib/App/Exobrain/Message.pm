@@ -92,14 +92,14 @@ method data() {
     return $data;
 }
 
-=method send($socket?)
+=method send_msg($socket?)
 
 Sends the message across the exobrain bus. If no socket is provided,
 the one from the exobrain object (if we were built with one) is used.
 
 =cut
 
-method send($socket?) {
+method send_msg($socket?) {
 
     # If we don't have a socket, grab it from our exobrain object
     # (if it exists)
@@ -109,7 +109,7 @@ method send($socket?) {
             $socket = $exobrain->pub->_socket;
         }
         else {
-            croak "send() is missing a socket or exobrain";
+            croak "send_msg() is missing a socket or exobrain";
         }
     }
 
