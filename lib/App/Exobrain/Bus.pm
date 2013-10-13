@@ -10,7 +10,7 @@ use Moose;
 use Method::Signatures;
 
 use App::Exobrain::Router;
-use App::Exobrain::Message;
+use App::Exobrain::Message::Raw;
 
 my $context  = zmq_init();                  # Context is always shared.
 my $endpoint = 'tcp://localhost:3568/';     # TODO: From config file?
@@ -56,7 +56,7 @@ method get() {
         $more = zmq_getsockopt($self->_socket, ZMQ_RCVMORE);
     }
 
-    my $message = App::Exobrain::Message->new(\@frames);
+    my $message = App::Exobrain::Message::Raw->new(\@frames);
 
     return $message;
 }

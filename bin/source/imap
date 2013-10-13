@@ -83,7 +83,7 @@ sub measure {
         count     => $count,
         user      => $user,
         server    => $server,
-        folder    => $mailbox,
+        mailbox   => $mailbox,
         raw       => $data,
     )->send_msg;
 }

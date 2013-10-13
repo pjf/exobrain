@@ -10,6 +10,7 @@ use Carp;
 use ZMQ::Constants qw(ZMQ_SNDMORE);
 use ZMQ::LibZMQ2;
 use JSON::Any;
+use Data::Dumper;
 
 has timestamp => ( is => 'ro', isa => 'Int', default => sub { time() } );
 has exobrain  => ( is => 'ro', isa => 'App::Exobrain');
@@ -155,7 +156,9 @@ method dump() {
     my $dumpstr = "";
 
     foreach my $method ( qw(namespace timestamp source data raw summary)) {
-        $dumpstr .= "$method : " . $self->$method . "\n";
+        my $data = $self->$method;
+        if (ref $data) { $data = Dumper $data };
+        $dumpstr .= "$method : $data\n";
     }
 
     return $dumpstr;

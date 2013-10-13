@@ -25,19 +25,19 @@ POP, Facebook API, or otherwise.
 Eg:
 
     $exobrain->measure('Mailbox',
-        server => 'imap.example.com',
-        user   => 'pjf',
-        folder => 'INBOX',
-        raw    => $raw_data,
-        count  => $cnt,
+        server  => 'imap.example.com',
+        user    => 'pjf',
+        mailbox => 'INBOX',
+        raw     => $raw_data,
+        count   => $cnt,
     );
 
 =cut
 
-payload server => ( isa => 'Str' );
-payload user   => ( isa => 'Str' );
-payload folder => ( isa => 'Str' );
-payload count  => ( isa => 'Int' );
+payload server  => ( isa => 'Str' );
+payload user    => ( isa => 'Str' );
+payload mailbox => ( isa => 'Str' );
+payload count   => ( isa => 'Int' );
 
 has summary => (
     isa => 'Str', builder => '_build_summary', lazy => 1, is => 'ro'
@@ -47,7 +47,7 @@ has '+namespace' => ( is => 'ro', isa => 'Str', default => 'EMAIL' );
 
 method _build_summary() {
     return join(" ",
-        $self->user, '@', $self->server, "/", $self->folder,
+        $self->user, '@', $self->server, "/", $self->mailbox,
         "has", $self->count, "messages"
     );
 }
