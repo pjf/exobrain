@@ -11,30 +11,43 @@ use warnings;
 use Ubic::Multiservice::Simple;
 use Ubic::Service::SimpleDaemon;
 
+my $LOG_HOME = "$ENV{HOME}/ubic/log/exobrain";
+
+sub daemon {
+    my ($bin) = @_;
+
+    return Ubic::Service::SimpleDaemon->new(
+        bin      => $bin,
+        stdout   => "$LOG_HOME/$bin.stdout.log",
+        stderr   => "$LOG_HOME/$bin.stderr.log",
+        ubic_log => "$LOG_HOME/$bin.ubic.log",
+    );
+}
+
 Ubic::Multiservice::Simple->new({
 
     source => Ubic::Multiservice::Simple->new({
-        twitter  => Ubic::Service::SimpleDaemon->new(bin=>"twitter"),
-        facebook => Ubic::Service::SimpleDaemon->new(bin=>"facebook"),
-        beeminder => Ubic::Service::SimpleDaemon->new(bin=>"beeminder-callback"),
-        foursquare => Ubic::Service::SimpleDaemon->new(bin=>"foursquare"),
+        twitter  => daemon("twitter"),
+        facebook => daemon("facebook"),
+        beeminder => daemon("beeminder-callback"),
+        foursquare => daemon("foursquare"),
     }),
 
     classify => Ubic::Multiservice::Simple->new({
-        'tweet-ping' => Ubic::Service::SimpleDaemon->new(bin=>'tweet-ping'),
-        'bee-habit'  => Ubic::Service::SimpleDaemon->new(bin=>'bee-habit'),
-        'bee-inbox'  => Ubic::Service::SimpleDaemon->new(bin=>'bee-inbox'),
-        'rtm-adder'  => Ubic::Service::SimpleDaemon->new(bin=>'rtm-adder'),
-        'sentbox-reward'  => Ubic::Service::SimpleDaemon->new(bin=>'sentbox-reward'),
+        'tweet-ping' => daemon('tweet-ping'),
+        'bee-habit'  => daemon('bee-habit'),
+        'bee-inbox'  => daemon('bee-inbox'),
+        'rtm-adder'  => daemon('rtm-adder'),
+        'sentbox-reward'  => daemon('sentbox-reward'),
     }),
 
     sink => Ubic::Multiservice::Simple->new({
-        twitter  => Ubic::Service::SimpleDaemon->new(bin=>"twitter-send"),
-        habitrpg => Ubic::Service::SimpleDaemon->new(bin=>'habitrpg'),
-        beeminder => Ubic::Service::SimpleDaemon->new(bin=>'beeminder'),
+        twitter  => daemon("twitter-send"),
+        habitrpg => daemon('habitrpg'),
+        beeminder => daemon('beeminder'),
     }),
 
     core => Ubic::Multiservice::Simple->new({
-        router => Ubic::Service::SimpleDaemon->new(bin=> "router"),
+        router => daemon("router"),
     }),
 });
