@@ -73,9 +73,9 @@ method send($msg) {
 }
 
 method send_msg(%opts) {
-    my $msg = App::Exobrain::Message->new( %opts );
+    my $msg = App::Exobrain::Message::Raw->new( %opts );
 
-    return $msg->send( $self->_socket );
+    return $msg->send_msg( $self->_socket );
 }
 
 1;
