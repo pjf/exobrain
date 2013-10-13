@@ -23,7 +23,8 @@ my $responder = App::Exobrain::Bus->new( type => 'PUB' );
 my $config = App::Exobrain::Config->new;
 my $cache  = App::Exobrain::Cache->new(namespace => $0);
 
-my $task = $config->{'Sendbox-Reward'}{task} or die "No HabitRPG task";
+my $task  = $config->{'Sendbox-Reward'}{task} or die "No HabitRPG task";
+my $send_tweet = $config->{'Sendbox-Reward'}{tweet} || 0;
 
 while (my $event = $bus->get) {
     if (my $tags = $event->namespace eq 'EMAIL') {
@@ -51,7 +52,7 @@ while (my $event = $bus->get) {
             App::Exobrain::Intent::HabitRPG->new(
                 task => $task,
                 direction => 'up',
-                public => 1,
+                public => $send_tweet,
             )->send( $responder->_socket );
         }
     }
