@@ -31,6 +31,11 @@ of a changed network configuration. Force install it with:
 
     cpanm -f WebService::RTMAgent
 
+Likewise, we require at least `Devel::Pragma` 0.60. As of 2013-10-13
+this was not yet on the CPAN, but it can be installed with:
+
+    cpanm https://github.com/chocolateboy/Devel-Pragma/archive/v0.60.tar.gz
+
 Set up ubic (if you haven't already done so):
 
     ubic-admin setup
