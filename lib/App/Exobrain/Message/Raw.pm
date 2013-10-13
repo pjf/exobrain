@@ -6,41 +6,33 @@ use ZMQ::LibZMQ2;
 use JSON::Any;
 use Method::Signatures;
 use Carp;
-use warnings;
 
 use Moose::Util::TypeConstraints;
 
-with 'App::Exobrain::Message';
-
-# Automatic conversion between JSON and Perl Refs.
-
 my $json = JSON::Any->new;
 
-subtype 'JSON',
-    as 'Str',
-    where { $json->decode($_) }
-;
+# Summary declared early, so our role can see it.
 
-coerce 'JSON',
-    from 'Ref',
-    via { $json->encode($_) }
-;
+has 'summary'    => ( is => 'ro', isa => 'Str', required => 1 );
+has '_data'      => ( is => 'rw', isa => 'Ref' );
 
-# Message format:
-# * Header string for pub/sub filtering (EXOBRAIN + NAMESPACE + SOURCE)
-#   (eg: EXOBRAIN_GEO_FOURSQUARE)
-# * Meta-info (JSON)
-# * Summary (human string)
-# * Data (JSON)
-# * Raw data (optional)
+with 'App::Exobrain::Message';
 
-has namespace => ( is => 'ro', isa => 'Str', required => 1 );
-has timestamp => ( is => 'ro', isa => 'Int'                );  # Epoch
-has source    => ( is => 'ro', isa => 'Str', required => 1 );
-has data      => ( is => 'ro', isa => 'Ref'                );
-has raw       => ( is => 'ro', isa => 'Ref'                );
-has summary   => ( is => 'ro', isa => 'Str'                );  # Human readable
-has exobrain  => ( is => 'ro', isa => 'App::Exobrain',     );
+# Stash our explicit data section
+
+sub BUILD {
+    my ($self, $args) = @_;
+
+    my $data = $args->{data} or croak "Raw packets need a data argument";
+
+    $self->_data($data);
+
+    return;
+};
+
+method data() {
+    return $self->_data;
+}
 
 around BUILDARGS => sub {
     my ($orig, $class, @args) = @_;
@@ -63,56 +55,5 @@ around BUILDARGS => sub {
 
     return $class->$orig(@args);
 };
-
-method send($socket?) {
-
-    # If we don't have a socket, grab it from our exobrain object
-    # (if it exists)
-
-    if (not $socket) {
-        if (my $exobrain = $self->exobrain) {
-            $socket = $exobrain->pub->_socket;
-        }
-        else {
-            croak "send() is missing a socket or exobrain";
-        }
-    }
-
-    # For some reason multipart sends don't work right now,
-    # $socket->ZMQ::Socket::send_multipart( $self->frames );
-
-    my @frames = $self->frames;
-    my $last   = pop(@frames);
-
-    foreach my $frame ( @frames) {
-        zmq_send($socket, $frame, ZMQ_SNDMORE);
-    }
-
-    zmq_send($socket,$last);
-    
-    return;
-}
-
-method frames() {
-    my @frames;
-
-    push(@frames, join("_", "EXOBRAIN", $self->namespace, $self->source));
-    push(@frames, "XXX - JSON - timestamp => " . $self->timestamp);
-    push(@frames, $self->summary // "");
-    push(@frames, $json->encode( $self->data ));
-    push(@frames, $json->encode( $self->raw  ));
-
-    return @frames;
-}
-
-method dump() {
-    my $dumpstr = "";
-
-    foreach my $method ( qw(namespace timestamp source data raw summary)) {
-        $dumpstr .= "$method : " . $self->$method . "\n";
-    }
-
-    return $dumpstr;
-}
 
 1;

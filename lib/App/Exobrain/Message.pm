@@ -17,6 +17,10 @@ has raw       => ( is => 'ro', isa => 'Ref' );
 has namespace => ( is => 'ro', isa => 'Str', required => 1 );
 has source    => ( is => 'ro', isa => 'Str', required => 1 );
 
+# This can be used to explicitly set the data, ignoring the
+# payload attributes.
+has _data     => ( is => 'ro', isa => 'Ref' );
+
 # Many classes will provide their own way of getting summary
 # data.
 

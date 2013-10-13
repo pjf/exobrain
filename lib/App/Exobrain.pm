@@ -14,6 +14,7 @@ use Method::Signatures;
 use App::Exobrain::Bus;
 use App::Exobrain::Config;
 use App::Exobrain::Message;
+use App::Exobrain::Message::Raw;
 
 has 'config' => (
     is => 'ro',
@@ -52,10 +53,10 @@ to the class constructor automatically.
 
 =cut
 
-method message() {
-    return App::Exobrain::Message->new(
+method message(@args) {
+    return App::Exobrain::Message::Raw->new(
         exobrain => $self,
-        @_,
+        @args,
     );
 }
 
