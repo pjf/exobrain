@@ -10,7 +10,9 @@ use Carp;
 # This provides a message which Beeminder sinks will act upon.
 # Intent::Beeminder->new( goal => 'inbox', value => 52 );
 
-extends 'App::Exobrain::Message';
+has summary => (is => 'ro', isa => 'Str', required => 1 );
+
+with 'App::Exobrain::Message';
 
 around BUILDARGS => sub {
     my ($orig, $class, @raw_args) = @_;

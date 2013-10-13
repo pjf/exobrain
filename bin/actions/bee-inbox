@@ -54,7 +54,7 @@ while (1) {
                 goal => $goal,
                 value => $count,
                 comment => "Submitted via exobrain",
-            )->send( $exobrain->pub->_socket);
+            )->send_msg( $exobrain->pub->_socket);
 
             # TODO: Fix the awful syntax above. Surely intents
             # could just take an exobrain parameter?
