@@ -13,7 +13,7 @@ use JSON::Any;
 use Data::Dumper;
 
 has timestamp => ( is => 'ro', isa => 'Int', default => sub { time() } );
-has exobrain  => ( is => 'ro', isa => 'App::Exobrain');
+has exobrain  => ( is => 'rw', isa => 'App::Exobrain');
 has raw       => ( is => 'ro', isa => 'Ref' );
 has namespace => ( is => 'ro', isa => 'Str', required => 1 );
 has source    => ( is => 'ro', isa => 'Str', required => 1 );

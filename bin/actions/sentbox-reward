@@ -8,8 +8,7 @@ use POSIX qw(strftime);
 # Reward users for sending email.
 
 use Getopt::Std;
-use App::Exobrain::Bus;
-use App::Exobrain::Config;
+use App::Exobrain;
 use App::Exobrain::Cache;
 use App::Exobrain::Intent::HabitRPG;
 use WebService::RTMAgent;
@@ -17,29 +16,33 @@ use Data::Dumper;
 
 use constant DEBUG => 1;
 
-my $bus       = App::Exobrain::Bus->new( type => 'SUB' );
-my $responder = App::Exobrain::Bus->new( type => 'PUB' );
+my $exobrain = App::Exobrain->new;
 
-my $config = App::Exobrain::Config->new;
+my $bus       = $exobrain->sub;
+my $responder = $exobrain->pub;
+my $config    = $exobrain->config;
+
 my $cache  = App::Exobrain::Cache->new(namespace => $0);
 
 my $task  = $config->{'Sendbox-Reward'}{task} or die "No HabitRPG task";
 my $send_tweet = $config->{'Sendbox-Reward'}{tweet} || 0;
 
-while (my $event = $bus->get) {
-    if (my $tags = $event->namespace eq 'EMAIL') {
+warn "Starting $0\n" if DEBUG;
+
+while (my $raw_event = $bus->get) {
+    if (my $tags = $raw_event->namespace eq 'EMAIL') {
 
         warn "Examining email event\n" if DEBUG;
 
-        my $data = $event->data;
+        my $event = $raw_event->to_class('Measurement::Mailbox');
 
-        my $mbox = $data->{mailbox} or next;
+        my $mbox = $event->mailbox or next;
 
         # Only look at sent mail.
         next unless $mbox =~ /sent/i;
 
-        my $key = [ $data->{server}, $mbox ];
-        my $count = $data->{count};
+        my $key = [ $event->server, $mbox ];
+        my $count = $event->count;
 
         my $old_count = $cache->get( $key ) || 0;
 
@@ -53,7 +56,7 @@ while (my $event = $bus->get) {
                 task => $task,
                 direction => 'up',
                 public => $send_tweet,
-            )->send( $responder->_socket );
+            )->send_msg( $responder->_socket );
         }
     }
 }

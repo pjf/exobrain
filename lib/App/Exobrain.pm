@@ -41,8 +41,8 @@ has 'sub' => (
 );
 
 sub _build_config { return App::Exobrain::Config->new; };
-sub _build_pub    { return App::Exobrain::Bus->new(type => 'PUB') }
-sub _build_sub    { return App::Exobrain::Bus->new(type => 'SUB') }
+sub _build_pub    { return App::Exobrain::Bus->new(type => 'PUB', exobrain => shift) }
+sub _build_sub    { return App::Exobrain::Bus->new(type => 'SUB', exobrain => shift) }
 
 =method message
 

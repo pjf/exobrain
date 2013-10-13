@@ -38,7 +38,7 @@ method data() {
 
 method to_class($class) {
     my $exobrain = $self->exobrain
-        or croak "Can't use to_class() on a message with an exobrain object.";
+        or croak "Can't use to_class() on a message without an exobrain object.";
 
     my $msg = $exobrain->message_class($class,
         %{ $self->data },

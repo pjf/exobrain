@@ -7,10 +7,12 @@ use warnings;
 use Moose;
 use Carp;
 
+has summary => (is => 'ro', isa => 'Str', required => 1);
+
 # This provides a message which HabitRPG sinks will act upon.
 # Intent::Tweet->new( task => $id, direction => 'up', public => 1 );
 
-extends 'App::Exobrain::Message';
+with 'App::Exobrain::Message';
 
 around BUILDARGS => sub {
     my ($orig, $class, @raw_args) = @_;

@@ -21,6 +21,7 @@ has router    => ( is => 'ro', default => sub { $router  } );
 has type      => ( is => 'ro', );   # TODO: Type
 has subscribe => ( is => 'rw', isa => 'Str', default => '' );
 has _socket   => ( is => 'rw' );
+has exobrain  => ( is => 'ro', isa => 'App::Exobrain' );
 
 sub BUILD {
     my ($self) = @_;
@@ -57,6 +58,10 @@ method get() {
     }
 
     my $message = App::Exobrain::Message::Raw->new(\@frames);
+
+    if ($self->exobrain) {
+        $message->exobrain($self->exobrain);
+    }
 
     return $message;
 }
