@@ -11,11 +11,11 @@ use App::Exobrain::Measurement::Mailbox;
 my $exobrain = App::Exobrain->new;
 
 my %raw = (
-    server => 'imap.example.com',
-    user   => 'urist',
-    folder => 'INBOX',
-    count  => 42,
-    source => 'TEST',
+    server  => 'imap.example.com',
+    user    => 'urist',
+    mailbox => 'INBOX',
+    count   => 42,
+    source  => 'TEST',
 );
 
 my $msg1 = App::Exobrain::Measurement::Mailbox->new(
