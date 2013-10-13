@@ -47,7 +47,8 @@ sub _build_sub    { return App::Exobrain::Bus->new(type => 'SUB') }
 
     $exobrain->message( ... )->send;
 
-Shortcut message creator.
+Shortcut to create a 'raw' message. The exobrain parameter will be passed
+to the class constructor automatically.
 
 =cut
 
@@ -57,6 +58,21 @@ method message() {
         @_,
     );
 }
+
+=method measure
+
+    $exobrain->measure( 'Mailbox',
+        count  => 42,
+        user   => 'pjf',
+        server => 'imap.example.com',
+        fodler => 'INBOX',
+    )->send;
+
+Preferred shortcut for creating a measurement of the desired class. The
+C<exobrain> parameter will be passed to the measurement class constructor
+automatically.
+
+=cut
 
 use constant MEASURE_PREFIX => 'App::Exobrain::Measurement::';
 

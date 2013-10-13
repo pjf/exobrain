@@ -7,6 +7,8 @@ use autodie;
 package App::Exobrain::Test;
 use Moose;
 
+sub summary { "Dummy summary"; }    # The role requires this
+
 BEGIN { with 'App::Exobrain::Message'; }
 
 payload 'foo' => (isa => 'Str');

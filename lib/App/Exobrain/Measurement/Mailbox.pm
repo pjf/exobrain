@@ -7,12 +7,15 @@ package App::Exobrain::Measurement::Mailbox;
 use 5.010;
 use autodie;
 use Moose;
-
-# See GH schwern/method-signatures #41 as to why we need to do our
-# 'withs' before loading Method::Signatures.
-
-BEGIN { with 'App::Exobrain::Message'; }
 use Method::Signatures;
+
+# Declare that we will have a summary attribute. This is to make
+# our roles happy.
+sub summary;
+
+# This needs to happen at begin time so it can add the 'payload'
+# keyword.
+BEGIN { with 'App::Exobrain::Message'; }
 
 =head1 DESCRIPTION
 
