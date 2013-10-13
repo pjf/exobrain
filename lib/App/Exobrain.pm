@@ -60,6 +60,20 @@ method message(@args) {
     );
 }
 
+use constant CLASS_PREFIX => 'App::Exobrain::';
+
+method message_class($class, @args) {
+    $class = CLASS_PREFIX . $class;
+
+    eval "require $class";
+    die $@ if $@;
+
+    return $class->new(
+        exobrain => $self,
+        @args,
+    );
+}
+
 =method measure
 
     $exobrain->measure( 'Mailbox',
@@ -75,7 +89,7 @@ automatically.
 
 =cut
 
-use constant MEASURE_PREFIX => 'App::Exobrain::Measurement::';
+use constant MEASURE_PREFIX => CLASS_PREFIX . 'Measurement::';
 
 method measure($type, @args) {
     my $class = MEASURE_PREFIX . $type;

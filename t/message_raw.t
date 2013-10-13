@@ -12,7 +12,13 @@ my $j = JSON::Any->new;
 
 my $exobrain = App::Exobrain->new;
 
-my $data = { foo => 1, bar => 2 };
+my $data = { 
+    mailbox => 'INBOX',
+    count => 42,
+    server => 'imap.example.com',
+    user  => 'pjf',
+};
+
 my $summary = "Test msg";
 
 my $namespace = 'TEST';
@@ -50,5 +56,13 @@ foreach my $m ($msg, $raw_msg) {
     is($msg->source, $source, 'source preserved');
 
 }
+
+# Convert to a class.
+
+my $mailbox = $msg->to_class('Measurement::Mailbox');
+
+isa_ok($mailbox, 'App::Exobrain::Measurement::Mailbox');
+is($mailbox->count, 42, 'mailbox count');
+
 
 done_testing;

@@ -34,6 +34,22 @@ method data() {
     return $self->_data;
 }
 
+# Build a typed message from our raw message
+
+method to_class($class) {
+    my $exobrain = $self->exobrain
+        or croak "Can't use to_class() on a message with an exobrain object.";
+
+    my $msg = $exobrain->message_class($class,
+        %{ $self->data },
+        summary   => $self->summary,
+        timestamp => $self->timestamp,
+        raw       => $self->raw,
+        namespace => $self->namespace,
+        source    => $self->source,
+    );
+}
+
 around BUILDARGS => sub {
     my ($orig, $class, @args) = @_;
 
