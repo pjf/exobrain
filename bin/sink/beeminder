@@ -10,7 +10,7 @@ use App::Exobrain;
 use App::Exobrain::Intent::Beeminder;
 use WebService::Beeminder;
 
-use constant DEBUG => 1;
+use constant DEBUG => 0;
 
 my $exobrain = App::Exobrain->new;
 
@@ -24,7 +24,7 @@ my $bus = $exobrain->sub;
 
 while (my $event = $bus->get) {
 
-    say "$0 debug: Looking at ".$event->namespace;
+    say "$0 debug: Looking at ".$event->namespace if DEBUG;
 
     if ($event->namespace eq 'INTENT+BEEMINDER') {
 
