@@ -10,7 +10,7 @@ use App::Exobrain;
 use App::Exobrain::Intent::Beeminder;
 use WebService::Beeminder;
 
-use constant DEBUG => 0;
+use constant DEBUG => 1;
 
 my $exobrain = App::Exobrain->new;
 
@@ -24,16 +24,26 @@ my $bus = $exobrain->sub;
 
 while (my $event = $bus->get) {
 
-    say "$0 debug: Looking at ".$event->namespace if DEBUG;
-
     if ($event->namespace eq 'INTENT+BEEMINDER') {
 
-        my $goal      = $event->data->{goal};
-        my $value     = $event->data->{value};
+        say "Beeminder action received" if DEBUG;
+
+        my $goal      = $event->data->{goal}  or drat($event, "No goal");
+        my $value     = $event->data->{value} or drat($event, "No value");
         my $comment   = $event->data->{comment} // "";
 
         $bee->add_datapoint( goal => $goal, value => $value, comment => $comment );
 
         say "bmndr: Updated $goal to $value ($comment)" if DEBUG;
     }
+}
+
+sub drat {
+    my ($event, $msg) = @_;
+
+    use Data::Dumper;
+    say "=== $msg ===";
+    say Dumper $event;
+
+    next;   # THIS IS AWFUL
 }

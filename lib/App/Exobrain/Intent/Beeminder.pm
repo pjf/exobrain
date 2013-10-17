@@ -12,7 +12,11 @@ use Carp;
 
 has summary => (is => 'ro', isa => 'Str', required => 1 );
 
-with 'App::Exobrain::Message';
+# XXX - This isn't a great solution, because we're not a "raw"
+# message. But it does the right thing for encoding and transmitting
+# our payload.
+
+extends 'App::Exobrain::Message::Raw';
 
 around BUILDARGS => sub {
     my ($orig, $class, @raw_args) = @_;
