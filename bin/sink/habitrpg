@@ -81,7 +81,7 @@ sub respond {
 
     App::Exobrain::Intent::Tweet->new(
         tweet => $content,
-    )->send( $responder->_socket );
+    )->send_msg( $responder->_socket );
 
     return;
 }
