@@ -10,7 +10,9 @@ use Carp;
 # This provides a message which twitter sinks will act upon.
 # Intent::Tweet->new( tweet => 'Hello World' );
 
-extends 'App::Exobrain::Message';
+has summary => (is => 'ro', isa => 'Str', required => 1);
+
+with 'App::Exobrain::Message';
 
 around BUILDARGS => sub {
     my ($orig, $class, @raw_args) = @_;
