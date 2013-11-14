@@ -20,7 +20,7 @@ my $config = App::Exobrain::Config->new;
 
 App::Exobrain::Intent::Tweet->new(
     tweet => "Ping debugger started",
-)->send( $responder->_socket );
+)->send_msg( $responder->_socket );
 
 while (my $event = $bus->get) {
     if (my $tags = $event->data->{tags}) {
