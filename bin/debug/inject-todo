@@ -23,5 +23,5 @@ my $msg = App::Exobrain::Message->new(
     data      => { tags => ['todo'], },
     raw       => { tags => ['todo'], text => $todo },
     summary   => $todo,
-)->send( $bus->_socket );
+)->send_msg( $bus->_socket );
 

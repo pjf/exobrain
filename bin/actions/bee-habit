@@ -27,7 +27,7 @@ while (my $event = $bus->get) {
                 task => $task,
                 direction => 'up',
                 public => 1,
-            )->send( $responder->_socket );
+            )->send_msg( $responder->_socket );
         }
     }
 }
