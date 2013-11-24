@@ -9,16 +9,19 @@ use Try::Tiny;
 use JSON::Any;
 use Data::Dumper;
 use App::Exobrain;
-use App::Exobrain::Bus;
-use App::Exobrain::Message;
 use App::Exobrain::Cache;
 use utf8::all;
+
+# This use line won't be needed once Geo::POI is
+# in its own file.
+use App::Exobrain::Measurement::Geo;
 
 use constant DEBUG => 0;
 use constant LAST_CHECK => 'last_check';
 
 my $exobrain = App::Exobrain->new;
-my $config   = $exobrain->config->{FourSquare};
+my $config   = $exobrain->config->{Foursquare};
+my $self_id  = $exobrain->config->{Identity}{Foursquare};
 my $TOKEN    = "oauth_token=$config->{auth_token}&v=20130425";
 my $BASE     = 'https://api.foursquare.com/v2';
 
@@ -26,7 +29,7 @@ my $mech = WWW::Mechanize->new();
 my $json = JSON::Any->new;
 
 my $cache = App::Exobrain::Cache->new(namespace => 'foursquare');
-my $bus  = App::Exobrain::Bus->new( type => 'PUB' );
+my $bus   = $exobrain->pub;
 
 my $last_check = $cache->compute(LAST_CHECK, undef, sub { time() } );
 
@@ -67,22 +70,22 @@ while (1) {
 
         my $time = localtime($checkin->{createdAt});
 
-        my $summary = "$name is at $checkin->{venue}{name}";
-        my $shout = $checkin->{shout} // "";
+        my $user = $checkin->{user}{id};
 
-        say(Dumper "$summary ( $shout )") if DEBUG;
-
-        my $msg = App::Exobrain::Message->new(
-            namespace => 'GEO',
+        $exobrain->measure('Geo',
+            source   => 'Foursquare',
             timestamp => $checkin->{createdAt},
-            source    => 'FOURSQUARE',
-            data      => $checkin,
-            raw       => $checkin,
-            summary   => $summary,
-        )->send( $bus->_socket );
+            is_me    => ( $user == $self_id),
+            user     => $user,
+            user_name => $name,
+            message  => $checkin->{shout} // "",
+            poi      => App::Exobrain::Measurement::Geo::POI->new(
+                name => $checkin->{venue}{name},
+                id   => $checkin->{venue}{id},
+            ),
+            raw      => $checkin,
+        )->send_msg;
     }
-
-    warn("$0: --\n") if DEBUG;
 
     sleep(60);
 }

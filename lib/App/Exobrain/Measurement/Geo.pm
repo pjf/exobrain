@@ -26,7 +26,7 @@ else that lets us snoop on poeple.
 Eg:
 
     $exobrain->measure('Geo',
-        service => 'Foursquare',
+        source => 'Foursquare',
         user    => 'pjf',
         user_name => 'Paul Fenwick',
         is_me   => 1,
@@ -42,7 +42,6 @@ a user object.
 
 =cut
 
-payload service  => ( isa => 'Str' );    # 4SQ, facebook, etc
 payload user     => ( isa => 'Str' );    # User on that service
 payload user_name=> ( isa => 'Str', required => 0);
 payload poi      => ( isa => 'App::Exobrain::Measurement::Geo::POI' );    # Point of interest
@@ -56,9 +55,16 @@ has summary => (
 has '+namespace' => ( is => 'ro', isa => 'Str', default => 'GEO' );
 
 method _build_summary() {
+
+    my $fmt_msg = "";
+
+    if (my $message = $self->message) {
+        $fmt_msg = qq{with message: "$message"};
+    }
     return join(" ",
-        $self->user, 'is at ', $self->poi->name, '(via ',
-        $self->service, ')',
+        $self->user_name || $self->user, 'is at', $self->poi->name,
+        $fmt_msg,
+        '( via', $self->source, ')', ($self->is_me ? "[Me]" : ""),
     );
 }
 

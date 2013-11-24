@@ -29,7 +29,7 @@ requires qw(summary);
 
 # Automatic conversion between JSON and Perl Refs.
 
-my $json = JSON::Any->new;
+my $json = JSON::Any->new(allow_blessed => 1);
 
 subtype 'JSON', as   'Str', where { $json->decode($_) } ;
 coerce  'JSON', from 'Ref', via   { $json->encode($_) } ;
