@@ -28,19 +28,26 @@ Eg:
     $exobrain->measure('Geo',
         service => 'Foursquare',
         user    => 'pjf',
+        user_name => 'Paul Fenwick',
         is_me   => 1,
         poi     => App::Exobrain::Measurement::Geo::POI->new(
             id   => 'abc01234ff',
             name => 'Some place',
         )
+        message => 'Drinking a coffee',
     );
+
+In the future C<user> and C<user_name> may be combined into
+a user object.
 
 =cut
 
 payload service  => ( isa => 'Str' );    # 4SQ, facebook, etc
 payload user     => ( isa => 'Str' );    # User on that service
+payload user_name=> ( isa => 'Str', required => 0);
 payload poi      => ( isa => 'App::Exobrain::Measurement::Geo::POI' );    # Point of interest
 payload is_me    => ( isa => 'Bool' );   # Is this the current user?
+payload message  => ( isa => 'Str', required => 0);  # Any message with checkin
 
 has summary => (
     isa => 'Str', builder => '_build_summary', lazy => 1, is => 'ro'
