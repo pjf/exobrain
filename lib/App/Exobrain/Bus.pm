@@ -59,6 +59,7 @@ method get() {
 
     my $message = App::Exobrain::Message::Raw->new(\@frames);
 
+    # If I have an exobrain object, attach that to the message.
     if ($self->exobrain) {
         $message->exobrain($self->exobrain);
     }
