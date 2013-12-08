@@ -45,6 +45,7 @@ Ubic::Multiservice::Simple->new({
         twitter  => daemon("twitter-send"),
         habitrpg => daemon('habitrpg'),
         beeminder => daemon('beeminder'),
+        idonethis => daemon('idone-send'),
     }),
 
     core => Ubic::Multiservice::Simple->new({

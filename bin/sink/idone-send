@@ -1,0 +1,39 @@
+#!/usr/bin/perl
+use 5.010;
+use strict;
+use warnings;
+use utf8::all;
+use autodie qw(:all);
+
+use App::Exobrain;
+use WebService::Idonethis;
+use POSIX qw(strftime);
+
+use constant DEBUG => 0;
+
+my $exobrain = App::Exobrain->new;
+my $config   = $exobrain->config->{Idonethis};
+
+my $user = $config->{user} or die "Can't find Idonethis/user";
+my $pass = $config->{pass} or die "Can't find Idonethis/pass";
+
+my $idone = WebService::Idonethis->new(
+    user => $config->{user},
+    pass => $config->{pass},
+);
+
+my $bus  = $exobrain->sub();
+
+while (my $event = $bus->get) {
+
+    say "Inspecting packet" if DEBUG;
+
+    next unless $event->namespace eq "INTENT+IDONE";
+
+    say "Logging " . $event->summary if DEBUG;
+
+    $idone->set_done(
+        text => $event->summary,
+        date => strftime("%Y-%m-%d", localtime( $event->timestamp )),
+    );
+}
