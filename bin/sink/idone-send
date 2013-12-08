@@ -32,8 +32,10 @@ while (my $event = $bus->get) {
 
     say "Logging " . $event->summary if DEBUG;
 
+    my $source = $event->source;
+
     $idone->set_done(
-        text => $event->summary,
+        text => "[exobrain/$source] " . $event->summary,
         date => strftime("%Y-%m-%d", localtime( $event->timestamp )),
     );
 }
