@@ -21,7 +21,6 @@ use constant LAST_CHECK => 'last_check';
 
 my $exobrain = App::Exobrain->new;
 my $config   = $exobrain->config->{Foursquare};
-my $self_id  = $exobrain->config->{Identity}{Foursquare};
 my $TOKEN    = "oauth_token=$config->{auth_token}&v=20130425";
 my $BASE     = 'https://api.foursquare.com/v2';
 
@@ -44,6 +43,8 @@ while (1) {
 
     # Record when we're making our call.
     my $checktime = time();
+
+    warn "Checking with a checktime of $checktime\n" if DEBUG;
 
     try {
         $mech->get("$BASE/checkins/recent?afterTimestamp=$last_check&$TOKEN");
@@ -72,10 +73,13 @@ while (1) {
 
         my $user = $checkin->{user}{id};
 
+        warn "Displaying checkin at $checkin->{venue}{name} by $name\n"
+            if DEBUG;
+
         $exobrain->measure('Geo',
             source   => 'Foursquare',
             timestamp => $checkin->{createdAt},
-            is_me    => ( $user == $self_id),
+            is_me    =>  ($checkin->{user}{relationship} eq 'self'),
             user     => $user,
             user_name => $name,
             message  => $checkin->{shout} // "",
