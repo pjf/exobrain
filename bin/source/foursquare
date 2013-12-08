@@ -24,7 +24,11 @@ my $config   = $exobrain->config->{Foursquare};
 my $TOKEN    = "oauth_token=$config->{auth_token}&v=20130425";
 my $BASE     = 'https://api.foursquare.com/v2';
 
-my $mech = WWW::Mechanize->new();
+# Setting a stack_depth of zero should disable mech history,
+# which may fix the memory leak in GH #7
+
+my $mech = WWW::Mechanize->new( stack_depth => 0 );
+
 my $json = JSON::Any->new;
 
 my $cache = App::Exobrain::Cache->new(namespace => 'foursquare');
