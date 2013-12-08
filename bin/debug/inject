@@ -10,6 +10,7 @@ use App::Exobrain::Message;
 use JSON::Any;
 use Config::Tiny;
 use Date::Manip::Date;
+use Try::Tiny;
 
 my $bus  = App::Exobrain::Bus->new( type => 'PUB' );
 
@@ -19,25 +20,25 @@ my $epoch_time = time();
 
 my $j = JSON::Any->new;
 
-if (my $data = $j->decode($summary)) {
+if (my $data = try { $j->decode($summary) } ) {
 
-    my $msg = App::Exobrain::Message->new(
+    my $msg = App::Exobrain::Message::Raw->new(
         namespace => $namespace,
         timestamp => $epoch_time,
         source    => 'CMDLINE',
         data      => $data,
         raw       => $data,
         summary   => $data->{summary} || $summary,
-    )->send( $bus->_socket );
+    )->send_msg( $bus->_socket );
 }
 
 else {
-    my $msg = App::Exobrain::Message->new(
+    my $msg = App::Exobrain::Message::Raw->new(
         namespace => $namespace,
         timestamp => $epoch_time,
         source    => 'CMDLINE',
         data      => { text => $summary },
         raw       => { text => $summary },
         summary   => $summary,
-    )->send( $bus->_socket );
+    )->send_msg( $bus->_socket );
 }
