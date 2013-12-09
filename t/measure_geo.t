@@ -33,4 +33,6 @@ is($message->message,'Drinking a coffee','message field');
 isa_ok($message->poi,'App::Exobrain::Measurement::Geo::POI');
 is($message->poi->source, 'Foursquare', 'POI source');
 
+is($message->summary, qq{Paul Fenwick is at Some place with message: "Drinking a coffee" ( via Foursquare ) [Me]}, "Summary msg");
+
 done_testing;
