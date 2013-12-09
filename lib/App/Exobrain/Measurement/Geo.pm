@@ -9,6 +9,9 @@ use autodie;
 use Moose;
 use Method::Signatures;
 
+use App::Exobrain::Measurement::Geo::POI;
+use App::Exobrain::Types qw(POI);
+
 # Declare that we will have a summary attribute. This is to make
 # our roles happy.
 sub summary;
@@ -30,11 +33,15 @@ Eg:
         user    => 'pjf',
         user_name => 'Paul Fenwick',
         is_me   => 1,
-        poi     => App::Exobrain::Measurement::Geo::POI->new(
+        poi     => {
             id   => 'abc01234ff',
             name => 'Some place',
-        )
+            lat  => $latitude,  # optional
+            long => $longitude, # optional
+        },
         message => 'Drinking a coffee',
+        lat  => $latitude,  # optional
+        long => $longitude, # optional
     );
 
 In the future C<user> and C<user_name> may be combined into
@@ -44,9 +51,11 @@ a user object.
 
 payload user     => ( isa => 'Str' );    # User on that service
 payload user_name=> ( isa => 'Str', required => 0);
-payload poi      => ( isa => 'App::Exobrain::Measurement::Geo::POI' );    # Point of interest
+payload poi      => ( isa => POI,   required => 0, coerce => 1 );    # Point of interest
 payload is_me    => ( isa => 'Bool' );   # Is this the current user?
 payload message  => ( isa => 'Str', required => 0);  # Any message with checkin
+payload lat      => ( isa => 'Num', required => 0); # TODO: Custom type
+payload long     => ( isa => 'Num', required => 0); # TODO: Custom type
 
 has summary => (
     isa => 'Str', builder => '_build_summary', lazy => 1, is => 'ro'
@@ -68,15 +77,14 @@ method _build_summary() {
     );
 }
 
-package App::Exobrain::Measurement::Geo::POI;
+method BUILD(...) {
 
-use Moose;
+    # Fill our POI source if required
 
-# Practically a stub class for now.
+    if ($self->poi and not $self->poi->source) {
+        $self->poi->source($self->source);
+    }
 
-has id   => (is => 'ro', isa => 'Str', required => 1);
-has name => (is => 'ro', isa => 'Str', required => 1);
-
-no Moose;
+}
 
 1;

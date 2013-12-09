@@ -17,10 +17,10 @@ my $message = $exobrain->measure('Geo',
     user    => 'pjf',
     user_name => 'Paul Fenwick',
     is_me   => 1,
-#    poi     => App::Exobrain::Measurement::Geo::POI->new(
-#        id   => 'abc01234ff',
-#        name => 'Some place',
-#    ),
+    poi => {
+        id   => 'abc01234ff',
+        name => 'Some place',
+    },
     message => 'Drinking a coffee',
 );
 
@@ -30,5 +30,7 @@ isa_ok($message,'App::Exobrain::Measurement::Geo');
 is($message->user,'pjf','user field');
 ok($message->is_me,'self field');
 is($message->message,'Drinking a coffee','message field');
+isa_ok($message->poi,'App::Exobrain::Measurement::Geo::POI');
+is($message->poi->source, 'Foursquare', 'POI source');
 
 done_testing;
