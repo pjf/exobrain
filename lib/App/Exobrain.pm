@@ -6,6 +6,7 @@ use warnings;
 use autodie;
 use Moose;
 use Method::Signatures;
+use Carp qw(croak);
 
 # ABSTRACT: Core Exobrain accessor class
 
@@ -60,13 +61,8 @@ method message(@args) {
     );
 }
 
-use constant CLASS_PREFIX => 'App::Exobrain::';
-
 method message_class($class, @args) {
-    $class = CLASS_PREFIX . $class;
-
-    eval "require $class";
-    die $@ if $@;
+    $class = $self->_load_component($class);
 
     return $class->new(
         exobrain => $self,
@@ -89,18 +85,30 @@ automatically.
 
 =cut
 
-use constant MEASURE_PREFIX => CLASS_PREFIX . 'Measurement::';
+use constant MEASURE_PREFIX => 'Measurement::';
 
 method measure($type, @args) {
-    my $class = MEASURE_PREFIX . $type;
 
-    eval "require $class";
-    die $@ if $@;
+    my $class = $self->_load_component( MEASURE_PREFIX . $type );
 
     return $class->new(
         exobrain => $self,
         @args,
     );
+}
+
+use constant CLASS_PREFIX => 'App::Exobrain::';
+
+# Loads a class, automatically adding App::Exobrain if
+# required. Returns the class loaded.
+
+method _load_component(Str $class) {
+    $class = CLASS_PREFIX . $class;
+
+    eval "require $class";
+    croak $@ if $@;
+
+    return $class;
 }
 
 =for Pod::Coverage BUILD DEMOLISH
