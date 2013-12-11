@@ -1,5 +1,6 @@
 package App::Exobrain::Config;
-
+use strict;
+use warnings;
 use parent 'Config::Tiny';
 
 # Bare-bones hack to wrap Config::Tiny

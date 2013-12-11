@@ -1,13 +1,10 @@
-package App::Exobrain::Measurement::Geo;
+package App::Exobrain::Measurement::Geo::POI;
 
 # ABSTRACT: Geo Point Of Interest class
 
 # VERSION
 
 use 5.010;
-
-package App::Exobrain::Measurement::Geo::POI;
-
 use Moose;
 
 # Practically a stub class for now.
