@@ -7,7 +7,8 @@ use autodie;
 package App::Exobrain::Test;
 use Moose;
 
-sub summary { "Dummy summary"; }    # The role requires this
+sub summary   { "Dummy summary"; }    # The role requires this
+sub namespace { "Test"         ; }    # ...and this
 
 BEGIN { with 'App::Exobrain::Message'; }
 

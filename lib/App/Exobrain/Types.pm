@@ -8,6 +8,7 @@ my $json = JSON::Any->new( allow_blessed => 1 );
 use MooseX::Types -declare => [qw(
     JSON
     POI
+    TweetStr
 )];;
 
 use MooseX::Types::Moose qw(
@@ -24,6 +25,11 @@ subtype JSON,
 coerce JSON,
     from Ref,
     via { $json->encode($_) }
+;
+
+subtype TweetStr,
+    as Str,
+    where { length($_) <= 140 }
 ;
 
 class_type POI,

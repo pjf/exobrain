@@ -48,6 +48,8 @@ foreach my $msg ($msg1, $msg2) {
     is($msg->summary, "urist @ imap.example.com / INBOX has 42 messages");
 
     is_deeply( $msg->raw, \%raw, "Raw data preserved" );
+
+    is($msg->namespace, 'Measurement::Mailbox');
 }
 
 done_testing;

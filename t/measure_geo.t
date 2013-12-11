@@ -35,4 +35,6 @@ is($message->poi->source, 'Foursquare', 'POI source');
 
 is($message->summary, qq{Paul Fenwick is at Some place with message: "Drinking a coffee" ( via Foursquare ) [Me]}, "Summary msg");
 
+is($message->namespace, 'Measurement::Geo');
+
 done_testing;

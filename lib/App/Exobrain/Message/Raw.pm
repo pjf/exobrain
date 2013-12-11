@@ -15,6 +15,7 @@ my $json = JSON::Any->new;
 
 has 'summary'    => ( is => 'ro', isa => 'Str', required => 1 );
 has '_data'      => ( is => 'rw', isa => 'Ref' );
+has 'namespace'  => ( is => 'ro', isa => 'Str', required => 1 );
 
 with 'App::Exobrain::Message';
 

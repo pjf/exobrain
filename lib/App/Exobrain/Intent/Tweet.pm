@@ -1,39 +1,18 @@
 package App::Exobrain::Intent::Tweet;
 
 use v5.10.0;
-use strict;
-use warnings;
 
 use Moose;
-use Carp;
+use Method::Signatures;
+use App::Exobrain::Types qw( TweetStr );
 
 # This provides a message which twitter sinks will act upon.
 # Intent::Tweet->new( tweet => 'Hello World' );
 
-has summary => (is => 'ro', isa => 'Str', required => 1);
+method summary() { return $self->tweet; }
 
-with 'App::Exobrain::Message';
+BEGIN { with 'App::Exobrain::Intent'; }
 
-around BUILDARGS => sub {
-    my ($orig, $class, @raw_args) = @_;
-
-    my %args = @raw_args;
-
-    $args{tweet} or croak "Intent::Tweet requires a tweet parameter";
-
-    if (length $args{tweet} > 140) {
-        carp "Tweet trimmed to 140 characters";
-        $args{tweet} = substr(0,140,$args{tweet});
-    }
-
-    $args{timestamp}  ||= time();
-    $args{data}       ||= { summary => $args{tweet} };
-    $args{raw}        ||= { summary => $args{tweet} };
-    $args{summary}    ||= $args{tweet};
-    $args{namespace}  ||= 'INTENT+TWEET';
-    $args{source}     ||= $0;
-
-    return $class->$orig(\%args);
-};
+payload tweet => ( isa => TweetStr );
 
 1;

@@ -1,34 +1,22 @@
 package App::Exobrain::Intent::Idone;
 
 use v5.10.0;
-use strict;
-use warnings;
 
 use Moose;
-use Carp;
+use Method::Signatures;
 
-# A very simple class that allows information to be added to
-# idonethis
+=head1 SYNOPSIS
 
-has summary => (is => 'ro', isa => 'Str', required => 1);
+    my $msg = $exobrain->intent( 'Idone',
+        message => "Wrote some awesome code",
+    );
 
-with 'App::Exobrain::Message';
+=cut
 
-around BUILDARGS => sub {
-    my ($orig, $class, @raw_args) = @_;
+method summary() { return $self->message; }
 
-    my %args = @raw_args;
+BEGIN { with 'App::Exobrain::Intent'; }
 
-    $args{message} or croak "Intent::Idone requires a message parameter";
-
-    $args{timestamp}  ||= time();
-    $args{data}       ||= { summary => $args{message} };
-    $args{raw}        ||= { summary => $args{message} };
-    $args{summary}    ||= $args{message};
-    $args{namespace}  ||= 'INTENT+IDONE';
-    $args{source}     ||= $0;
-
-    return $class->$orig(\%args);
-};
+payload 'message' => ( isa => 'Str' );
 
 1;

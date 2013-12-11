@@ -61,8 +61,6 @@ has summary => (
     isa => 'Str', builder => '_build_summary', lazy => 1, is => 'ro'
 );
 
-has '+namespace' => ( is => 'ro', isa => 'Str', default => 'GEO' );
-
 method _build_summary() {
 
     my $fmt_msg = "";

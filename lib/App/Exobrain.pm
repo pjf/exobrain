@@ -97,6 +97,29 @@ method measure($type, @args) {
     );
 }
 
+=method intent
+
+    my $intent = $exobrain->intent( 'Tweet',
+        tweet => 'Hello World',
+    );
+
+Preferred shortcut for making an intent of the desired class. The
+C<exobrain> parameter will be passed to the intent class constructor
+automatically.
+
+=cut
+
+use constant INTENT_PREFIX => 'Intent::';
+
+method intent($type, @args) {
+    my $class = $self->_load_component( INTENT_PREFIX . $type );
+
+    return $class->new(
+        exobrain => $self,
+        @args,
+    );
+}
+
 use constant CLASS_PREFIX => 'App::Exobrain::';
 
 # Loads a class, automatically adding App::Exobrain if

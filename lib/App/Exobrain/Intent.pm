@@ -2,6 +2,6 @@ package App::Exobrain::Intent;
 
 use Moose::Role;
 
-requires 'namespace';
+with 'App::Exobrain::Message';
 
 1;
