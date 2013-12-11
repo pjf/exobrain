@@ -12,6 +12,14 @@ use ZMQ::LibZMQ2;
 use JSON::Any;
 use Data::Dumper;
 
+use App::Exobrain::Types qw(JSON);
+
+=head1 DESCRIPTION
+
+Top-level I<role> for all exobrain messages.
+
+=cut
+
 has timestamp => ( is => 'ro', isa => 'Int', default => sub { time() } );
 has exobrain  => ( is => 'rw', isa => 'App::Exobrain');
 has raw       => ( is => 'ro', isa => 'Ref' );
@@ -27,12 +35,7 @@ has _data     => ( is => 'ro', isa => 'Ref' );
 
 requires qw(summary);
 
-# Automatic conversion between JSON and Perl Refs.
-
 my $json = JSON::Any->new(allow_blessed => 1);
-
-subtype 'JSON', as   'Str', where { $json->decode($_) } ;
-coerce  'JSON', from 'Ref', via   { $json->encode($_) } ;
 
 =method payload
 
