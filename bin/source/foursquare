@@ -4,17 +4,11 @@ use strict;
 use warnings;
 use autodie qw(:all);
 use WWW::Mechanize;
-use Config::Tiny;
 use Try::Tiny;
 use JSON::Any;
-use Data::Dumper;
 use App::Exobrain;
 use App::Exobrain::Cache;
 use utf8::all;
-
-# This use line won't be needed once Geo::POI is
-# in its own file.
-use App::Exobrain::Measurement::Geo;
 
 use constant DEBUG => 0;
 use constant LAST_CHECK => 'last_check';
@@ -87,10 +81,10 @@ while (1) {
             user     => $user,
             user_name => $name,
             message  => $checkin->{shout} // "",
-            poi      => App::Exobrain::Measurement::Geo::POI->new(
+            poi      => {
                 name => $checkin->{venue}{name},
                 id   => $checkin->{venue}{id},
-            ),
+            },
             raw      => $checkin,
         )->send_msg;
     }

@@ -4,8 +4,6 @@ use strict;
 use warnings;
 use autodie;
 
-use Getopt::Std;
-
 use App::Exobrain;
 use App::Exobrain::Intent::Beeminder;
 use WebService::Beeminder;
