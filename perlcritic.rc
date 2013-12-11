@@ -3,3 +3,8 @@ allow_includes = 1
 
 [Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict]
 allow = refs
+
+[-Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma]
+
+; Alas, Method::Signatures confuses perl critic on this one
+[-Perl::Critic::Policy::Modules::RequireEndWithOne]

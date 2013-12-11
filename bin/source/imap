@@ -86,4 +86,6 @@ sub measure {
         mailbox   => $mailbox,
         raw       => $data,
     )->send_msg;
+
+    return;
 }

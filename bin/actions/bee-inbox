@@ -19,7 +19,7 @@ my $tz = $exobrain->config->{General}{timezone};
 
 if ($tz) {
     say "Setting timezone to $tz";
-    $ENV{TZ} = $tz;
+    $ENV{TZ} = $tz;     ## no critic RequireLocalizedPunctuationVars
     tzset();
 }
 

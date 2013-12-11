@@ -45,6 +45,8 @@ sub BUILD {
             die "Internal error: Can't make a $_ socket.";
         }
     }
+
+    return;
 }
 
 method get() {
