@@ -28,11 +28,7 @@ my $msg2 = $exobrain->measure('Mailbox',
     raw => \%raw,
 );
 
-my $i = 1;
-
 foreach my $msg ($msg1, $msg2) {
-    diag "Examining msg$i"; $i++;
-
     isa_ok( $msg, 'App::Exobrain::Measurement::Mailbox');
 
     # No does_ok in Test::More?
