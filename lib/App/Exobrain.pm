@@ -45,6 +45,45 @@ sub _build_config { return App::Exobrain::Config->new; };
 sub _build_pub    { return App::Exobrain::Bus->new(type => 'PUB', exobrain => shift) }
 sub _build_sub    { return App::Exobrain::Bus->new(type => 'SUB', exobrain => shift) }
 
+=method watch_loop
+
+    $exobrain->watch_loop(
+        class  => 'Measurement::Geo',
+        filter => sub { $_->is_me },
+        then   => sub { ... },
+    );
+
+When we see packets of a particular class, do a particular thing.
+
+Never returns, just runs the loop forever.
+
+=cut
+
+method watch_loop(
+    Str     :$class!,
+    CodeRef :$filter,
+    CodeRef :$then!,
+) {
+    # my $full_class = $self->_load_component($class);
+
+    while (my $event = $self->sub->get) {
+        next unless $event->namespace eq $class;
+
+        $event->to_class($class);
+
+        if ($filter) {
+
+            # Check our filter, and skip if required
+            local $_ = $event;
+            next unless $filter->();
+
+        }
+
+        # Everything passes! Trigger our callback
+        $then->($event);
+    }
+}
+
 =method message
 
     $exobrain->message( ... )->send;
