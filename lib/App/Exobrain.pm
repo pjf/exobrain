@@ -64,7 +64,11 @@ method watch_loop(
     CodeRef :$filter,
     CodeRef :$then!,
 ) {
-    # my $full_class = $self->_load_component($class);
+
+    # Load our component, because that means we immediately get
+    # an error if that class doesn't exist.
+
+    $self->_load_component($class);
 
     while (my $event = $self->sub->get) {
         next unless $event->namespace eq $class;
