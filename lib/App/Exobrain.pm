@@ -90,7 +90,7 @@ method watch_loop(
 
 =method message
 
-    $exobrain->message( ... )->send;
+    $exobrain->message( ... )->send_msg;
 
 Shortcut to create a 'raw' message. The exobrain parameter will be passed
 to the class constructor automatically.
