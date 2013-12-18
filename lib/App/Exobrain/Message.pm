@@ -165,7 +165,7 @@ method _frames() {
     push(@frames, "XXX - JSON - timestamp => " . $self->timestamp);
     push(@frames, $self->summary // "");
     push(@frames, $json->encode( $self->data ));
-    push(@frames, $json->encode( $self->raw  ));
+    push(@frames, $json->encode( $self->raw  || {} ));
 
     return @frames;
 }

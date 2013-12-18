@@ -73,7 +73,7 @@ method watch_loop(
     while (my $event = $self->sub->get) {
         next unless $event->namespace eq $class;
 
-        $event->to_class($class);
+        $event = $event->to_class($class);
 
         if ($filter) {
 
