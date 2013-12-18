@@ -10,8 +10,6 @@ use Net::IMAP::Client;
 use Term::ReadKey;
 
 use App::Exobrain;
-use App::Exobrain::Bus;
-use App::Exobrain::Message;
 
 my $exobrain = App::Exobrain->new;
 
@@ -52,8 +50,6 @@ my $imap = Net::IMAP::Client->new(
 $imap->login or die "Can't login " . $imap->last_error;
 
 say "Connected...";
-
-my $bus = $exobrain->pub;
 
 my $sent_box;
 

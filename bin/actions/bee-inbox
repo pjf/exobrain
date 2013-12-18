@@ -6,16 +6,17 @@ use autodie;
 
 use App::Exobrain;
 use App::Exobrain::Cache;
-use App::Exobrain::Intent::Beeminder;
 use WebService::Beeminder;
 use POSIX qw(tzset);
 
 use constant DEBUG => 1;
 
 my $exobrain = App::Exobrain->new;
-my $bus = $exobrain->sub;
 my $cache = App::Exobrain::Cache->new(namespace => $0);
 my $tz = $exobrain->config->{General}{timezone};
+
+# TODO: Exobrain should set its own TZ, not have us do it
+# manually.
 
 if ($tz) {
     say "Setting timezone to $tz";
@@ -27,22 +28,17 @@ my %inbox_goal = (
     'perltraining.com.au' => 'inbox',
 );
 
-while (1) {
-    my $msg = $bus->get;
+$exobrain->watch_loop(
+    class  => 'Measurement::Mailbox',
+    filter => sub {
+        $_->mailbox eq 'INBOX' and $inbox_goal{ $_->server }
+    },
+    then => sub {
+        my $event = shift;
 
-    if ($msg->namespace eq 'EMAIL') {
-
-        my $data = $msg->data;
-
-        warn "Looking at email msg\n" if DEBUG;
-
-        # Only process INBOX states which we have goals
-        # for...
-        next unless $data->{mailbox} eq "INBOX";
-
-        my $server = $data->{server};
-        my $goal   = $inbox_goal{$server} or next;
-        my $count  = $data->{count};
+        my $server = $event->server;
+        my $goal   = $inbox_goal{$server};
+        my $count  = $event->count;
         my $key    = ['INBOX', $server];
 
         warn "$server has $count messages for $goal\n" if DEBUG;
@@ -56,21 +52,18 @@ while (1) {
         # new measurement each day.
 
         if (! $old_count or $count < $old_count) {
-            App::Exobrain::Intent::Beeminder->new(
+            $exobrain->intent('Beeminder',
                 goal => $goal,
                 value => $count,
                 comment => "Submitted via exobrain",
-            )->send_msg( $exobrain->pub->_socket);
+            )->send_msg;
 
-            # TODO: Fix the awful syntax above. Surely intents
-            # could just take an exobrain parameter?
-
-            say "Updating beeminder goal $goal to $count msgs";
+            say "Updating beeminder goal $goal to $count msgs" if DEBUG;
 
             $cache->set($key, $count, seconds_until_tomorrow());
         }
     }
-}
+);
 
 sub seconds_until_tomorrow {
     my ($s, $m, $h) = localtime;

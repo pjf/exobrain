@@ -5,10 +5,7 @@ use warnings;
 use autodie;
 
 use App::Exobrain;
-use App::Exobrain::Intent::Beeminder;
 use WebService::Beeminder;
-
-use constant DEBUG => 1;
 
 my $exobrain = App::Exobrain->new;
 
@@ -18,30 +15,14 @@ my $bee = WebService::Beeminder->new(
     token => $config->{auth_token},
 );
 
-my $bus = $exobrain->sub;
-
-while (my $event = $bus->get) {
-
-    if ($event->namespace eq 'INTENT+BEEMINDER') {
-
-        say "Beeminder action received" if DEBUG;
-
-        my $goal      = $event->data->{goal}  or drat($event, "No goal");
-        my $value     = $event->data->{value} or drat($event, "No value");
-        my $comment   = $event->data->{comment} // "";
-
-        $bee->add_datapoint( goal => $goal, value => $value, comment => $comment );
-
-        say "bmndr: Updated $goal to $value ($comment)" if DEBUG;
+$exobrain->watch_loop(
+    class => 'Intent::Beeminder',
+    then  => sub {
+        my $event = shift;
+        $bee->add_datapoint(
+            goal    => $event->goal,
+            value   => $event->value,
+            comment => $event->comment // "",
+        );
     }
-}
-
-sub drat {
-    my ($event, $msg) = @_;
-
-    use Data::Dumper;
-    say "=== $msg ===";
-    say Dumper $event;
-
-    next;   # THIS IS AWFUL
-}
+);
