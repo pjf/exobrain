@@ -3,31 +3,26 @@ use 5.010;
 use strict;
 use warnings;
 use autodie;
-use POSIX qw(strftime);
 
-use Getopt::Std;
-use App::Exobrain::Bus;
-use App::Exobrain::Config;
-use App::Exobrain::Intent::Tweet;
+use App::Exobrain;
 use WebService::HabitRPG;
-use Data::Dumper;
 
-use constant DEBUG => 1;
+use constant DEBUG => 0;
 
-my $bus       = App::Exobrain::Bus->new( type => 'SUB' );
-my $responder = App::Exobrain::Bus->new( type => 'PUB' );
+my $exobrain = App::Exobrain->new;
 
 my $config = App::Exobrain::Config->new;
 
 my $hrpg = WebService::HabitRPG->new(
-    api_token => $config->{HabitRPG}{api_token},
-    user_id   => $config->{HabitRPG}{user_id},
+    api_token => $exobrain->config->{HabitRPG}{api_token},
+    user_id   => $exobrain->config->{HabitRPG}{user_id},
 );
 
-while (my $event = $bus->get) {
-    if ($event->namespace eq 'INTENT+HABITRPG') {
+$exobrain->watch_loop(
+    class => 'Intent::HabitRPG',
+    then => sub {
 
-        debug(Dumper $event->data);
+        my $event = shift;
 
         my $task      = $event->data->{task};
         my $direction = $event->data->{direction};
@@ -64,13 +59,13 @@ while (my $event = $bus->get) {
             }
 
             debug("Sending: $msg");
-            respond($config->{Identity}, $msg);
+            respond($event->exobrain, $config->{Identity}, $msg);
         }
     }
-}
+);
 
 sub respond {
-    my ($ident, $text) = @_;
+    my ($exobrain, $ident, $text) = @_;
 
     my $user = $ident->{Twitter};
     my $content = "@".$user.": $text";
@@ -79,9 +74,9 @@ sub respond {
 
     my $time = time();
 
-    App::Exobrain::Intent::Tweet->new(
+    $exobrain->intent('Tweet',
         tweet => $content,
-    )->send_msg( $responder->_socket );
+    )->send_msg;
 
     return;
 }
