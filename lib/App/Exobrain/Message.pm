@@ -70,8 +70,6 @@ func payload($name, @args) {
     );
 }
 
-# TODO: Add method to automatically provide data from payloads.
-
 =method namespace
 
     my $namespace = $message->namespace;

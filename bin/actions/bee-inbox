@@ -24,6 +24,9 @@ if ($tz) {
     tzset();
 }
 
+# When we see a server in this hash, we update the corresponding
+# beeminder goal in the value.
+
 my %inbox_goal = (
     'perltraining.com.au' => 'inbox',
 );
