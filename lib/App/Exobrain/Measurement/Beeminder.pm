@@ -31,7 +31,11 @@ A dedicated class for Beeminder callbacks.
 
 =cut
 
-has source => (isa => 'Str');   # Used to construct user/goal
+# TODO: Exobrain msgs normally have a source, which are *different* from
+# the beeminder user/goal string used here. We need to tease them
+# apart.
+
+has source => (isa => 'Str', is => 'ro');   # Used to construct user/goal
 
 payload user    => ( isa => 'Str', builder => '_build_user', lazy => 1 );
 payload goal    => ( isa => 'Str', builder => '_build_goal', lazy => 1 );
@@ -60,7 +64,7 @@ method _build_goal() {
 
 method _split_summary($attr!) {
     my %attrs;
-    @attrs{qw(user $goal)} = split('/', $self->source);
+    @attrs{qw(user goal)} = split('/', $self->source);
 
     return $attrs{$attr} or croak "No source attribute provided, can't auto-generate $attr attribute";
 }

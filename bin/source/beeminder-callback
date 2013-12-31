@@ -8,13 +8,12 @@ use Dancer;
 use Try::Tiny;
 
 use Data::Dumper;
-use constant DEBUG => 0;
+use constant DEBUG => 1;
 
 set port => 3000;
 set logger => 'console';
-set log => 'debug';
-
-debug("Debug from dancer");
+set log => 'core';
+set warnings => 1;
 
 =begin example
 
@@ -38,27 +37,32 @@ This is what a set of params look like when they come in.
 =cut
 
 # Catch all requests.
-any qr{.*} => sub {
+post qr{.*} => sub {
 
     state $exobrain = App::Exobrain->new;
 
     # If we see what could be a valid response, but it's not
     # an 'ADD', then ignore it.
-    if( param('action') and param('action') ne 'ADD') {
-        return "OK";
+    if( (param('action')||"") ne 'ADD') {
+        warning("Non-add packet received");
+        return "IGNORED";
     }
+
+    my $pktdump = Dumper ({ params() });
+    debug("Receieved packet: $pktdump");
 
     # Exobrain just accepts the packet whole.
 
     try {
-        $exobrain->measure( 'Beeminder', params() )->send_msg;
+        debug("About to send packet on exobrain bus...");
+        $exobrain->measure( 'Beeminder', params(), raw => { params() } )->send_msg;
+        debug("Packet sent on exobrain bus");
     }
     catch {
-        my $pktdump = Dumper( { params() } );
-        error("Invalid packet received " . $pktdump);
+        error("Sending on exobrain bus failed: $_");
         status 'error';
         return "Invalid packet";
-    }
+    };
 
     return "OK";
 };
