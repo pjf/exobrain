@@ -55,6 +55,12 @@ sub _build_sub    { return App::Exobrain::Bus->new(type => 'SUB', exobrain => sh
 
 When we see packets of a particular class, do a particular thing.
 
+If the optional C<debug> option is passed with a coderef,  that will be run for
+every event in the desired class, before the filter is evaluated.
+
+The event is passed as the first argument to all coderefs. In the filter
+option, it is also placed inside $_.
+
 Never returns, just runs the loop forever.
 
 =cut
@@ -63,6 +69,7 @@ method watch_loop(
     Str     :$class!,
     CodeRef :$filter,
     CodeRef :$then!,
+    CodeRef :$debug?,
 ) {
 
     # Load our component, because that means we immediately get
@@ -75,11 +82,13 @@ method watch_loop(
 
         $event = $event->to_class($class);
 
+        $debug->($event) if $debug;
+
         if ($filter) {
 
             # Check our filter, and skip if required
             local $_ = $event;
-            next unless $filter->();
+            next unless $filter->($event);
 
         }
 

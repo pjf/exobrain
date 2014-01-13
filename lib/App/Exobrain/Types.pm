@@ -3,6 +3,8 @@ use 5.010;
 use strict;
 use warnings;
 
+use JSON::Any;
+
 my $json = JSON::Any->new( allow_blessed => 1 );
 
 use MooseX::Types -declare => [qw(

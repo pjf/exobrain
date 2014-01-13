@@ -6,7 +6,6 @@ use utf8::all;
 use autodie qw(:all);
 
 use App::Exobrain;
-use App::Exobrain::Message;
 use App::Exobrain::Cache;
 use Date::Manip::Date;
 use Try::Tiny;
@@ -28,7 +27,6 @@ my $twitter = Net::Twitter->new(
     access_token_secret => $config->{access_token_secret},
 );
 
-my $bus   = $exobrain->pub;
 my $cache = App::Exobrain::Cache->new( namespace => $0 );
 
 # Fetch our last ID from the cache, or otherwise just pick
@@ -55,6 +53,9 @@ while (1) {
         my $text = $status->{text};
         my @tags;
 
+        # TODO: Move all this into the Measurement::Tweet class,
+        # so it can auto-inflate from a single tweet
+
         while ($text =~ m{\#(?<tag>\w+)}g) {
             push @tags, $+{tag};
         }
@@ -68,21 +69,16 @@ while (1) {
 
         print "[$status->{id}] $epoch_time <$status->{user}{screen_name}> $status->{text} (Tags: @tags)\n" if DEBUG;
 
-        my $msg = App::Exobrain::Message::Raw->new(
-            namespace => 'SOCIAL',
+        # TODO: Parse or figure out who this is to, for the 'to' attribute.
+
+        $exobrain->measure('Tweet',
             timestamp => $epoch_time,
-            source    => 'TWITTER',
-            data      => {
-                            # TODO: Users should be their own objects.
-                            #       Then we can translate between idents
-                            user  => $status->{user}{screen_name},
-                            to_me => 1,  # XXX - Needed?
-                            tags  => \@tags,
-                            message => $status->{text},
-                         },
+            from      => $status->{user}{screen_name},
+            tags      => \@tags,
+            to_me     => 1,     # Because we're only looking at replies
+            text      => $status->{text},
             raw       => $status,
-            summary   => "<$status->{user}{screen_name}> $status->{text}",
-        )->send_msg( $bus->_socket );
+        )->send_msg;
 
         if ($status->{id} > $last_id) {
             $last_id = $status->{id};

@@ -6,47 +6,41 @@ use autodie;
 use POSIX qw(strftime);
 
 use Getopt::Std;
-use App::Exobrain::Bus;
-use App::Exobrain::Config;
-use App::Exobrain::Intent::Tweet;
+use App::Exobrain;
 use Data::Dumper;
 
 use constant DEBUG => 1;
 
-my $bus       = App::Exobrain::Bus->new( type => 'SUB' );
-my $responder = App::Exobrain::Bus->new( type => 'PUB' );
+my $exobrain = App::Exobrain->new;
+my $config = $exobrain->config;
 
-my $config = App::Exobrain::Config->new;
-
-App::Exobrain::Intent::Tweet->new(
+$exobrain->intent('Tweet',
     tweet => "Ping debugger started",
-)->send_msg( $responder->_socket );
+);
 
-while (my $event = $bus->get) {
-    if (my $tags = $event->data->{tags}) {
-        if (grep { /^ping$/i } @$tags) {
-            respond($event, "Ack");
-        }
-    }
-}
+$exobrain->watch_loop(
+    class  => 'Measurement::Tweet',
+    debug  => sub { say Dumper $_[0] },
+    filter => sub { grep { /^ping$/ } @{ $_->tags } },
+    then   => \&acknowledge,
+);
 
-sub respond {
+sub acknowledge {
     my ($event, $text) = @_;
+
+    $text ||= "Ack";
 
     say "Source from [" . $event->source . "]" if DEBUG;
 
-    # We only respond to tweets right now
-    return if $event->source ne 'TWITTER';
-
-    my $user = $event->data->{user};
+    my $user = $event->from;
     my $time = time();
     my $content = "@".$user.": $text";
 
     say "Responding: $content" if DEBUG;
 
-    my $msg = App::Exobrain::Intent::Tweet->new(
+    $event->exobrain->intent('Tweet',
         tweet => $content,
-    )->send_msg( $responder->_socket );
+    )->send_msg;
 
     return;
 }

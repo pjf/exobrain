@@ -5,32 +5,26 @@ use warnings;
 use utf8::all;
 use autodie qw(:all);
 
-use App::Exobrain::Bus;
-use App::Exobrain::Message;
-use App::Exobrain::Config;
-use JSON::Any;
-use Config::Tiny;
-use Date::Manip::Date;
-
+use App::Exobrain;
 use Net::Twitter;
 
 use constant DEBUG => 0;
 
-my $config = App::Exobrain::Config->new;
+my $exobrain = App::Exobrain->new;
+my $config   = $exobrain->config->{TwitterSend};
 
 my $twitter = Net::Twitter->new(
     traits   => [qw(API::RESTv1_1)],
-    consumer_key        => $config->{TwitterSend}{consumer_key},
-    consumer_secret     => $config->{TwitterSend}{consumer_secret},
-    access_token        => $config->{TwitterSend}{access_token},
-    access_token_secret => $config->{TwitterSend}{access_token_secret},
+    consumer_key        => $config->{consumer_key},
+    consumer_secret     => $config->{consumer_secret},
+    access_token        => $config->{access_token},
+    access_token_secret => $config->{access_token_secret},
 );
 
-my $bus  = App::Exobrain::Bus->new( type => 'SUB' );
-
-while (my $event = $bus->get) {
-    say "Examining " . $event->namespace if DEBUG;
-    next unless $event->namespace eq "INTENT+TWEET";
-    say "Sending: " . $event->summary if DEBUG;
-    $twitter->update($event->summary);
-}
+$exobrain->watch_loop(
+    class => 'Intent::Tweet',
+    then => sub {
+        my $event = shift;
+        $twitter->update($event->tweet);
+    },
+);
