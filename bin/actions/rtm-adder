@@ -5,81 +5,86 @@ use warnings;
 use autodie;
 use POSIX qw(strftime);
 
+use App::Exobrain;
+
 use Getopt::Std;
-use App::Exobrain::Bus;
-use App::Exobrain::Config;
-use App::Exobrain::Intent::Tweet;
 use WebService::RTMAgent;
-use Data::Dumper;
 
 use constant DEBUG => 1;
 
-my $bus       = App::Exobrain::Bus->new( type => 'SUB' );
-my $responder = App::Exobrain::Bus->new( type => 'PUB' );
-
-my $config = App::Exobrain::Config->new;
+my $exobrain = App::Exobrain->new;
+my $config   = $exobrain->{config};
 
 my $rtm = WebService::RTMAgent->new;
 my $list = $config->{'RTM-ADDER'}{list};
 
 say "Adding to list: $list" if DEBUG;
 
+# TODO: These need better config names.
+
 $rtm->api_key(    $config->{RTBM}{api_key}    );
 $rtm->api_secret( $config->{RTBM}{api_secret} );
 $rtm->init;
 
-while (my $event = $bus->get) {
-    if (my $tags = $event->data->{tags}) {
-        if (grep { /^todo$/i } @$tags) {
-            say "TODO event: " . $event->summary;
+$exobrain->watch_loop(
+    class  => "Measurement::Tweet",        # TODO: Watch 'Any' later on
+    filter => sub { grep { $_ eq 'todo' } @{$_->{tags}} },
+    then   => \&add_todo,
+);
 
-            if ($event->summary =~ /sudo make me a sandwich/i) {
-                respond($event, "User not in the sudoers file. This incident will be reported.");
-                next;
-            }
-            elsif ($event->summary =~ /make me a sandwich/i) {
-                respond($event, "What? Make it yourself.");
-                next;
-            }
-            elsif ($event->summary =~ /dQw4w9WgXcQ/i) {
-                respond($event, "I'm never gonna let you down!");
-                next;
-            }
+sub add_todo {
+    my $event = shift;
 
-            my $res = $rtm->tasks_add(
-                "name=".$event->summary,
-                "list_id=$list",
-            );
+    say "TODO event: " . $event->summary if DEBUG;
 
-            my $time = strftime("%Y-%m-%d %H:%M:%S UTC", gmtime($event->timestamp));
+    # Anti-troll. ;)
 
-            if (not defined $res) { 
-                respond($event, "Sorry, I couldn't add your TODO item posted at $time " . q{(cc/@pjf)});
-            }
-            else { 
-                respond($event, "Thanks! I've added your TODO item posted at $time " . q{(cc/@pjf)});
-            }
-        }
+    if ($event->summary =~ /sudo make me a sandwich/i) {
+        respond($event, "User not in the sudoers file. This incident will be reported.");
+        return;
+    }
+    elsif ($event->summary =~ /make me a sandwich/i) {
+        respond($event, "What? Make it yourself.");
+        return;
+    }
+    elsif ($event->summary =~ /dQw4w9WgXcQ/i) {
+        respond($event, "I'm never gonna let you down!");
+        return;
+    }
+
+    # Add to TODO list
+
+    my $res = $rtm->tasks_add(
+        "name=".$event->summary,
+        "list_id=$list",
+    );
+
+    my $time = strftime("%Y-%m-%d %H:%M:%S UTC", gmtime($event->timestamp));
+
+    if (not defined $res) { 
+        respond($event, "Sorry, I couldn't add your TODO item posted at $time " . q{(cc/@pjf)});
+    }
+    else { 
+        respond($event, "Thanks! I've added your TODO item posted at $time " . q{(cc/@pjf)});
     }
 }
 
 sub respond {
     my ($event, $text) = @_;
 
-    say "Source from [" . $event->source . "]" if DEBUG;
+    say "Responding with $text" if DEBUG;
 
     # We only respond to tweets right now
-    return if $event->source ne 'TWITTER';
+    return if not $event->isa("App::Exobrain::Measurement::Tweet");
 
-    my $user = $event->data->{user};
-    my $time = time();
+    my $user = $event->from;
     my $content = "@".$user.": $text";
 
-    say "Responding: $content" if DEBUG;
+    say "Sending tweet: $content" if DEBUG;
 
-    App::Exobrain::Intent::Tweet->new(
+    $exobrain->intent("Tweet",
         tweet => $content,
-    )->send_msg( $responder->_socket );
+    )->send_msg();
 
     return;
 }
