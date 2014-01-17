@@ -1,0 +1,28 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+use App::Exobrain;
+use WebService::Pushover;
+
+my $exobrain = App::Exobrain->new;
+my $config   = $exobrain->config->{Pushover};
+
+$exobrain->watch_loop(
+    class => 'Intent::Notify',
+    then  => \&send_notify,
+);
+
+sub send_notify {
+    my ($event) = @_;
+    state $pushover = WebService::Pushover->new;
+    
+    $pushover->message(
+        token   => $config->{api_token},
+        user    => $config->{user_token},
+        message => $event->summary,
+    );
+
+    return;
+}

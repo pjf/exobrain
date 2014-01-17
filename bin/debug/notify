@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+use App::Exobrain;
+
+@ARGV or die "Usage: $0 message\n";
+
+my $exobrain = App::Exobrain->new;
+
+$exobrain->intent('Notify',
+    message => "@ARGV",
+)->send_msg;
