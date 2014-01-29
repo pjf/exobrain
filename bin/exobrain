@@ -46,6 +46,7 @@ Ubic::Multiservice::Simple->new({
         habitrpg => daemon('habitrpg'),
         beeminder => daemon('beeminder'),
         idonethis => daemon('idone-send'),
+        pushover  => daemon('pushover'),
     }),
 
     core => Ubic::Multiservice::Simple->new({
