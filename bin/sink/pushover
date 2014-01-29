@@ -19,9 +19,10 @@ sub send_notify {
     state $pushover = WebService::Pushover->new;
     
     $pushover->message(
-        token   => $config->{api_token},
-        user    => $config->{user_token},
-        message => $event->summary,
+        token    => $config->{api_token},
+        user     => $config->{user_token},
+        message  => $event->summary,
+        priority => $event->priority || 0,
     );
 
     return;
