@@ -97,6 +97,29 @@ method watch_loop(
     }
 }
 
+=method notify
+
+    $exobrain->notify($msg
+        priority => -1,
+    );
+
+Takes a mandatory message, and any arguments that can be passeed to
+L<App::Exobrain::Intent::Notify>, and notifies the user.  At the time of
+writing, notifications are done by the pushover end-point by default.
+
+This is a thin wrapper around C< $exobrain->intent('Notify', ... >.
+
+=cut
+
+use constant NOTIFY => 'Notify';
+
+method notify($message, @args) {
+    return $self->intent( NOTIFY,
+        message => $message,
+        @args,
+    )->send_msg;
+}
+
 =method message
 
     $exobrain->message( ... )->send_msg;
