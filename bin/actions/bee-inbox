@@ -61,6 +61,11 @@ $exobrain->watch_loop(
                 comment => "Submitted via exobrain",
             )->send_msg;
 
+            $exobrain->notify(
+                "Updated bmndr/$goal to $count msgs",
+                priority => -1,
+            );
+
             say "Updating beeminder goal $goal to $count msgs" if DEBUG;
 
             $cache->set($key, $count, seconds_until_tomorrow());
