@@ -9,6 +9,10 @@ use WebService::Pushover;
 my $exobrain = App::Exobrain->new;
 my $config   = $exobrain->config->{Pushover};
 
+$exobrain->notify("Starting $0",
+    priority => -1,
+);
+
 $exobrain->watch_loop(
     class => 'Intent::Notify',
     then  => \&send_notify,
