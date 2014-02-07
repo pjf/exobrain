@@ -9,6 +9,4 @@ use App::Exobrain;
 
 my $exobrain = App::Exobrain->new;
 
-$exobrain->intent('Notify',
-    message => "@ARGV",
-)->send_msg;
+$exobrain->notify("@ARGV");
