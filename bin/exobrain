@@ -40,6 +40,7 @@ Ubic::Multiservice::Simple->new({
         'rtm-adder'  => daemon('rtm-adder'),
         'sentbox-reward'  => daemon('sentbox-reward'),
         'bee-notify' => daemon('bee-notify'),
+        'geo-notify' => daemon('geo-notify'),
     }),
 
     sink => Ubic::Multiservice::Simple->new({
