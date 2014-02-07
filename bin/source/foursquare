@@ -74,7 +74,7 @@ while (1) {
         warn "Displaying checkin at $checkin->{venue}{name} by $name\n"
             if DEBUG;
 
-        $exobrain->measure('Geo',
+        my $packet = $exobrain->measure('Geo',
             source   => 'Foursquare',
             timestamp => $checkin->{createdAt},
             is_me    =>  ($checkin->{user}{relationship} eq 'self'),
@@ -84,9 +84,13 @@ while (1) {
             poi      => {
                 name => $checkin->{venue}{name},
                 id   => $checkin->{venue}{id},
+                lat  => $checkin->{venue}{location}{lat},
+                long => $checkin->{venue}{location}{lng},
             },
             raw      => $checkin,
-        )->send_msg;
+        );
+        
+        $packet->send_msg;
     }
 
     sleep(60);

@@ -1,0 +1,15 @@
+package App::Exobrain::JSONify;
+use Moose::Role;
+use Storable qw(dclone);
+use Data::Structure::Util qw(unbless);
+
+# Basic role that allows converting self object into JSON.
+# Really we should use MooseX::Storage instead.
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    return unbless dclone $self;   # Yuck!
+}
+
+1;

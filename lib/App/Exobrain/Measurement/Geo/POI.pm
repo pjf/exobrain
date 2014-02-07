@@ -7,6 +7,8 @@ package App::Exobrain::Measurement::Geo::POI;
 use 5.010;
 use Moose;
 
+with 'App::Exobrain::JSONify';
+
 # Practically a stub class for now.
 
 has id     => (is => 'ro', isa => 'Str', required => 1);

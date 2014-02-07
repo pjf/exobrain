@@ -34,7 +34,10 @@ has _data     => ( is => 'ro', isa => 'Ref' );
 
 requires qw(summary);
 
-my $json = JSON::Any->new(allow_blessed => 1);
+# TODO: We should use JSON::XS, because we need specialised features
+#       for handling objects.
+
+my $json = JSON::Any->new( convert_blessed => 1 );
 
 =method payload
 

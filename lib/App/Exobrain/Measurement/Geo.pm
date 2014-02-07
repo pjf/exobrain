@@ -54,8 +54,6 @@ payload user_name=> ( isa => 'Str', required => 0);
 payload poi      => ( isa => POI,   required => 0, coerce => 1 );    # Point of interest
 payload is_me    => ( isa => 'Bool' );   # Is this the current user?
 payload message  => ( isa => 'Str', required => 0);  # Any message with checkin
-payload lat      => ( isa => 'Num', required => 0); # TODO: Custom type
-payload long     => ( isa => 'Num', required => 0); # TODO: Custom type
 
 has summary => (
     isa => 'Str', builder => '_build_summary', lazy => 1, is => 'ro'
