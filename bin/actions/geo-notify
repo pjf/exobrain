@@ -5,6 +5,8 @@ use warnings;
 use autodie;
 
 # Send a notification every time we spot the user check-in.
+# This is mostly useful for debugging, although with a tiny
+# bit of work one could turn it into a creepy stalker plug-in.
 
 use App::Exobrain;
 
