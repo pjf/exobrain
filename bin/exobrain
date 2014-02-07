@@ -41,6 +41,7 @@ Ubic::Multiservice::Simple->new({
         'sentbox-reward'  => daemon('sentbox-reward'),
         'bee-notify' => daemon('bee-notify'),
         'geo-notify' => daemon('geo-notify'),
+        'geo-personallog' => daemon('geo-personallog'),
     }),
 
     sink => Ubic::Multiservice::Simple->new({
