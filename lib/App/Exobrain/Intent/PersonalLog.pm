@@ -1,4 +1,4 @@
-package App::Exobrain::Intent::Idone;
+package App::Exobrain::Intent::PersonalLog;
 
 use v5.10.0;
 
@@ -7,7 +7,7 @@ use Method::Signatures;
 
 =head1 SYNOPSIS
 
-    my $msg = $exobrain->intent( 'Idone',
+    my $msg = $exobrain->intent( 'PersonalLog',
         message => "Wrote some awesome code",
     );
 

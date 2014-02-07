@@ -1,0 +1,20 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+
+# Log our own check-ins to a personal log (such as idonethis).
+
+use App::Exobrain;
+
+my $exobrain = App::Exobrain->new;
+
+$exobrain->watch_loop(
+    class  => 'Measurement::Geo',
+    filter => sub { $_->is_me },
+    then   => sub {
+        my $event = shift;
+        $exobrain->intent("PersonalLog", message => $event->summary);
+    },
+);

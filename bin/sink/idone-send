@@ -22,20 +22,23 @@ my $idone = WebService::Idonethis->new(
     pass => $config->{pass},
 );
 
-my $bus  = $exobrain->sub();
+$exobrain->watch_loop(
+    class => 'Intent::PersonalLog',
+    then  => \&log_this,
+);
 
-while (my $event = $bus->get) {
+sub log_this {
+    my $event = shift;
 
-    say "Inspecting packet" if DEBUG;
-
-    next unless $event->namespace eq "INTENT+IDONE";
-
-    say "Logging " . $event->summary if DEBUG;
-
-    my $source = $event->source;
+    my $text = $event->summary;
 
     $idone->set_done(
-        text => "[exobrain/$source] " . $event->summary,
+        text => $event->summary,
         date => strftime("%Y-%m-%d", localtime( $event->timestamp )),
+    );
+
+    # Also confirm that we've logged this.
+    $exobrain->notify("Logged: $text",
+        priority => -1,
     );
 }
