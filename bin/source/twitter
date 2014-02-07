@@ -25,6 +25,7 @@ my $twitter = Net::Twitter->new(
     consumer_secret     => $config->{consumer_secret},
     access_token        => $config->{access_token},
     access_token_secret => $config->{access_token_secret},
+    ssl                 => 1,
 );
 
 my $cache = App::Exobrain::Cache->new( namespace => $0 );
@@ -36,6 +37,8 @@ my $last_id = $cache->compute(LAST_CHECK, undef,
     sub { $twitter->mentions({count => 1})->[0]{id} }
 );
 
+my $last_error = "";
+
 while (1) {
 
     sleep(90);
@@ -46,6 +49,9 @@ while (1) {
         $statuses = $twitter->mentions({since_id => $last_id});
     }
     catch {
+        # TODO: Signal to our owner that something is wrong if
+        # we see too many errors in a row.
+        warn $_;
         next;
     };
 
