@@ -7,6 +7,7 @@ use autodie;
 use Moose;
 use Method::Signatures;
 use Carp qw(croak);
+use POSIX qw(tzset);
 
 # ABSTRACT: Core Exobrain accessor class
 
@@ -40,6 +41,27 @@ has 'sub' => (
     builder => '_build_sub',
     lazy => 1,
 );
+
+# Right now we make sure anything using Exobrain is going to use
+# the user's timezone (if set).
+
+method BUILD(...) {
+    $self->_set_timezone();
+    return;
+}
+
+# This sets our timezone based upon what's in our config file,
+# so any use of localtime() should use the user's local timezone.
+
+method _set_timezone($tz?) {
+    $tz //= $self->config->{General}{timezone};
+
+    if ($tz) {
+        $ENV{TZ} = $tz;     ## no critic RequireLocalizedPunctuationVars
+        tzset();
+    }
+    return;
+}
 
 sub _build_config { return App::Exobrain::Config->new; };
 sub _build_pub    { return App::Exobrain::Bus->new(type => 'PUB', exobrain => shift) }
