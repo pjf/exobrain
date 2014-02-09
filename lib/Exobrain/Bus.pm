@@ -3,7 +3,7 @@ use v5.10.0;
 use strict;
 use warnings;
 
-use ZMQ::LibZMQ2;
+use ZMQ::LibZMQ3;
 use ZMQ::Constants qw(ZMQ_SUB ZMQ_PUB ZMQ_SUBSCRIBE ZMQ_RCVMORE);
 
 use Moose;

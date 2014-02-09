@@ -4,14 +4,14 @@ use Moose;
 use warnings;
 use Method::Signatures;
 use Carp qw(croak);
-use ZMQ::LibZMQ2;
+use ZMQ::LibZMQ3;
 use ZMQ::Constants qw(ZMQ_SUB ZMQ_SUBSCRIBE ZMQ_PUB ZMQ_FORWARDER);
 
 has subscriber => (is => 'ro', default => 'tcp://127.0.0.1:3546');     # Subscribers connect here
 has publisher  => (is => 'ro', default => 'tcp://127.0.0.1:3547');     # Publishers connect here
 has server     => (is => 'ro', isa => 'Bool', default => 0);
 
-# Clients should never call start. 
+# Clients should never call start.
 
 method start() {
 
