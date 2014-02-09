@@ -5,12 +5,12 @@ use warnings;
 use utf8::all;
 use autodie qw(:all);
 
-use App::Exobrain;
+use Exobrain;
 use Net::Twitter;
 
 use constant DEBUG => 0;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 my $config   = $exobrain->config->{TwitterSend};
 
 my $twitter = Net::Twitter->new(

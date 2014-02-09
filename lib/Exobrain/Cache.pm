@@ -1,4 +1,4 @@
-package App::Exobrain::Cache;
+package Exobrain::Cache;
 
 use v5.10.0;
 use strict;

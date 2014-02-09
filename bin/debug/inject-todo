@@ -5,18 +5,18 @@ use warnings;
 use utf8::all;
 use autodie qw(:all);
 
-use App::Exobrain::Bus;
-use App::Exobrain::Message;
+use Exobrain::Bus;
+use Exobrain::Message;
 use JSON::Any;
 use Config::Tiny;
 use Date::Manip::Date;
 
-my $bus  = App::Exobrain::Bus->new( type => 'PUB' );
+my $bus  = Exobrain::Bus->new( type => 'PUB' );
 
 my $todo = "@ARGV";
 my $epoch_time = time();
 
-my $msg = App::Exobrain::Message->new(
+my $msg = Exobrain::Message->new(
     namespace => 'TODO',
     timestamp => $epoch_time,
     source    => 'CMDLINE',

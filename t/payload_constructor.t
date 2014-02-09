@@ -4,13 +4,13 @@ use strict;
 use warnings;
 use autodie;
 
-package App::Exobrain::Test;
+package Exobrain::Test;
 use Moose;
 
 sub summary   { "Dummy summary"; }    # The role requires this
 sub namespace { "Test"         ; }    # ...and this
 
-BEGIN { with 'App::Exobrain::Message'; }
+BEGIN { with 'Exobrain::Message'; }
 
 payload 'foo' => (isa => 'Str');
 has     'bar' => (isa => 'Int', is => 'ro');
@@ -18,7 +18,7 @@ has     'bar' => (isa => 'Int', is => 'ro');
 package main;
 use Test::More;
 
-my $obj = App::Exobrain::Test->new(
+my $obj = Exobrain::Test->new(
     foo=> 'Foo',
     bar => 42,
     timestamp=>1000,
@@ -36,17 +36,17 @@ is($obj->data->{foo}, 'Foo', "Foo is in data packet");
 is(scalar (keys $obj->data), 1, "Only one attribute in data packet");
 
 ok(
-    ! $meta->get_attribute('bar')->does('App::Exobrain::Message::Trait::Payload'),
+    ! $meta->get_attribute('bar')->does('Exobrain::Message::Trait::Payload'),
     "Bar is not a payload attribute"
 );
 
 ok(
-    $meta->get_attribute('foo')->does('App::Exobrain::Message::Trait::Payload'),
+    $meta->get_attribute('foo')->does('Exobrain::Message::Trait::Payload'),
     "Foo is a payload attribute"
 );
 
 my $time = time();
-my $obj2 = App::Exobrain::Test->new(
+my $obj2 = Exobrain::Test->new(
     foo=> 'Foo',
     bar => 42,
     namespace => 'TEST',

@@ -12,14 +12,15 @@ isa_ok($exobrain,'Exobrain');
 
 # Build a sample tweet message and test
 
-my $message = $exobrain->intent('Tweet',
-    tweet => 'Hello World',
+my $message = $exobrain->intent('PersonalLog',
+    message => 'Hello World',
 );
 
 ok($message->DOES('Exobrain::Intent'), 'Does Exobrain::Intent');
-isa_ok($message,'Exobrain::Intent::Tweet');
+isa_ok($message,'Exobrain::Intent::PersonalLog');
 
-is($message->namespace, 'Intent::Tweet', 'namespace');
-is($message->tweet, 'Hello World', 'tweet');
+is($message->namespace, 'Intent::PersonalLog', 'namespace');
+is($message->message, 'Hello World', 'message');
+is($message->summary, 'Hello World', 'summary');
 
 done_testing;

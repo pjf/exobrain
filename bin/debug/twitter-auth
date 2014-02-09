@@ -5,11 +5,11 @@ use warnings;
 use autodie;
 
 use Net::Twitter;
-use App::Exobrain::Config;
+use Exobrain::Config;
 
 # TODO: Make a generalised exobrain config sript that calls this.
 
-my $config = App::Exobrain::Config->new;
+my $config = Exobrain::Config->new;
  
 my $nt = Net::Twitter->new(
      traits          => ['API::RESTv1_1', 'OAuth'],

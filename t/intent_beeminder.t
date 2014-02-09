@@ -3,12 +3,12 @@ use 5.010;
 use strict;
 use warnings;
 use autodie;
-use App::Exobrain;
+use Exobrain;
 use Test::Most;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
-isa_ok($exobrain,'App::Exobrain');
+isa_ok($exobrain,'Exobrain');
 
 # Invalid ways of generating this intent
 
@@ -24,8 +24,8 @@ dies_ok { $exobrain->intent('Beeminder', value => 3    ) } "no value";
         comment => "Test Comment",
     );
 
-    ok($message->DOES('App::Exobrain::Intent'), 'Does Exobrain::Intent');
-    isa_ok($message,'App::Exobrain::Intent::Beeminder');
+    ok($message->DOES('Exobrain::Intent'), 'Does Exobrain::Intent');
+    isa_ok($message,'Exobrain::Intent::Beeminder');
 
     is($message->namespace, 'Intent::Beeminder','namespace');
 

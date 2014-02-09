@@ -1,4 +1,4 @@
-package App::Exobrain::Measurement::Mailbox;
+package Exobrain::Measurement::Mailbox;
 
 # ABSTRACT: Mailbox measurement packet
 
@@ -15,7 +15,7 @@ sub summary;
 
 # This needs to happen at begin time so it can add the 'payload'
 # keyword.
-BEGIN { with 'App::Exobrain::Message'; }
+BEGIN { with 'Exobrain::Message'; }
 
 =head1 DESCRIPTION
 

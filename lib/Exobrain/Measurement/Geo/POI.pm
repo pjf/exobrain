@@ -1,4 +1,4 @@
-package App::Exobrain::Measurement::Geo::POI;
+package Exobrain::Measurement::Geo::POI;
 
 # ABSTRACT: Geo Point Of Interest class
 
@@ -7,7 +7,7 @@ package App::Exobrain::Measurement::Geo::POI;
 use 5.010;
 use Moose;
 
-with 'App::Exobrain::JSONify';
+with 'Exobrain::JSONify';
 
 # Practically a stub class for now.
 

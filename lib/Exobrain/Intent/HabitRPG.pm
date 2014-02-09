@@ -1,4 +1,4 @@
-package App::Exobrain::Intent::HabitRPG;
+package Exobrain::Intent::HabitRPG;
 
 use v5.10.0;
 use Moose;
@@ -18,7 +18,7 @@ method summary() {
     return join(' ' , "HabitRPG: Move" , $self->task, $self->direction);
 }
 
-BEGIN { with 'App::Exobrain::Intent'; };
+BEGIN { with 'Exobrain::Intent'; };
 
 payload task      => ( isa => 'Str' , required => 1 );
 payload direction => ( isa => 'Str' , required => 1 );  # TODO - Restrict to up/down

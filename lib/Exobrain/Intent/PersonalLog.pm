@@ -1,4 +1,4 @@
-package App::Exobrain::Intent::PersonalLog;
+package Exobrain::Intent::PersonalLog;
 
 use v5.10.0;
 
@@ -15,7 +15,7 @@ use Method::Signatures;
 
 method summary() { return $self->message; }
 
-BEGIN { with 'App::Exobrain::Intent'; }
+BEGIN { with 'Exobrain::Intent'; }
 
 payload 'message' => ( isa => 'Str' );
 

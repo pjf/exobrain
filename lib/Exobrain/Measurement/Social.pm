@@ -1,4 +1,4 @@
-package App::Exobrain::Measurement::Social;
+package Exobrain::Measurement::Social;
 
 use 5.010;
 use strict;
@@ -6,7 +6,7 @@ use warnings;
 use autodie;
 use Moose::Role;
 
-BEGIN { with 'App::Exobrain::Message'; }
+BEGIN { with 'Exobrain::Message'; }
 
 payload from    => ( isa => 'Str' );
 payload to      => ( isa => 'ArrayRef[Str]', default => sub { [] } );

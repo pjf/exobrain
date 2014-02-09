@@ -1,4 +1,4 @@
-package App::Exobrain::Router;
+package Exobrain::Router;
 use v5.10.0;
 use Moose;
 use warnings;

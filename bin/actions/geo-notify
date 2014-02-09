@@ -8,9 +8,9 @@ use autodie;
 # This is mostly useful for debugging, although with a tiny
 # bit of work one could turn it into a creepy stalker plug-in.
 
-use App::Exobrain;
+use Exobrain;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
 $exobrain->watch_loop(
     class  => 'Measurement::Geo',

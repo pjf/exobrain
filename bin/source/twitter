@@ -5,8 +5,8 @@ use warnings;
 use utf8::all;
 use autodie qw(:all);
 
-use App::Exobrain;
-use App::Exobrain::Cache;
+use Exobrain;
+use Exobrain::Cache;
 use Date::Manip::Date;
 use Try::Tiny;
 
@@ -15,7 +15,7 @@ use Net::Twitter;
 use constant DEBUG => 1;
 use constant LAST_CHECK => 'last_check';
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
 my $config = $exobrain->config->{Twitter};
 
@@ -28,7 +28,7 @@ my $twitter = Net::Twitter->new(
     ssl                 => 1,
 );
 
-my $cache = App::Exobrain::Cache->new( namespace => $0 );
+my $cache = Exobrain::Cache->new( namespace => $0 );
 
 # Fetch our last ID from the cache, or otherwise just pick
 # the last mention we've seen.

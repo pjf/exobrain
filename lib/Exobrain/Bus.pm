@@ -1,4 +1,4 @@
-package App::Exobrain::Bus;
+package Exobrain::Bus;
 use v5.10.0;
 use strict;
 use warnings;
@@ -9,19 +9,19 @@ use ZMQ::Constants qw(ZMQ_SUB ZMQ_PUB ZMQ_SUBSCRIBE ZMQ_RCVMORE);
 use Moose;
 use Method::Signatures;
 
-use App::Exobrain::Router;
-use App::Exobrain::Message::Raw;
+use Exobrain::Router;
+use Exobrain::Message::Raw;
 
 my $context  = zmq_init();                  # Context is always shared.
 my $endpoint = 'tcp://localhost:3568/';     # TODO: From config file?
-my $router   = App::Exobrain::Router->new;
+my $router   = Exobrain::Router->new;
 
 has context   => ( is => 'ro', default => sub { $context } );
 has router    => ( is => 'ro', default => sub { $router  } );
 has type      => ( is => 'ro', );   # TODO: Type
 has subscribe => ( is => 'rw', isa => 'Str', default => '' );
 has _socket   => ( is => 'rw' );
-has exobrain  => ( is => 'ro', isa => 'App::Exobrain' );
+has exobrain  => ( is => 'ro', isa => 'Exobrain' );
 
 sub BUILD {
     my ($self) = @_;
@@ -59,7 +59,7 @@ method get() {
         $more = zmq_getsockopt($self->_socket, ZMQ_RCVMORE);
     }
 
-    my $message = App::Exobrain::Message::Raw->new(\@frames);
+    my $message = Exobrain::Message::Raw->new(\@frames);
 
     # If I have an exobrain object, attach that to the message.
     if ($self->exobrain) {
@@ -76,7 +76,7 @@ method send($msg) {
 }
 
 method send_msg(%opts) {
-    my $msg = App::Exobrain::Message::Raw->new( %opts );
+    my $msg = Exobrain::Message::Raw->new( %opts );
 
     return $msg->send_msg( $self->_socket );
 }

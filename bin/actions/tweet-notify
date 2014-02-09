@@ -2,11 +2,11 @@
 use v5.10.0;
 use strict;
 use warnings;
-use App::Exobrain;
+use Exobrain;
 
 # Send all tweets to the user to notify.
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
 $exobrain->watch_loop(
     class  => 'Measurement::Tweet',

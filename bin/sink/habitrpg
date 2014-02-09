@@ -4,14 +4,14 @@ use strict;
 use warnings;
 use autodie;
 
-use App::Exobrain;
+use Exobrain;
 use WebService::HabitRPG;
 
 use constant DEBUG => 0;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
-my $config = App::Exobrain::Config->new;
+my $config = Exobrain::Config->new;
 
 my $hrpg = WebService::HabitRPG->new(
     api_token => $exobrain->config->{HabitRPG}{api_token},

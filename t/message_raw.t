@@ -3,14 +3,14 @@ use 5.010;
 use strict;
 use warnings;
 use autodie;
-use App::Exobrain;
-use App::Exobrain::Message::Raw;
+use Exobrain;
+use Exobrain::Message::Raw;
 use Test::More;
 use JSON::Any;
 
 my $j = JSON::Any->new;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
 my $data = { 
     mailbox => 'INBOX',
@@ -35,7 +35,7 @@ my $msg = $exobrain->message(
 # Testing the 'off the wire' build by frames syntax.
 # This should probably be invoked somehow other than a flat 'new'
 
-my $raw_msg = App::Exobrain::Message::Raw->new( [
+my $raw_msg = Exobrain::Message::Raw->new( [
     'EXOBRAIN_TEST_TESTING',
     $j->encode( { time => time() } ),
     $summary,
@@ -45,8 +45,8 @@ my $raw_msg = App::Exobrain::Message::Raw->new( [
 
 foreach my $m ($msg, $raw_msg) {
 
-    isa_ok($msg, 'App::Exobrain::Message::Raw');
-    ok($msg->DOES('App::Exobrain::Message'), 'does App::Exobrain::Message');
+    isa_ok($msg, 'Exobrain::Message::Raw');
+    ok($msg->DOES('Exobrain::Message'), 'does App::Exobrain::Message');
 
     is_deeply($msg->data, $data, "data preserved");
     is_deeply($msg->raw,  $data, "raw  preserved");
@@ -61,7 +61,7 @@ foreach my $m ($msg, $raw_msg) {
 
 my $mailbox = $msg->to_class('Measurement::Mailbox');
 
-isa_ok($mailbox, 'App::Exobrain::Measurement::Mailbox');
+isa_ok($mailbox, 'Exobrain::Measurement::Mailbox');
 is($mailbox->count, 42, 'mailbox count');
 
 

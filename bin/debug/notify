@@ -3,10 +3,10 @@ use 5.010;
 use strict;
 use warnings;
 use autodie;
-use App::Exobrain;
+use Exobrain;
 
 @ARGV or die "Usage: $0 message\n";
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
 $exobrain->notify("@ARGV");

@@ -1,4 +1,4 @@
-package App::Exobrain::JSONify;
+package Exobrain::JSONify;
 use Moose::Role;
 use Storable qw(dclone);
 use Data::Structure::Util qw(unbless);

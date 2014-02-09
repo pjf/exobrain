@@ -1,4 +1,4 @@
-package App::Exobrain::Message;
+package Exobrain::Message;
 
 use 5.010;
 use strict;
@@ -12,7 +12,7 @@ use ZMQ::LibZMQ2;
 use JSON::Any;
 use Data::Dumper;
 
-use App::Exobrain::Types qw(JSON);
+use Exobrain::Types qw(JSON);
 
 =head1 DESCRIPTION
 
@@ -21,7 +21,7 @@ Top-level I<role> for all exobrain messages.
 =cut
 
 has timestamp => ( is => 'ro', isa => 'Int', default => sub { time() } );
-has exobrain  => ( is => 'rw', isa => 'App::Exobrain');
+has exobrain  => ( is => 'rw', isa => 'Exobrain');
 has raw       => ( is => 'ro', isa => 'Ref' );
 has source    => ( is => 'ro', isa => 'Str', default => "$0" );
 
@@ -78,7 +78,7 @@ func payload($name, @args) {
     my $namespace = $message->namespace;
 
 Provides the namespace of the message type in question. By default
-this is the class name with the C<App::Exobrain> prefix stripped,
+this is the class name with the C<Exobrain> prefix stripped,
 but individual message classes are free to define their own namespaces.
 
 =cut
@@ -86,7 +86,7 @@ but individual message classes are free to define their own namespaces.
 method namespace() {
     my $class = ref($self);
 
-    $class =~ s/^App::Exobrain:://;
+    $class =~ s/^Exobrain:://;
 
     return $class;
 }
@@ -100,7 +100,7 @@ over the exobrain bus) by tallying payload attributes.
 
 =cut
 
-use constant PAYLOAD_CLASS => 'App::Exobrain::Message::Trait::Payload';
+use constant PAYLOAD_CLASS => 'Exobrain::Message::Trait::Payload';
 
 method data() {
     my $meta     = $self->meta;
@@ -192,7 +192,7 @@ method dump() {
     return $dumpstr;
 }
 
-package App::Exobrain::Message::Trait::Payload;
+package Exobrain::Message::Trait::Payload;
 use Moose::Role;
 
 Moose::Util::meta_attribute_alias('Payload');

@@ -5,9 +5,9 @@ use warnings;
 use autodie;
 
 use Getopt::Std;
-use App::Exobrain::Bus;
+use Exobrain::Bus;
 
-my $bus = App::Exobrain::Bus->new(
+my $bus = Exobrain::Bus->new(
     type => 'SUB',
 );
 

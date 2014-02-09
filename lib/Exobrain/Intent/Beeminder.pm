@@ -1,4 +1,4 @@
-package App::Exobrain::Intent::Beeminder;
+package Exobrain::Intent::Beeminder;
 
 use v5.10.0;
 
@@ -18,7 +18,7 @@ method summary() {
     return $summary;
 }
 
-BEGIN { with 'App::Exobrain::Intent' }
+BEGIN { with 'Exobrain::Intent' }
 
 payload goal    => (isa => 'Str');
 payload value   => (isa => 'Num');

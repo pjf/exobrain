@@ -6,9 +6,9 @@ use autodie;
 
 # Send a notification every time a bmndr data point is updated
 
-use App::Exobrain;
+use Exobrain;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
 $exobrain->watch_loop(
     class => 'Measurement::Beeminder',

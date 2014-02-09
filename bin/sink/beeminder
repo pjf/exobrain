@@ -4,10 +4,10 @@ use strict;
 use warnings;
 use autodie;
 
-use App::Exobrain;
+use Exobrain;
 use WebService::Beeminder;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
 my $config = $exobrain->config->{Beeminder};
 

@@ -6,9 +6,9 @@ use autodie;
 
 # Log our own check-ins to a personal log (such as idonethis).
 
-use App::Exobrain;
+use Exobrain;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
 $exobrain->watch_loop(
     class  => 'Measurement::Geo',

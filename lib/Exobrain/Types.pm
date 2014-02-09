@@ -1,4 +1,4 @@
-package App::Exobrain::Types;
+package Exobrain::Types;
 use 5.010;
 use strict;
 use warnings;
@@ -35,12 +35,12 @@ subtype TweetStr,
 ;
 
 class_type POI,
-    { class => 'App::Exobrain::Measurement::Geo::POI' }
+    { class => 'Exobrain::Measurement::Geo::POI' }
 ;
 
 coerce POI,
     from HashRef,
-    via { App::Exobrain::Measurement::Geo::POI->new(%$_) }
+    via { Exobrain::Measurement::Geo::POI->new(%$_) }
 ;
 
 1;

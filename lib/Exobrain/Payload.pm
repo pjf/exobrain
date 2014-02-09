@@ -1,4 +1,4 @@
-package App::Exobrain::Payload;
+package Exobrain::Payload;
 
 use 5.010;
 use strict;

@@ -9,9 +9,9 @@ use Socket qw( SO_KEEPALIVE );
 use Net::IMAP::Client;
 use Term::ReadKey;
 
-use App::Exobrain;
+use Exobrain;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
 my $user    = shift || die "Usage: $0 user server";
 my $server  = shift || die "Usage: $0 user server";

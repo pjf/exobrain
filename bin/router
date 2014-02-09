@@ -4,9 +4,9 @@ use strict;
 use warnings;
 use autodie;
 
-use App::Exobrain::Router;
+use Exobrain::Router;
 
-my $router = App::Exobrain::Router->new(
+my $router = Exobrain::Router->new(
     server => 1,
 );
 

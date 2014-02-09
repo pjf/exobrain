@@ -5,14 +5,14 @@ use warnings;
 use utf8::all;
 use autodie qw(:all);
 
-use App::Exobrain::Bus;
-use App::Exobrain::Message;
+use Exobrain::Bus;
+use Exobrain::Message;
 use JSON::Any;
 use Config::Tiny;
 use Date::Manip::Date;
 use Try::Tiny;
 
-my $bus  = App::Exobrain::Bus->new( type => 'PUB' );
+my $bus  = Exobrain::Bus->new( type => 'PUB' );
 
 my $namespace = shift @ARGV;
 my $summary   = "@ARGV";
@@ -22,7 +22,7 @@ my $j = JSON::Any->new;
 
 if (my $data = try { $j->decode($summary) } ) {
 
-    my $msg = App::Exobrain::Message::Raw->new(
+    my $msg = Exobrain::Message::Raw->new(
         namespace => $namespace,
         timestamp => $epoch_time,
         source    => 'CMDLINE',
@@ -33,7 +33,7 @@ if (my $data = try { $j->decode($summary) } ) {
 }
 
 else {
-    my $msg = App::Exobrain::Message::Raw->new(
+    my $msg = Exobrain::Message::Raw->new(
         namespace => $namespace,
         timestamp => $epoch_time,
         source    => 'CMDLINE',

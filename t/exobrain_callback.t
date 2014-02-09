@@ -3,9 +3,9 @@ use 5.010;
 use strict;
 use warnings;
 use Test::Most;
-use App::Exobrain;
+use Exobrain;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
 # Actual bmndr callback packet
 

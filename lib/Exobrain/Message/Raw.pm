@@ -1,4 +1,4 @@
-package App::Exobrain::Message::Raw;
+package Exobrain::Message::Raw;
 use v5.10.0;
 use Moose;
 use ZMQ::Constants qw(ZMQ_SNDMORE);
@@ -17,7 +17,7 @@ has 'summary'    => ( is => 'ro', isa => 'Str', required => 1 );
 has '_data'      => ( is => 'rw', isa => 'Ref' );
 has 'namespace'  => ( is => 'ro', isa => 'Str', required => 1 );
 
-with 'App::Exobrain::Message';
+with 'Exobrain::Message';
 
 # Stash our explicit data section
 

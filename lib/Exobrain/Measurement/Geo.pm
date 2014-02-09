@@ -1,4 +1,4 @@
-package App::Exobrain::Measurement::Geo;
+package Exobrain::Measurement::Geo;
 
 # ABSTRACT: Geo measurement packet
 
@@ -9,8 +9,8 @@ use autodie;
 use Moose;
 use Method::Signatures;
 
-use App::Exobrain::Measurement::Geo::POI;
-use App::Exobrain::Types qw(POI);
+use Exobrain::Measurement::Geo::POI;
+use Exobrain::Types qw(POI);
 
 # Declare that we will have a summary attribute. This is to make
 # our roles happy.
@@ -18,7 +18,7 @@ sub summary;
 
 # This needs to happen at begin time so it can add the 'payload'
 # keyword.
-BEGIN { with 'App::Exobrain::Message'; }
+BEGIN { with 'Exobrain::Message'; }
 
 =head1 DESCRIPTION
 

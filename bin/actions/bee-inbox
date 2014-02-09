@@ -4,15 +4,15 @@ use strict;
 use warnings;
 use autodie;
 
-use App::Exobrain;
-use App::Exobrain::Cache;
+use Exobrain;
+use Exobrain::Cache;
 use WebService::Beeminder;
 use POSIX qw(tzset);
 
 use constant DEBUG => 1;
 
-my $exobrain = App::Exobrain->new;
-my $cache = App::Exobrain::Cache->new(namespace => $0);
+my $exobrain = Exobrain->new;
+my $cache = Exobrain::Cache->new(namespace => $0);
 my $tz = $exobrain->config->{General}{timezone};
 
 # TODO: Exobrain should set its own TZ, not have us do it

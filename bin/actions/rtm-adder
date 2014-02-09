@@ -5,14 +5,14 @@ use warnings;
 use autodie;
 use POSIX qw(strftime);
 
-use App::Exobrain;
+use Exobrain;
 
 use Getopt::Std;
 use WebService::RTMAgent;
 
 use constant DEBUG => 1;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 my $config   = $exobrain->{config};
 
 my $rtm = WebService::RTMAgent->new;
@@ -81,7 +81,7 @@ sub respond {
     say "Responding with $text" if DEBUG;
 
     # We only respond to tweets right now
-    return if not $event->isa("App::Exobrain::Measurement::Tweet");
+    return if not $event->isa("Exobrain::Measurement::Tweet");
 
     my $user = $event->from;
     my $content = "@".$user.": $text";

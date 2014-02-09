@@ -8,21 +8,21 @@ use POSIX qw(strftime);
 # Reward users for sending email.
 
 use Getopt::Std;
-use App::Exobrain;
-use App::Exobrain::Cache;
-use App::Exobrain::Intent::HabitRPG;
+use Exobrain;
+use Exobrain::Cache;
+use Exobrain::Intent::HabitRPG;
 use WebService::RTMAgent;
 use Data::Dumper;
 
 use constant DEBUG => 1;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
 my $bus       = $exobrain->sub;
 my $responder = $exobrain->pub;
 my $config    = $exobrain->config;
 
-my $cache  = App::Exobrain::Cache->new(namespace => $0);
+my $cache  = Exobrain::Cache->new(namespace => $0);
 
 my $task  = $config->{'Sendbox-Reward'}{task} or die "No HabitRPG task";
 my $send_tweet = $config->{'Sendbox-Reward'}{tweet} || 0;
@@ -52,7 +52,7 @@ while (my $raw_event = $bus->get) {
             # Sweet! They sent email
             $cache->set( $key, $count );
 
-            App::Exobrain::Intent::HabitRPG->new(
+            Exobrain::Intent::HabitRPG->new(
                 task => $task,
                 direction => 'up',
                 public => $send_tweet,

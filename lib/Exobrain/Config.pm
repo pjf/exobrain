@@ -1,4 +1,4 @@
-package App::Exobrain::Config;
+package Exobrain::Config;
 use strict;
 use warnings;
 use parent 'Config::Tiny';

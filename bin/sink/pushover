@@ -3,10 +3,10 @@ use 5.010;
 use strict;
 use warnings;
 use autodie;
-use App::Exobrain;
+use Exobrain;
 use WebService::Pushover;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 my $config   = $exobrain->config->{Pushover};
 
 $exobrain->notify("Starting $0",

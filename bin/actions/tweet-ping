@@ -6,12 +6,12 @@ use autodie;
 use POSIX qw(strftime);
 
 use Getopt::Std;
-use App::Exobrain;
+use Exobrain;
 use Data::Dumper;
 
 use constant DEBUG => 1;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 my $config = $exobrain->config;
 
 $exobrain->intent('Tweet',

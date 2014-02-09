@@ -1,4 +1,4 @@
-package App::Exobrain::Measurement::Tweet;
+package Exobrain::Measurement::Tweet;
 
 # ABSTRACT: Tweet measurement packet
 
@@ -15,7 +15,7 @@ sub summary;
 
 # This needs to happen at begin time so it can add the 'payload'
 # keyword.
-BEGIN { with 'App::Exobrain::Measurement::Social'; }
+BEGIN { with 'Exobrain::Measurement::Social'; }
 
 =head1 DESCRIPTION
 

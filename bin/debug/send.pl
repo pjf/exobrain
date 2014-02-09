@@ -4,15 +4,15 @@ use strict;
 use warnings;
 use autodie;
 
-use App::Exobrain::Bus;
-use App::Exobrain::Message;
+use Exobrain::Bus;
+use Exobrain::Message;
 
-my $bus = App::Exobrain::Bus->new(
+my $bus = Exobrain::Bus->new(
     type => 'PUB',
 );
 
 while (<>) {
-    my $msg = App::Exobrain::Message->new(
+    my $msg = Exobrain::Message->new(
         namespace => 'NOTICE',
         timestamp => time(),
         source    => $0,

@@ -5,7 +5,7 @@ use warnings;
 use autodie;
 use Test::Most;
 
-use App::Exobrain;
+use Exobrain;
 
 # For making dummy raw packets
 my %raw_args = (
@@ -23,31 +23,31 @@ my %imap_args = (
     count  => 10,
 );
    
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 
 # Verify our component is not installed
 
 TODO: {
     local $TODO = "Test a class that *isn't* autoloaded";
-    dies_ok( sub { App::Exobrain::Message::Raw->new(%raw_args) } );
+    dies_ok( sub { Exobrain::Message::Raw->new(%raw_args) } );
 }
 
 # Now load our component
 
 my $class = $exobrain->_load_component('Message::Raw');
 
-is($class,'App::Exobrain::Message::Raw');
+is($class,'Exobrain::Message::Raw');
 
 # Now make sure we can use it.
 
-lives_ok( sub { App::Exobrain::Message::Raw->new(%raw_args) } );
+lives_ok( sub { Exobrain::Message::Raw->new(%raw_args) } );
 
 # Now let's try a measurement
 
-dies_ok( sub { App::Exobrain::Measurement::Mailbox->new(%raw_args, %imap_args)});
+dies_ok( sub { Exobrain::Measurement::Mailbox->new(%raw_args, %imap_args)});
 
 my $measurement = $exobrain->measure('Mailbox',%raw_args, %imap_args);
 
-isa_ok($measurement, 'App::Exobrain::Measurement::Mailbox');
+isa_ok($measurement, 'Exobrain::Measurement::Mailbox');
 
 done_testing;

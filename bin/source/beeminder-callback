@@ -3,7 +3,7 @@ use v5.10.0;
 use strict;
 use warnings;
 use autodie;
-use App::Exobrain;
+use Exobrain;
 use Dancer;
 use Try::Tiny;
 
@@ -39,7 +39,7 @@ This is what a set of params look like when they come in.
 # Catch all requests.
 post qr{.*} => sub {
 
-    state $exobrain = App::Exobrain->new;
+    state $exobrain = Exobrain->new;
 
     # If we see what could be a valid response, but it's not
     # an 'ADD', then ignore it.

@@ -5,9 +5,9 @@ use warnings;
 use utf8::all;
 use autodie qw(:all);
 
-use App::Exobrain::Bus;
-use App::Exobrain::Message;
-use App::Exobrain::Config;
+use Exobrain::Bus;
+use Exobrain::Message;
+use Exobrain::Config;
 use JSON::Any;
 use Date::Manip::Date;
 use Data::Dumper;
@@ -20,9 +20,9 @@ use constant DEBUG => 1;
 my $POLL_INTERVAL = 60; 
 my $last_poll = time() - 3600;
 
-my $bus = App::Exobrain::Bus->new( type => 'PUB' );
+my $bus = Exobrain::Bus->new( type => 'PUB' );
 
-my $config = App::Exobrain::Config->new;
+my $config = Exobrain::Config->new;
 
 my $fb = Facebook::Graph->new(
     app_id => $config->{Facebook}{app_id},

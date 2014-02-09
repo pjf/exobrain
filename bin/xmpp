@@ -12,9 +12,9 @@ my $user  = $ENV{HXMPP_USER}  || shift || die "Usage $0 user pass owner\n";
 my $pass  = $ENV{HXMPP_PASS}  || shift || die "Usage $0 user pass owner\n";
 my $owner = $ENV{HXMPP_OWNER} || shift || die "Usage $0 user pass owner\n";
 
-use App::Exobrain::Bus;
+use Exobrain::Bus;
 
-my $bus = App::Exobrain::Bus->new(
+my $bus = Exobrain::Bus->new(
     type => 'SUB',
 );
 

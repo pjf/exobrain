@@ -1,4 +1,4 @@
-package App::Exobrain::Intent::Notify;
+package Exobrain::Intent::Notify;
 
 use 5.010;
 use Moose;
@@ -8,7 +8,7 @@ use Method::Signatures;
 
 method summary() { return $self->message; }
 
-BEGIN { with 'App::Exobrain::Intent'; }
+BEGIN { with 'Exobrain::Intent'; }
 
 payload message  => ( isa => 'Str' );
 payload priority => ( isa => 'Int', default => 0 );

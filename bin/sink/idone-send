@@ -5,13 +5,13 @@ use warnings;
 use utf8::all;
 use autodie qw(:all);
 
-use App::Exobrain;
+use Exobrain;
 use WebService::Idonethis;
 use POSIX qw(strftime);
 
 use constant DEBUG => 0;
 
-my $exobrain = App::Exobrain->new;
+my $exobrain = Exobrain->new;
 my $config   = $exobrain->config->{Idonethis};
 
 my $user = $config->{user} or die "Can't find Idonethis/user";
