@@ -1,0 +1,18 @@
+#!/usr/bin/env perl
+use v5.10.0;
+use strict;
+use warnings;
+use App::Exobrain;
+
+# Send all tweets to the user to notify.
+
+my $exobrain = App::Exobrain->new;
+
+$exobrain->watch_loop(
+    class  => 'Measurement::Tweet',
+    filter => sub { $_->to_me },
+    then   => sub {
+        $exobrain->notify( $_->summary );
+    },
+);
+
