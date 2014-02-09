@@ -12,6 +12,10 @@ Examples of things that exobrain can currently do:
 * Reward you for responding to email
 * Automatically log life events to idonethis
 
+You can find pre-built actions in the
+`[bin/actions](https://github.com/pjf/exobrain/tree/master/bin/actions)`
+directory.
+
 Exobrain is designed to make it very easy to write and trigger
 events using standard interfaces. 
 
