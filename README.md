@@ -50,7 +50,7 @@ Firstly, make sure you've got all the dependencies:
 
     $ sudo apt-get install libzmq-dev libexpat-dev libnet-ssleay-perl \
         libnet-libidn-perl libcrypt-ssleay-perl cpanminus make \
-        liblocal-lib-perl
+        liblocal-lib-perl libmethod-signatures-perl
 
 Configure `local::lib` if you haven't already done so:
 
