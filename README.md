@@ -55,6 +55,7 @@ Configure `local::lib` if you haven't already done so:
 
 If installing from git, you can then use:
 
+    $ dzil authordeps | cpanm
     $ dzil listdeps | cpanm
     $ dzil install
 
@@ -62,8 +63,11 @@ If installing from CPAN:
 
     $ cpanm Exobrain
 
-You now have exobrain installed! However to use it properly, you'll
-want to manage it with `ubic`.
+Note that Exobrain has many dependencies. If you're feeling hungry,
+this would be a good time to go out for a meal or find a snack.
+
+When you return, you'll find that you have exobrain installed!
+However to use it properly, you'll want to manage it with `ubic`.
 
 **Step 2: Configure ubic**
 
