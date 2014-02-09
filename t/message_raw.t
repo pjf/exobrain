@@ -46,7 +46,7 @@ my $raw_msg = Exobrain::Message::Raw->new( [
 foreach my $m ($msg, $raw_msg) {
 
     isa_ok($msg, 'Exobrain::Message::Raw');
-    ok($msg->DOES('Exobrain::Message'), 'does App::Exobrain::Message');
+    ok($msg->DOES('Exobrain::Message'), 'does Exobrain::Message');
 
     is_deeply($msg->data, $data, "data preserved");
     is_deeply($msg->raw,  $data, "raw  preserved");
