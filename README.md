@@ -126,9 +126,16 @@ components, and also the easiest to write.
 
 Heaps. Report and/or fix them at https://github.com/pjf/exobrain/issues/
 
-# SUPPORT
+# SUPPORTING EXOBRAIN DEVELOPMENT
 
 If you like my work, you can [tip me on gittip](https://gittip.com/pjf).
+
+If you wish to see Exobrain features implemented more quickly, you
+can [place bounties on Bountysource](https://www.bountysource.com/trackers/347315-exobrain).
+
+All code contributions, tests, bug reports, feature ideas, documentation,
+and anything else are extremely welcome! Exobrain is free and open
+source software, please use it to make the world a better place.
 
 # LICENSE
 
