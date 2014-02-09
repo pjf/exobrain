@@ -52,20 +52,28 @@ sub add_todo {
         return;
     }
 
+    my $user = $event->from;
+    my $todo = $event->summary;
+
     # Add to TODO list
 
     my $res = $rtm->tasks_add(
-        "name=".$event->summary,
+        "name=$todo",
         "list_id=$list",
     );
 
     my $time = strftime("%Y-%m-%d %H:%M:%S UTC", gmtime($event->timestamp));
 
     if (not defined $res) { 
-        respond($event, "Sorry, I couldn't add your TODO item posted at $time " . q{(cc/@pjf)});
+        respond($event, "Sorry, I couldn't add your TODO item posted at $time");
+
+        $exobrain->notify("$user FAILED to add to your TODO list: $todo",
+            priority => 1
+        );
     }
     else { 
-        respond($event, "Thanks! I've added your TODO item posted at $time " . q{(cc/@pjf)});
+        respond($event, "Thanks! I've added your TODO item posted at $time");
+        $exobrain->notify("$user added to your TODO list: $todo");
     }
 }
 
