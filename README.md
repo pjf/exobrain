@@ -46,6 +46,8 @@ all tweets directed at him to said watch:
 
 **Step 1: Install exobrain**
 
+The following works for a fresh install of Ubuntu 13.10.
+
 Firstly, make sure you've got all the dependencies:
 
     $ sudo apt-get install libzmq-dev libexpat-dev libnet-ssleay-perl \
@@ -60,18 +62,21 @@ Configure `local::lib` if you haven't already done so:
 If installing from git, you can then use:
 
     $ dzil authordeps | cpanm
-    $ dzil listdeps | cpanm
+    $ dzil listdeps   | cpanm
     $ dzil install
 
-If installing from CPAN:
+If installing from CPAN, it's just:
 
     $ cpanm Exobrain
 
-Note that Exobrain has many dependencies. If you're feeling hungry,
-this would be a good time to go out for a meal or find a snack.
+Note that Exobrain has *many* dependencies. If you're feeling hungry,
+this would be a good time to go out for a meal or find a snack. You
+can also use `cpanm --notest` instead of `cpanm` in all the lines above,
+which will get things installed sooner by not rigorously testing
+Exobrain and every one of its dependencies.
 
-When you return, you'll find that you have exobrain installed!
-However to use it properly, you'll want to manage it with `ubic`.
+When you return from your meal, you should find that you have exobrain
+installed!  However to use it properly, you'll want to manage it with `ubic`.
 
 **Step 2: Configure ubic**
 
