@@ -80,8 +80,8 @@ When we see packets of a particular class, do a particular thing.
 If the optional C<debug> option is passed with a coderef,  that will be run for
 every event in the desired class, before the filter is evaluated.
 
-The event is passed as the first argument to all coderefs. In the filter
-option, it is also placed inside $_.
+The event is passed as the first argument to all coderefs. As a
+convenience, it is also placed inside C<$_>.
 
 Never returns, just runs the loop forever.
 
@@ -115,7 +115,7 @@ method watch_loop(
         }
 
         # Everything passes! Trigger our callback
-        $then->($event);
+        { local $_ = $event; $then->($event); }
     }
 }
 
