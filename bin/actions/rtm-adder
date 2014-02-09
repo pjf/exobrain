@@ -20,10 +20,8 @@ my $list = $config->{'RTM-ADDER'}{list};
 
 say "Adding to list: $list" if DEBUG;
 
-# TODO: These need better config names.
-
-$rtm->api_key(    $config->{RTBM}{api_key}    );
-$rtm->api_secret( $config->{RTBM}{api_secret} );
+$rtm->api_key(    $config->{RTM}{api_key}    );
+$rtm->api_secret( $config->{RTM}{api_secret} );
 $rtm->init;
 
 $exobrain->watch_loop(
