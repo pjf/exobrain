@@ -10,6 +10,9 @@ use Exobrain::Config;
 use Exobrain::Intent::HabitRPG;
 use Data::Dumper;
 
+# PODNAME: bee-habit
+# ABSTRACT: Update HabitRPG events from Beeminder
+
 use constant DEBUG => 1;
 
 my $bus       = Exobrain::Bus->new( type => 'SUB' );

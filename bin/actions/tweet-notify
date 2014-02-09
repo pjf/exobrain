@@ -4,7 +4,8 @@ use strict;
 use warnings;
 use Exobrain;
 
-# Send all tweets to the user to notify.
+# PODNAME: tweet-notify
+# ABSTRACT: Send all tweets to the user to notify.
 
 my $exobrain = Exobrain->new;
 

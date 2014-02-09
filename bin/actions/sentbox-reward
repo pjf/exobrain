@@ -5,7 +5,8 @@ use warnings;
 use autodie;
 use POSIX qw(strftime);
 
-# Reward users for sending email.
+# PODNAME: sentbox-reward
+# ABSTRACT: Reward users on HabitRPG for sending email.
 
 use Getopt::Std;
 use Exobrain;

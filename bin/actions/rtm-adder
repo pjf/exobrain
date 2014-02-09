@@ -10,6 +10,9 @@ use Exobrain;
 use Getopt::Std;
 use WebService::RTMAgent;
 
+# PODNAME: rtm-adder
+# ABSTRACT: Add TODO items to iDoneThis from twitter
+
 use constant DEBUG => 1;
 
 my $exobrain = Exobrain->new;

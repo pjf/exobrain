@@ -9,6 +9,9 @@ use Getopt::Std;
 use Exobrain;
 use Data::Dumper;
 
+# PODNAME: tweet-ping
+# ABSTRACT: Respond to tweets with `#ping`
+
 use constant DEBUG => 1;
 
 my $exobrain = Exobrain->new;

@@ -7,6 +7,9 @@ use Exobrain;
 use Dancer;
 use Try::Tiny;
 
+# PODNAME: beeminder-callback
+# ABSTRACT: Turn Beeminder callbacks into exobrain measurements
+
 use Data::Dumper;
 use constant DEBUG => 1;
 

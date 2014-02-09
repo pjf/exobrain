@@ -5,6 +5,9 @@ use warnings;
 use utf8::all;
 use autodie qw(:all);
 
+# PODNAME: inject
+# ABSTRACT: Inject packets directly into the exobrain bus
+
 use Exobrain::Bus;
 use Exobrain::Message;
 use JSON::Any;

@@ -4,7 +4,9 @@ use strict;
 use warnings;
 use autodie;
 
-# Send a notification every time we spot the user check-in.
+# PODNAME: geo-notify
+# ABSTRACT: Send a notification every time we spot the user check-in.
+
 # This is mostly useful for debugging, although with a tiny
 # bit of work one could turn it into a creepy stalker plug-in.
 

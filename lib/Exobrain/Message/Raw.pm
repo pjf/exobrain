@@ -73,4 +73,8 @@ around BUILDARGS => sub {
     return $class->$orig(@args);
 };
 
+=for Pod::Coverage BUILD
+
+=cut
+
 1;

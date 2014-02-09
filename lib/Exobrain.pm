@@ -231,7 +231,7 @@ method _load_component(Str $class) {
     return $class;
 }
 
-=for Pod::Coverage BUILD DEMOLISH
+=for Pod::Coverage BUILD DEMOLISH CLASS_PREFIX INTENT_PREFIX MEASURE_PREFIX NOTIFY
 
 =cut
 

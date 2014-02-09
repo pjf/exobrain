@@ -5,6 +5,9 @@ use warnings;
 use autodie;
 use Exobrain;
 
+# PODNAME: notify
+# ABSTRACT: Send an exobrain notify intent from the cmdline
+
 @ARGV or die "Usage: $0 message\n";
 
 my $exobrain = Exobrain->new;

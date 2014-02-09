@@ -7,6 +7,9 @@ use autodie;
 use Exobrain;
 use WebService::HabitRPG;
 
+# PODNAME: habitrpg
+# ABSTRACT: Send HabitRPG intents to HabitRPG
+
 use constant DEBUG => 0;
 
 my $exobrain = Exobrain->new;

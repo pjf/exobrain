@@ -7,6 +7,9 @@ use autodie;
 use Getopt::Std;
 use Exobrain::Bus;
 
+# PODNAME: debug.pl
+# ABSTRACT: View events on the exobrain bus
+
 my $bus = Exobrain::Bus->new(
     type => 'SUB',
 );

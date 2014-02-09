@@ -4,6 +4,9 @@ use strict;
 use warnings;
 use autodie;
 
+# PODNAME: router
+# ABSTRACT: Exobrain router. This *must* be running for exobrain to work
+
 use Exobrain::Router;
 
 my $router = Exobrain::Router->new(

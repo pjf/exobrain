@@ -7,6 +7,9 @@ use autodie;
 use Exobrain;
 use WebService::Beeminder;
 
+# PODNAME: beeminder
+# ABSTRACT: Send beeminder intends to Beeminder
+
 my $exobrain = Exobrain->new;
 
 my $config = $exobrain->config->{Beeminder};

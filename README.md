@@ -44,8 +44,8 @@ all tweets directed at him to said watch:
 
 Firstly, make sure you've got all the dependencies:
 
-    apt-get install libzmq-dev expat-dev libnet-ssleay-perl \
-        libnet-libidn-perl libcrypt-ssleay-perl ubic
+    sudo apt-get install libzmq-dev libexpat-dev libnet-ssleay-perl \
+        libnet-libidn-perl libcrypt-ssleay-perl cpanminus
 
 If installing from git, you can then use:
 

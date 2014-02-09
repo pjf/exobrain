@@ -4,6 +4,9 @@ use strict;
 use warnings;
 use autodie;
 
+# PODNAME: xmpp
+# ABSTRACT: Bit-rotted XMPP client for exobrain
+
 use AnyEvent::XMPP::Client;
 use AnyEvent;
 use IO::Handle;

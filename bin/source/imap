@@ -11,6 +11,9 @@ use Term::ReadKey;
 
 use Exobrain;
 
+# PODNAME: imap
+# ABSTRACT: Report IMAP folder sizes to exobrain
+
 my $exobrain = Exobrain->new;
 
 my $user    = shift || die "Usage: $0 user server";

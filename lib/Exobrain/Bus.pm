@@ -81,4 +81,8 @@ method send_msg(%opts) {
     return $msg->send_msg( $self->_socket );
 }
 
+=for Pod::Coverage BUILD ZMQ_PUB ZMQ_SUB ZMQ_SUBSCRIBE
+
+=cut
+
 1;

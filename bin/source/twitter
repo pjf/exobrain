@@ -12,6 +12,9 @@ use Try::Tiny;
 
 use Net::Twitter;
 
+# PODNAME: twitter
+# ABSTRACT: Bridge twitter events to the exobrain bus
+
 use constant DEBUG => 1;
 use constant LAST_CHECK => 'last_check';
 

@@ -9,6 +9,9 @@ use Exobrain;
 use WebService::Idonethis;
 use POSIX qw(strftime);
 
+# PODNAME: idone-send
+# ABSTRACT: Send personal log events to iDoneThis
+
 use constant DEBUG => 0;
 
 my $exobrain = Exobrain->new;

@@ -34,4 +34,8 @@ method start() {
     zmq_device(ZMQ_FORWARDER, $pub, $sub);
 }
 
+=for Pod::Coverage ZMQ_FORWARDER ZMQ_PUB ZMQ_SUB ZMQ_SUBSCRIBE
+
+=cut
+
 1;

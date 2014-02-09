@@ -5,6 +5,9 @@ use warnings;
 use utf8::all;
 use autodie qw(:all);
 
+# PODNAME: twitter-send
+# ABSTRACT: Sink process for exobrain/twitter
+
 use Exobrain;
 use Net::Twitter;
 

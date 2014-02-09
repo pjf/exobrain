@@ -7,6 +7,9 @@ use autodie;
 use Net::Twitter;
 use Exobrain::Config;
 
+# PODNAME: twitter-auth
+# ABSTRACT: OAuth with twitter from the command-line
+
 # TODO: Make a generalised exobrain config sript that calls this.
 
 my $config = Exobrain::Config->new;

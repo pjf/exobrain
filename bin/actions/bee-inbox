@@ -9,6 +9,8 @@ use Exobrain::Cache;
 use WebService::Beeminder;
 use POSIX qw(tzset);
 
+# PODNAME: bee-inbox
+
 use constant DEBUG => 1;
 
 my $exobrain = Exobrain->new;

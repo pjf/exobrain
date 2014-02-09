@@ -4,7 +4,8 @@ use strict;
 use warnings;
 use autodie;
 
-# Send a notification every time a bmndr data point is updated
+# PODNAME: bee-notify
+# ABSTRACT: Send a notification every time a bmndr data point is updated
 
 use Exobrain;
 

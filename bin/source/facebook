@@ -5,6 +5,9 @@ use warnings;
 use utf8::all;
 use autodie qw(:all);
 
+# PODNAME: facebook
+# ABSTRACT: Bridge facebook events to exobrain
+
 use Exobrain::Bus;
 use Exobrain::Message;
 use Exobrain::Config;

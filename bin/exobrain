@@ -4,9 +4,21 @@ use v5.10.0;
 use strict;
 use warnings;
 
-# You must have Ubic installed.
-# Place this in your ubic/service directory.
-# Then 'ubic start exobrain' to start.
+# PODNAME: exobrain
+# ABSTRACT: UBIC service file for exobrain
+
+=head1 SYNOPSIS
+
+    $ cp `which exobrain` ~/ubic/service
+    $ ubic start exobrain
+
+=head1 DESCRIPTION
+
+This is a service file for Ubic which allows for the
+control of exobrain services. It must be placed in
+your F<~/ubic/service> directory to be operational.
+
+=cut
 
 use Ubic::Multiservice::Simple;
 use Ubic::Service::SimpleDaemon;

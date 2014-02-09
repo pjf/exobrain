@@ -12,4 +12,8 @@ sub TO_JSON {
     return unbless dclone $self;   # Yuck!
 }
 
+=for Pod::Coverage TO_JSON
+
+=cut
+
 1;

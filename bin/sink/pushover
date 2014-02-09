@@ -6,6 +6,9 @@ use autodie;
 use Exobrain;
 use WebService::Pushover;
 
+# PODNAME: pushover
+# ABSTRACT: Send exobrain notify events to Pushover
+
 my $exobrain = Exobrain->new;
 my $config   = $exobrain->config->{Pushover};
 

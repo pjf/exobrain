@@ -192,6 +192,10 @@ method dump() {
     return $dumpstr;
 }
 
+=for Pod::Coverage PAYLOAD_CLASS ZMQ_SNDMORE
+
+=cut
+
 package Exobrain::Message::Trait::Payload;
 use Moose::Role;
 

@@ -10,6 +10,9 @@ use Exobrain;
 use Exobrain::Cache;
 use utf8::all;
 
+# PODNAME: foursquare
+# ABSTRACT: Send foursquare events to the exobrain bus
+
 use constant DEBUG => 0;
 use constant LAST_CHECK => 'last_check';
 

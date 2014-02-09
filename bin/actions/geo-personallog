@@ -4,7 +4,8 @@ use strict;
 use warnings;
 use autodie;
 
-# Log our own check-ins to a personal log (such as idonethis).
+# PODNAME: geo-personallog
+# ABSTRACT: Log our own check-ins to a personal log (such as idonethis).
 
 use Exobrain;
 

@@ -6,6 +6,8 @@ use warnings;
 use autodie;
 use Moose::Role;
 
+# ABSTRACT: Base class for all social media events
+
 BEGIN { with 'Exobrain::Message'; }
 
 payload from    => ( isa => 'Str' );
