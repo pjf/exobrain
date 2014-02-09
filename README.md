@@ -118,7 +118,7 @@ Heaps. Report and/or fix them at https://github.com/pjf/exobrain/issues/
 
 # SUPPORT
 
-If you like my work, you can [tip me on gittip](https://gittip.com/pjf)
+If you like my work, you can [tip me on gittip](https://gittip.com/pjf).
 
 # LICENSE
 
