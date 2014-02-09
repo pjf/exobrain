@@ -44,17 +44,23 @@ all tweets directed at him to said watch:
 
 Firstly, make sure you've got all the dependencies:
 
-    sudo apt-get install libzmq-dev libexpat-dev libnet-ssleay-perl \
-        libnet-libidn-perl libcrypt-ssleay-perl cpanminus
+    $ sudo apt-get install libzmq-dev libexpat-dev libnet-ssleay-perl \
+        libnet-libidn-perl libcrypt-ssleay-perl cpanminus make \
+        liblocal-lib-perl
+
+Configure `local::lib` if you haven't already done so:
+
+    $ perl -Mlocal::lib >> ~/.bashrc
+    $ eval $(per -Mlocal::lib)
 
 If installing from git, you can then use:
 
-    dzil listdeps | cpanm
-    dzil install
+    $ dzil listdeps | cpanm
+    $ dzil install
 
 If installing from CPAN:
 
-    cpanm exobrain
+    $ cpanm Exobrain
 
 You now have exobrain installed! However to use it properly, you'll
 want to manage it with `ubic`.
