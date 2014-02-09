@@ -55,7 +55,7 @@ Firstly, make sure you've got all the dependencies:
 Configure `local::lib` if you haven't already done so:
 
     $ perl -Mlocal::lib >> ~/.bashrc
-    $ eval $(per -Mlocal::lib)
+    $ eval $(perl -Mlocal::lib)
 
 If installing from git, you can then use:
 
