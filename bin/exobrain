@@ -33,7 +33,7 @@ Ubic::Multiservice::Simple->new({
         foursquare => daemon("foursquare"),
     }),
 
-    classify => Ubic::Multiservice::Simple->new({
+    action => Ubic::Multiservice::Simple->new({
         'tweet-ping' => daemon('tweet-ping'),
         'bee-habit'  => daemon('bee-habit'),
         'bee-inbox'  => daemon('bee-inbox'),
