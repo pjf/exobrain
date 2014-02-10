@@ -7,6 +7,8 @@ Revision history for Exobrain
     * TEST: Tests now run without an ~/.exobrainrc file
     * TEST: Added travis-ci support (thanks to @mmcclimon)
     * BUGFIX: Compatibility with Perl 5.12
+    * BUGFIX: Removed given/when in Exobrain::Bus.
+              This was making older and newer perls unhappy. :P
 
 0.05    Early Feb 2014
 

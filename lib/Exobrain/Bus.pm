@@ -26,24 +26,21 @@ has exobrain  => ( is => 'ro', isa => 'Exobrain' );
 sub BUILD {
     my ($self) = @_;
 
-    given ($self->type) {
+    my $type = $self->type;
 
-        when('SUB') {
-            my $socket = $context->socket(ZMQ_SUB);
-            $socket->connect($self->router->subscriber);
-            $socket->setsockopt(ZMQ_SUBSCRIBE, $self->subscribe);
-            $self->_socket($socket);
-        }
-
-        when('PUB') {
-            my $socket = $context->socket(ZMQ_PUB);
-            $socket->connect($self->router->publisher);
-            $self->_socket($socket);
-        }
-
-        default {
-            die "Internal error: Can't make a $_ socket.";
-        }
+    if ($type eq 'SUB') {
+        my $socket = $context->socket(ZMQ_SUB);
+        $socket->connect($self->router->subscriber);
+        $socket->setsockopt(ZMQ_SUBSCRIBE, $self->subscribe);
+        $self->_socket($socket);
+    }
+    elsif ($type eq 'PUB') {
+        my $socket = $context->socket(ZMQ_PUB);
+        $socket->connect($self->router->publisher);
+        $self->_socket($socket);
+    }
+    else {
+        die "Internal error: Can't make a $type socket.";
     }
 
     return;
