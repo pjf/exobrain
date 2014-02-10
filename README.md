@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/pjf/exobrain.png?branch=master)](https://travis-ci.org/pjf/exobrain)
+
 # What is this?
 
 Exobrain is a collection of agents which collect, classify, and act
