@@ -12,6 +12,11 @@ before_install:
 
 install:
     - cpanm --notest --skip-satisfied Dist::Zilla
+
+    # ZMQ tries to install ZMQ2 if we don't have ZMQ3
+    # installed first, and Travis already comes with ZMQ3
+    - cpanm --notest --skip-satisfied ZMQ::LibZMQ3
+
     - dzil authordeps | cpanm --notest --skip-satisfied
     - dzil listdeps   | cpanm --notest --skip-satisfied
 
