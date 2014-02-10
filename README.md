@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/pjf/exobrain.png?branch=master)](https://travis-ci.org/pjf/exobrain)
 
+[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.1.0/dist/gittip.png)](https://www.gittip.com/pjf/)
+
 # What is this?
 
 Exobrain is a collection of agents which collect, classify, and act
@@ -137,7 +139,7 @@ components, and also the easiest to write.
 
 Heaps. Report and/or fix them at https://github.com/pjf/exobrain/issues/
 
-# SUPPORTING EXOBRAIN DEVELOPMENT
+# SUPPORT
 
 If you like my work, you can [tip me on gittip](https://gittip.com/pjf).
 
@@ -147,6 +149,8 @@ can [place bounties on Bountysource](https://www.bountysource.com/trackers/34731
 All code contributions, tests, bug reports, feature ideas, documentation,
 and anything else are extremely welcome! Exobrain is free and open
 source software, please use it to make the world a better place.
+
+Exobrain is [hosted on github](https://github.com/pjf/exobrain).
 
 # LICENSE
 
