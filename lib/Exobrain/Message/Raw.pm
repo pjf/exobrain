@@ -2,7 +2,7 @@ package Exobrain::Message::Raw;
 use v5.10.0;
 use Moose;
 use ZMQ::Constants qw(ZMQ_SNDMORE);
-use ZMQ::LibZMQ2;
+use ZMQ::LibZMQ3;
 use JSON::Any;
 use Method::Signatures;
 use Carp;

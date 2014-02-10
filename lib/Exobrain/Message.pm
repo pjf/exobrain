@@ -8,7 +8,7 @@ use Moose::Role;
 use Moose::Util::TypeConstraints;
 use Carp;
 use ZMQ::Constants qw(ZMQ_SNDMORE);
-use ZMQ::LibZMQ2;
+use ZMQ::LibZMQ3;
 use JSON::Any;
 use Data::Dumper;
 
@@ -69,7 +69,7 @@ func payload($name, @args) {
             is       => 'ro',
             required => 1,
             @args
-        ) 
+        )
     );
 }
 
@@ -106,7 +106,7 @@ method data() {
     my $meta     = $self->meta;
     my @attrs    = $self->meta->get_attribute_list;
 
-    my @payloads = grep 
+    my @payloads = grep
         { $meta->get_attribute($_)->does( PAYLOAD_CLASS ) } @attrs
     ;
 
