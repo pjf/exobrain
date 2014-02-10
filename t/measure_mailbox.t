@@ -6,6 +6,7 @@ use autodie;
 
 use Test::More;
 use Exobrain;
+use Exobrain::Test;
 use Exobrain::Measurement::Mailbox;
 
 my $exobrain = Exobrain->new;

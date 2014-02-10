@@ -6,6 +6,7 @@ use autodie;
 use Test::Most;
 
 use Exobrain;
+use Exobrain::Test;
 
 # For making dummy raw packets
 my %raw_args = (

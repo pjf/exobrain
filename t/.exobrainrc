@@ -1,0 +1,82 @@
+[General]
+timezone = Australia/Melbourne
+
+[RTM]
+; RememberTheMilk
+api_key = 
+api_secret =
+
+[Twitter]
+; This is your main twitter account. You can use `twitter-auth`
+; to generate the tokens, but you'll need to register an app
+; yourself at dev.twittr.com
+
+consumer_key        =
+consumer_secret     =
+access_token        =
+access_token_secret =
+
+[TwitterSend]
+; If you want a second account to *send* tweets (eg: @pjf_exobrain)
+; you can configure it here. You can also copy/paste your main
+; [Twitter] details to have the same account used for sending
+; and receiving.
+
+consumer_key        = 
+consumer_secret     =
+access_token        =
+access_token_secret =
+
+[Foursquare]
+; You can grab an auth token directly out of the API explorer.
+auth_token =
+
+[Beeminder]
+auth_token = 
+callback_port = 3000
+
+[HabitRPG]
+user_id   = 
+api_token = 
+
+[Facebook]
+app_id = 
+secret = 
+access_token = 
+
+[Idonethis]
+user = 
+pass = 
+
+[Pushover]
+; Pushover is amazing for notifications.
+api_token  = 
+user_token = 
+
+[Beeminder-Habits]
+; This action allows us to gain XP for a beeminder goal (lhs)
+; which maps to a HabitRPG goal (rhs). The HabitRPG goals are
+; uuids.
+
+floss     = a670fc50-4e04-4b0f-9583-e4ee55fced02
+weight    = c5199061-a5cc-4013-810d-0e3314bdbbca
+gitminder = a5bf1893-9fc8-4d11-8283-59257f939462
+
+[Sendbox-Reward]
+; I like to get XP whenever I send an email, because I suck
+; at responding to email. :)
+
+task = f98fc39d-b507-4c55-a9fa-b184f6369ad1
+tweet = 1
+
+[RTM-ADDER]
+; When adding things to RTM, we'll use this list.
+list = 33947791
+
+[Identity]
+; This common section is used by everything to tell if something
+; is being done to/by us, or someone else.
+
+Facebook   = 549169610
+Twitter    = pjf
+Foursquare = 106036

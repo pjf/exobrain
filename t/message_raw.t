@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use autodie;
 use Exobrain;
+use Exobrain::Test;
 use Exobrain::Message::Raw;
 use Test::More;
 use JSON::Any;

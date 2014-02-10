@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use autodie;
 use Exobrain;
+use Exobrain::Test;
 use Test::More;
 
 my $exobrain = Exobrain->new;

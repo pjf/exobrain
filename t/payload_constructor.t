@@ -3,8 +3,9 @@ use 5.010;
 use strict;
 use warnings;
 use autodie;
+use Exobrain::Test;
 
-package Exobrain::Test;
+package Exobrain::Test::Message;
 use Moose;
 
 sub summary   { "Dummy summary"; }    # The role requires this
@@ -18,7 +19,7 @@ has     'bar' => (isa => 'Int', is => 'ro');
 package main;
 use Test::More;
 
-my $obj = Exobrain::Test->new(
+my $obj = Exobrain::Test::Message->new(
     foo=> 'Foo',
     bar => 42,
     timestamp=>1000,
@@ -46,7 +47,7 @@ ok(
 );
 
 my $time = time();
-my $obj2 = Exobrain::Test->new(
+my $obj2 = Exobrain::Test::Message->new(
     foo=> 'Foo',
     bar => 42,
     namespace => 'TEST',
