@@ -6,6 +6,7 @@ Revision history for Exobrain
     * BUILD: We now use ZMQ.pm, supporting both ZMQ2 and ZMQ3
     * TEST: Tests now run without an ~/.exobrainrc file
     * TEST: Added travis-ci support (thanks to @mmcclimon)
+    * BUGFIX: Compatibility with Perl 5.12
 
 0.05    Early Feb 2014
 
