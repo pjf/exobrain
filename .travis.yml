@@ -7,8 +7,8 @@ perl:
     - "5.10"
 
 before_install:
-    # This line should always match what's in our README.md
-    - sudo apt-get install -qq libzmq-dev libexpat-dev libnet-ssleay-perl libnet-libidn-perl libcrypt-ssleay-perl cpanminus make liblocal-lib-perl
+    # This line should try to match what's in our README.md
+    - sudo apt-get install libzmq3-dev libexpat-dev libnet-ssleay-perl libnet-libidn-perl libcrypt-ssleay-perl cpanminus make liblocal-lib-perl
 
 install:
     - cpanm --notest --skip-satisfied Dist::Zilla
