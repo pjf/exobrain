@@ -2,6 +2,10 @@ Revision history for Exobrain
 
 {{$NEXT}}
 
+    * BUILD: Re-ordered dist.ini for better release process.
+
+0.06      2014-02-11 04:46:19EST+1100 Australia/Melbourne
+
     * BUILD: Reduced dependencies
     * BUILD: We now use ZMQ.pm, supporting both ZMQ2 and ZMQ3
     * TEST: Tests now run without an ~/.exobrainrc file
