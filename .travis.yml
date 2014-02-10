@@ -11,11 +11,12 @@ before_install:
     - sudo apt-get install libzmq3-dev libexpat-dev libnet-ssleay-perl libnet-libidn-perl libcrypt-ssleay-perl cpanminus make liblocal-lib-perl
 
 install:
-    - cpanm --notest --skip-satisfied Dist::Zilla
 
-    # ZMQ tries to install ZMQ2 if we don't have ZMQ3
-    # installed first, and Travis already comes with ZMQ3
-    - cpanm --notest --skip-satisfied ZMQ::LibZMQ3
+    # ZMQ requires us to specify at build-time what back-end
+    # we'll use. Travis comes with ZMQ3 pre-installed.
+    - export PERL_ZMQ_BACKEND=ZMQ::LibZMQ3
+
+    - cpanm --notest --skip-satisfied Dist::Zilla
 
     - dzil authordeps | cpanm --notest --skip-satisfied
     - dzil listdeps   | cpanm --notest --skip-satisfied
