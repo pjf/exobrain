@@ -4,7 +4,7 @@ use Moose;
 use warnings;
 use Method::Signatures;
 use Carp qw(croak);
-use ZMQ::LibZMQ2;
+use ZMQ;
 use ZMQ::Constants qw(ZMQ_SUB ZMQ_SUBSCRIBE ZMQ_PUB ZMQ_FORWARDER);
 
 has subscriber => (is => 'ro', default => 'tcp://127.0.0.1:3546');     # Subscribers connect here
@@ -23,15 +23,16 @@ method start() {
         croak "Attempt to start non-server.";
     }
 
-    my $zmq = zmq_init;
-    my $sub = zmq_socket($zmq, ZMQ_SUB);
-    zmq_bind($sub, $self->publisher);
-    zmq_setsockopt($sub, ZMQ_SUBSCRIBE, '');    # Sub everything
+    my $zmq = ZMQ::Context->new;
+    my $sub = $zmq->socket(ZMQ_SUB);
+    $sub->bind($self->publisher);
+    $sub->setsockopt(ZMQ_SUBSCRIBE, '');    # Sub everything
 
-    my $pub = zmq_socket($zmq, ZMQ_PUB);
-    zmq_bind($pub, $self->subscriber);
+    my $pub = $zmq->socket(ZMQ_PUB);
+    $pub->bind($self->subscriber);
 
-    zmq_device(ZMQ_FORWARDER, $pub, $sub);
+    # Breaking encapsulation! Eeew!
+    ZMQ::call('zmq_device', ZMQ_FORWARDER, $pub->{_socket}, $sub->{_socket});
 }
 
 =for Pod::Coverage ZMQ_FORWARDER ZMQ_PUB ZMQ_SUB ZMQ_SUBSCRIBE

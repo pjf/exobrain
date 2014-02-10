@@ -8,7 +8,7 @@ use Moose::Role;
 use Moose::Util::TypeConstraints;
 use Carp;
 use ZMQ::Constants qw(ZMQ_SNDMORE);
-use ZMQ::LibZMQ2;
+use ZMQ;
 use JSON::Any;
 use Data::Dumper;
 
@@ -142,17 +142,9 @@ method send_msg($socket?) {
         }
     }
 
-    # For some reason multipart sends don't work right now,
-    # $socket->ZMQ::Socket::send_multipart( $self->frames );
-
     my @frames = $self->_frames;
-    my $last   = pop(@frames);
 
-    foreach my $frame ( @frames) {
-        zmq_send($socket, $frame, ZMQ_SNDMORE);
-    }
-
-    zmq_send($socket,$last);
+    $socket->send_multipart(\@frames);
 
     return;
 }
