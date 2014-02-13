@@ -43,7 +43,8 @@ subtype SmsStr,
 
 # TODO: Properly define phone numbers
 subtype PhoneNum,
-    as Str
+    as Str,
+    where { 1 },
 ;
 
 class_type POI,

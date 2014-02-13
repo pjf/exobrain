@@ -1,0 +1,39 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+use SMS::Send;
+use Exobrain;
+
+# PODNAME: sms
+# ABSTRACT: Send SMS from exobrain
+
+# TODO: Make this configurable for any SMS service.
+# Currently it's only tested against Twilio
+
+my $exobrain = Exobrain->new;
+my $config   = $exobrain->config->{SMS};
+
+my $sms = SMS::Send->new( $config->{provider},
+    _accountsid => $config->{account},
+    _authtoken  => $config->{token},
+    _from       => $config->{from},
+);
+
+$exobrain->watch_loop(
+    class => 'Intent::SMS',
+    then  => sub {
+        my $text   = $_->text;
+        my $number = $_->to;
+
+        my $sent = $sms->send_sms(
+            to   => $number,
+            text => $text,
+        );
+
+        if (not $sent) {
+            $exobrain->notify("Failed to send '$text' to $number");
+        }
+    },
+);
