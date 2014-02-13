@@ -11,7 +11,9 @@ use MooseX::Types -declare => [qw(
     JSON
     POI
     TweetStr
-)];;
+    SmsStr
+    PhoneNum
+)];
 
 use MooseX::Types::Moose qw(
     HashRef
@@ -32,6 +34,16 @@ coerce JSON,
 subtype TweetStr,
     as Str,
     where { length($_) <= 140 }
+;
+
+subtype SmsStr,
+    as Str,
+    where { length($_) <= 160 }
+;
+
+# TODO: Properly define phone numbers
+subtype PhoneNum,
+    as Str
 ;
 
 class_type POI,
