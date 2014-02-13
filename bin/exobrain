@@ -63,6 +63,7 @@ Ubic::Multiservice::Simple->new({
         beeminder => daemon('beeminder'),
         idonethis => daemon('idone-send'),
         pushover  => daemon('pushover'),
+        sms       => daemon('sms'),
     }),
 
     core => Ubic::Multiservice::Simple->new({
