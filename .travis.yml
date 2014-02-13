@@ -21,5 +21,10 @@ install:
     - dzil authordeps | cpanm --notest --skip-satisfied
     - dzil listdeps   | cpanm --notest --skip-satisfied
 
+    # Manually install Pod::Coverage::TestPod for now.
+    # See rjbs/Dist-Zilla#283
+    
+    - cpanm --notest --skip-satisfied Pod::Coverage::TestPod
+
 script:
     - dzil test --all
