@@ -1,0 +1,55 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+use Exobrain;
+use Config::Tiny;
+
+# ABSTRACT: Text people when you're in their area.
+
+my $exobrain = Exobrain->new;
+
+# TODO: use File::XDG or Exobrain::Config or *something* that
+# abstracts away the location of our config file.
+
+my $config = Config::Tiny->read("$ENV{HOME}/.config/exobrain/stalk-paul");
+
+# TODO: Configure area, either from tags in Geo packets, or actual
+# honest geolocation logic.
+
+# TODO: Only broadcast on seeing a tag in the geo packet indicating
+#       we should!
+
+my $area = 'PDX';
+
+my $phones = $config->{$area} or die "Cannot find people in $area";
+
+$exobrain->watch_loop(
+    class  => 'Measurement::Geo',
+    filter => sub { $_->is_me },
+    then   => sub {
+        my $event = $_;
+
+        my $location = $event->poi->name;
+        my $message = $event->message;
+
+        my $text = "PJF is at '$location' with message: '$message'.";
+
+        my $length = length($text);
+
+        # Truncate text to 160 characters for SMS.
+        # TODO: Split into multiple messages
+        $text =~ s/^(.{1,160}).*/$1/;
+
+
+        foreach my $person (keys %$phones) {
+            my $phone = $phones->{$person};
+
+            $exobrain->intent('SMS',
+                to => $phone,
+                text => $message,
+            )->send_msg;
+        }
+    },
+);
