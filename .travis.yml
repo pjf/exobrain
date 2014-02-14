@@ -22,7 +22,7 @@ install:
     # virgin 5.16. So start up upgrading MakeMaker.
     # See miyagawa/cpanminus#291 for details
 
-    - cpanm --notest --skip-satisfied ExtUtils::MakeMaker
+    - cpanm --notest ExtUtils::MakeMaker
 
     - dzil authordeps | cpanm --notest --skip-satisfied
     - dzil listdeps   | cpanm --notest --skip-satisfied
