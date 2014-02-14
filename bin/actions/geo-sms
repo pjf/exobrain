@@ -42,13 +42,12 @@ $exobrain->watch_loop(
         # TODO: Split into multiple messages
         $text =~ s/^(.{1,160}).*/$1/;
 
-
         foreach my $person (keys %$phones) {
             my $phone = $phones->{$person};
 
             $exobrain->intent('SMS',
                 to => $phone,
-                text => $message,
+                text => $text,
             )->send_msg;
         }
     },
