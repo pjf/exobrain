@@ -24,13 +24,8 @@ install:
 
     - cpanm --notest ExtUtils::MakeMaker
 
-    - dzil authordeps | cpanm --notest --skip-satisfied
-    - dzil listdeps   | cpanm --notest --skip-satisfied
-
-    # Manually install Pod::Coverage::TrustPod for now.
-    # See rjbs/Dist-Zilla#283
-    
-    - cpanm --notest --skip-satisfied Pod::Coverage::TrustPod
+    - dzil authordeps         | cpanm --notest --skip-satisfied
+    - dzil listdeps --author  | cpanm --notest --skip-satisfied
 
 script:
     - dzil test --all
