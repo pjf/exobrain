@@ -17,6 +17,8 @@ use Data::Dumper;
 
 use constant DEBUG => 1;
 
+# TODO: Upgrade this to use watch_loops
+
 my $exobrain = Exobrain->new;
 
 my $bus       = $exobrain->sub;

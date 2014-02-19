@@ -79,7 +79,7 @@ sub respond {
 
     $exobrain->intent('Tweet',
         tweet => $content,
-    )->send_msg;
+    );
 
     return;
 }

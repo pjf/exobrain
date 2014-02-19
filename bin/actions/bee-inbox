@@ -10,6 +10,7 @@ use WebService::Beeminder;
 use POSIX qw(tzset);
 
 # PODNAME: bee-inbox
+# ABSTRACT: Watch inbox and send low-water marks to beeminder
 
 use constant DEBUG => 1;
 
@@ -61,7 +62,7 @@ $exobrain->watch_loop(
                 goal => $goal,
                 value => $count,
                 comment => "Submitted via exobrain",
-            )->send_msg;
+            );
 
             $exobrain->notify(
                 "Updated bmndr/$goal to $count msgs",
