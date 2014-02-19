@@ -217,7 +217,7 @@ method dump() {
     return $dumpstr;
 }
 
-=for Pod::Coverage PAYLOAD_CLASS ZMQ_SNDMORE
+=for Pod::Coverage PAYLOAD_CLASS ZMQ_SNDMORE BUILD
 
 =cut
 
