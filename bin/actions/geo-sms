@@ -5,6 +5,9 @@ use warnings;
 use autodie;
 use Exobrain;
 use Config::Tiny;
+use Data::Dumper;
+
+use constant DEBUG => 1;
 
 # ABSTRACT: Text people when you're in their area.
 # PODNAME: geo-sms
@@ -33,9 +36,11 @@ $exobrain->watch_loop(
         my $event = $_;
 
         my $location = $event->poi->name;
-        my $message = $event->message;
+        my $message  = $event->message;
 
         my $text = "PJF is at '$location' with message: '$message'.";
+
+        say Dumper $event if DEBUG;
 
         my $length = length($text);
 
@@ -47,7 +52,7 @@ $exobrain->watch_loop(
             my $phone = $phones->{$person};
 
             $exobrain->intent('SMS',
-                to => $phone,
+                to   => $phone,
                 text => $text,
             )->send_msg;
         }
