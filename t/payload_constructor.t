@@ -25,6 +25,7 @@ my $obj = Exobrain::Test::Message->new(
     timestamp=>1000,
     namespace => 'TEST',
     source => 'TEST',
+    nosend => 1,
 );
 
 my $meta = $obj->meta;
@@ -52,6 +53,7 @@ my $obj2 = Exobrain::Test::Message->new(
     bar => 42,
     namespace => 'TEST',
     source => 'TEST',
+    nosend => 1,
 );
 
 ok (

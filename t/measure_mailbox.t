@@ -17,6 +17,7 @@ my %raw = (
     mailbox => 'INBOX',
     count   => 42,
     source  => 'TEST',
+    nosend  => 1,
 );
 
 my $msg1 = Exobrain::Measurement::Mailbox->new(

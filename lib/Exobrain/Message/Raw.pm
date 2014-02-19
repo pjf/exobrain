@@ -53,7 +53,8 @@ around BUILDARGS => sub {
     my ($orig, $class, @args) = @_;
 
     # If called with an arrayref, then we're reconstituting a packet
-    # off the wire
+    # off the wire. We need to make sure we build this with the 'nosend'
+    # flag set, otherwise we'll result in a packet-storm!
 
     if (@args == 1 and ref($args[0]) eq 'ARRAY') {
         my $frames = $args[0];
@@ -65,6 +66,7 @@ around BUILDARGS => sub {
             summary   => $frames->[2],
             data      => $json->decode( $frames->[3] ),
             raw       => $json->decode( $frames->[4] ),
+            nosend    => 1,
         );
     }
 

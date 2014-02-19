@@ -73,6 +73,8 @@ method _build_summary() {
     );
 }
 
+no warnings qw(redefine);
+
 method BUILD(...) {
 
     # Fill our POI source if required

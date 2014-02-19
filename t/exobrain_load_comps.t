@@ -15,6 +15,7 @@ my %raw_args = (
     summary   => 'test',
     namespace => 'test',
     raw       => {},
+    nosend    => 1,
 );
 
 my %imap_args = (

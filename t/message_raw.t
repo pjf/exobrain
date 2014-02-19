@@ -31,6 +31,7 @@ my $msg = $exobrain->message(
     data      => $data,
     raw       => $data,
     summary   => $summary,
+    nosend    => 1,
 );
 
 # Testing the 'off the wire' build by frames syntax.
