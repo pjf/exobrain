@@ -14,6 +14,12 @@ use Method::Signatures;
 
 # See http://blog.beeminder.com/blogdog/ for how this make me money. :)
 
+# This code is intended to be run from cron, or another scheduler.
+# It does not remain a persistent agent (as do other exobrain components)
+
+# TODO: Split this into standard exobrain format (a measurement
+# provider, and a classifier).
+
 my $LOSE_RE = qr{Red\.};
 my $WIN_RE  = qr{(?:Green|Yellow|Blue)\.};
 
