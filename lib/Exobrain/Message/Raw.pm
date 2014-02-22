@@ -46,6 +46,7 @@ method to_class($class) {
         raw       => $self->raw,
         namespace => $self->namespace,
         source    => $self->source,
+        nosend    => 1,                 # Without this, we packet-storm!
     );
 }
 
