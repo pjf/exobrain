@@ -139,7 +139,7 @@ method notify($message, @args) {
     return $self->intent( NOTIFY,
         message => $message,
         @args,
-    )->send_msg;
+    );
 }
 
 =method message
