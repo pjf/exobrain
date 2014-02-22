@@ -9,6 +9,11 @@ use Try::Tiny;
 use WWW::Mechanize;
 use Method::Signatures;
 
+# PODNAME: beeminder-bounties
+# ABSTRACT: Spot when beeminder are about to fail a meta-goal
+
+# See http://blog.beeminder.com/blogdog/ for how this make me money. :)
+
 my $LOSE_RE = qr{Red\.};
 my $WIN_RE  = qr{(?:Green|Yellow|Blue)\.};
 
