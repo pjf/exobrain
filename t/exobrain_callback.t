@@ -27,7 +27,7 @@ my $raw = {
 
 my $pkt;
 
-lives_ok { $pkt =  $exobrain->measure('Beeminder', %$raw) };
+lives_ok { $pkt =  $exobrain->measure('Beeminder', %$raw, nosend => 1) };
 
 is($pkt->user, 'pjf',  'user');
 is($pkt->goal, 'test', 'goal');

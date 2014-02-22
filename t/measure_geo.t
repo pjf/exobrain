@@ -23,6 +23,7 @@ my $message = $exobrain->measure('Geo',
         name => 'Some place',
     },
     message => 'Drinking a coffee',
+    nosend => 1,
 );
 
 ok($message->DOES('Exobrain::Message'), 'Does Exobrain::Message');
