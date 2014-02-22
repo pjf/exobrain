@@ -87,7 +87,7 @@ while (1) {
             to_me     => 1,     # Because we're only looking at replies
             text      => $status->{text},
             raw       => $status,
-        )->send_msg;
+        );
 
         if ($status->{id} > $last_id) {
             $last_id = $status->{id};

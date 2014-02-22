@@ -144,10 +144,13 @@ method notify($message, @args) {
 
 =method message
 
-    $exobrain->message( ... )->send_msg;
+    $exobrain->message( ... );
 
 Shortcut to create a 'raw' message. The exobrain parameter will be passed
 to the class constructor automatically.
+
+The message I<will> be sent automatically, unless the C<nosend> parameter
+is set to a true value.
 
 =cut
 

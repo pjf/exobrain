@@ -92,8 +92,6 @@ while (1) {
             },
             raw      => $checkin,
         );
-        
-        $packet->send_msg;
     }
 
     sleep(60);

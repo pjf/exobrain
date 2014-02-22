@@ -15,9 +15,8 @@ $exobrain->watch_loop(
     class  => 'Measurement::Geo',
     filter => sub { $_->is_me },
     then   => sub {
-        my $event = shift;
         $exobrain->intent("PersonalLog",
-            message => $event->summary
-        )->send_msg;
+            message => $_->summary
+        );
     },
 );

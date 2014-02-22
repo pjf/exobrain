@@ -13,8 +13,8 @@ isa_ok($exobrain,'Exobrain');
 
 # Invalid ways of generating this intent
 
-dies_ok { $exobrain->intent('Beeminder', goal => 'foo' ) } "no goal";
-dies_ok { $exobrain->intent('Beeminder', value => 3    ) } "no value";
+dies_ok { $exobrain->intent('Beeminder', goal => 'foo', nosend => 1 ) } "no goal";
+dies_ok { $exobrain->intent('Beeminder', value => 3, nosend => 1    ) } "no value";
 
 {
     # Build a sample (valid) message and test
@@ -23,6 +23,7 @@ dies_ok { $exobrain->intent('Beeminder', value => 3    ) } "no value";
         goal => 'floss',
         value => 3,
         comment => "Test Comment",
+        nosend => 1,
     );
 
     ok($message->DOES('Exobrain::Intent'), 'Does Exobrain::Intent');

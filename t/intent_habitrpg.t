@@ -13,8 +13,8 @@ isa_ok($exobrain,'Exobrain');
 
 # Invalid ways of generatingt his intent
 
-dies_ok { $exobrain->intent('HabitRPG', direction => 'up'   ) } "no task";
-dies_ok { $exobrain->intent('HabitRPG', task => 'test-goal' ) } "no direction";
+dies_ok { $exobrain->intent('HabitRPG', direction => 'up'  , nosend => 1 ) } "no task";
+dies_ok { $exobrain->intent('HabitRPG', task => 'test-goal', nosend => 1 ) } "no direction";
 
 
 {
@@ -24,6 +24,7 @@ dies_ok { $exobrain->intent('HabitRPG', task => 'test-goal' ) } "no direction";
         task => 'test-goal',
         direction => 'up',
         public => 0,
+        nosend => 1,
     );
 
     ok($message->DOES('Exobrain::Intent'), 'Does Exobrain::Intent');
@@ -45,6 +46,7 @@ dies_ok { $exobrain->intent('HabitRPG', task => 'test-goal' ) } "no direction";
     my $message = $exobrain->intent('HabitRPG',
         task => 'test-goal',
         direction => 'up',
+        nosend => 1,
     );
 
     is( $message->public, 0, 'default 0 public flag');

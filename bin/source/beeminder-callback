@@ -58,7 +58,7 @@ post qr{.*} => sub {
 
     try {
         debug("About to send packet on exobrain bus...");
-        $exobrain->measure( 'Beeminder', params(), raw => { params() } )->send_msg;
+        $exobrain->measure( 'Beeminder', params(), raw => { params() } );
         debug("Packet sent on exobrain bus");
     }
     catch {

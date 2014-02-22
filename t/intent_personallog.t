@@ -15,6 +15,7 @@ isa_ok($exobrain,'Exobrain');
 
 my $message = $exobrain->intent('PersonalLog',
     message => 'Hello World',
+    nosend => 1,
 );
 
 ok($message->DOES('Exobrain::Intent'), 'Does Exobrain::Intent');

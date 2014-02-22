@@ -54,7 +54,7 @@ $exobrain->watch_loop(
             $exobrain->intent('SMS',
                 to   => $phone,
                 text => $text,
-            )->send_msg;
+            );
         }
     },
 );

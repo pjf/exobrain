@@ -24,6 +24,8 @@ has timestamp => ( is => 'ro', isa => 'Int', default => sub { time() } );
 has exobrain  => ( is => 'rw', isa => 'Exobrain');
 has raw       => ( is => 'ro', isa => 'Ref' );
 has source    => ( is => 'ro', isa => 'Str', default => "$0" );
+has nosend    => ( is => 'ro', isa => 'Bool', default => 0 );
+has _sent     => ( is => 'rw', isa => 'Bool', default => 0 );
 
 # This can be used to explicitly set the data, ignoring the
 # payload attributes.
@@ -38,6 +40,23 @@ requires qw(summary);
 #       for handling objects.
 
 my $json = JSON::Any->new( convert_blessed => 1 );
+
+# We define a dummy BUILD method so the class that consumes us doesn't
+# need to define its own, but we can still use 'after BUILD' later.
+# Many thanks to hobbs on #Moose for this. ;)
+
+sub BUILD { }
+
+after BUILD => sub {
+    my $self = shift;
+
+    # Send our packet, unless nosend is set.
+    unless ($self->nosend) {
+        $self->send_msg;
+    }
+
+    return;
+};
 
 =method payload
 
@@ -126,9 +145,21 @@ method data() {
 Sends the message across the exobrain bus. If no socket is provided,
 the one from the exobrain object (if we were built with one) is used.
 
+This method is invoked automatically unless the C<nosend> option
+is used when the message was created.
+
+This generates a warning (and does NOT send the packet) if
+the C<_sent> flag on the message is set. This flag is set automatically
+after sending.
+
 =cut
 
 method send_msg($socket?) {
+
+    if ($self->_sent) {
+        carp "Packet of type ".$self->namespace." already sent.";
+        return;
+    }
 
     # If we don't have a socket, grab it from our exobrain object
     # (if it exists)
@@ -145,6 +176,8 @@ method send_msg($socket?) {
     my @frames = $self->_frames;
 
     $socket->send_multipart(\@frames);
+
+    $self->_sent(1);
 
     return;
 }
@@ -184,7 +217,7 @@ method dump() {
     return $dumpstr;
 }
 
-=for Pod::Coverage PAYLOAD_CLASS ZMQ_SNDMORE
+=for Pod::Coverage PAYLOAD_CLASS ZMQ_SNDMORE BUILD
 
 =cut
 
