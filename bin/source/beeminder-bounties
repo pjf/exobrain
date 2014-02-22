@@ -1,0 +1,57 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+use Exobrain;
+use JSON::Any;
+use Try::Tiny;
+use WWW::Mechanize;
+use Method::Signatures;
+
+my $LOSE_RE = qr{Red\.};
+my $WIN_RE  = qr{(?:Green|Yellow|Blue)\.};
+
+my $exobrain = Exobrain->new;
+
+my $agent = WWW::Mechanize->new(
+    autocheck => 1,
+);
+
+my $json = JSON::Any->new;
+
+my @bounty_goals = qw(
+    http://beeminder.com/meta/uvi
+    http://beeminder.com/meta/blog
+    http://beeminder.com/b/meta
+    http://beeminder.com/d/meta
+);
+
+foreach my $goal (@bounty_goals) {
+    try {
+        my $json_url = "$goal.json";
+        my $json     = $json->decode( $agent->get($json_url)->content );
+        check_goal_info( $goal, $json );
+    };
+}
+
+func check_goal_info( $url, $json ) {
+    my $title = $json->{titlesum};
+
+    if ($title =~ /^$LOSE_RE/) {
+        $exobrain->notify(
+            "Bounty goal $url is about to lose!",
+            priority => 1,      # High priority
+        ),
+    }
+    elsif ($title =~ /^$WIN_RE/) {
+        # Goal isn't losing. Return.
+        return;
+    }
+    else {
+        $exobrain->notify(
+            "Bounty goal $url unexpected returned titlesum of $title",
+            priority => -1,     # Debug priority
+        ),
+    }
+}
