@@ -21,7 +21,7 @@ use Method::Signatures;
 # provider, and a classifier).
 
 my $LOSE_RE = qr{Red\.};
-my $WIN_RE  = qr{(?:Green|Yellow|Blue)\.};
+my $WIN_RE  = qr{(?:Green|Yellow|Blue|Orange)\.};
 
 my $exobrain = Exobrain->new;
 
