@@ -13,6 +13,7 @@ use MooseX::Types -declare => [qw(
     TweetStr
     SmsStr
     PhoneNum
+    Exobrain
 )];
 
 use MooseX::Types::Moose qw(
@@ -46,6 +47,8 @@ subtype PhoneNum,
     as Str,
     where { 1 },
 ;
+
+class_type Exobrain, { class => 'Exobrain' } ;
 
 class_type POI,
     { class => 'Exobrain::Measurement::Geo::POI' }
