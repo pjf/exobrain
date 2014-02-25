@@ -5,7 +5,7 @@ use Net::Twitter;
 use Method::Signatures;
 use Date::Manip::Date;
 
-with 'Exobrain::Source::Poll';
+with 'Exobrain::Agent::Source::Poll';
 
 # Key used by the cache for our last Twitter ID.
 # Called 'last_check' for historical reasons.

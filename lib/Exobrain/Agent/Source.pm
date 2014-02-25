@@ -1,4 +1,4 @@
-package Exobrain::Source;
+package Exobrain::Agent::Source;
 use Moose::Role;
 use Exobrain;
 use Exobrain::Cache;

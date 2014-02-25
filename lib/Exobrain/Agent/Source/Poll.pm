@@ -1,4 +1,4 @@
-package Exobrain::Source::Poll;
+package Exobrain::Agent::Source::Poll;
 use Moose::Role;
 use Method::Signatures;
 use Try::Tiny;

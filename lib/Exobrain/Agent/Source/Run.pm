@@ -1,4 +1,4 @@
-package Exobrain::Source::Run;
+package Exobrain::Agent::Source::Run;
 use Moose::Role;
 use Method::Signatures;
 use Try::Tiny;
