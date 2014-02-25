@@ -1,9 +1,9 @@
-package Exobrain::Agent::Source::Run;
+package Exobrain::Agent::Run;
 use Moose::Role;
 use Method::Signatures;
 use Try::Tiny;
 
-# ABSTRACT: Role for sources which run 'continously'
+# ABSTRACT: Role for agents which run 'continously'
 
 with 'Exobrain::Source';
 

@@ -1,4 +1,4 @@
-package Exobrain::Agent::Source::Poll;
+package Exobrain::Agent::Poll;
 use Moose::Role;
 use Method::Signatures;
 use Try::Tiny;
@@ -6,7 +6,7 @@ use Exobrain::Types qw(TimeOut PosInt);
 
 # ABTRACT: Role for exobrain sources which poll a source.
 
-with 'Exobrain::Source';
+with 'Exobrain::Agent';
 
 requires('poll');
 excludes('run');

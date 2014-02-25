@@ -5,7 +5,21 @@ use Net::Twitter;
 use Method::Signatures;
 use Date::Manip::Date;
 
-with 'Exobrain::Agent::Source::Poll';
+with 'Exobrain::Agent::Poll';
+
+=head1 DESCRIPTION
+
+Exobrain agent class for twitter.
+
+This requires the following configuration section:
+
+    [Exobrain::Agent::Source::Twitter]
+    consumer_key =
+    consumer_secret =
+    access_token =
+    access_token_secret =
+
+=cut
 
 # Key used by the cache for our last Twitter ID.
 # Called 'last_check' for historical reasons.
@@ -101,3 +115,6 @@ method poll() {
 }
 
 1;
+
+=for Pod::Coverage DEBUG CACHE_LAST_MENTION
+
