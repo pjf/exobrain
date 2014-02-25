@@ -6,6 +6,7 @@ use autodie;
 use Exobrain;
 use Exobrain::Test;
 use Test::More;
+use Test::Deep;
 
 my $exobrain = Exobrain->new;
 
@@ -23,5 +24,7 @@ isa_ok($message,'Exobrain::Intent::Tweet');
 
 is($message->namespace, 'Intent::Tweet', 'namespace');
 is($message->tweet, 'Hello World', 'tweet');
+
+cmp_set( $message->roles, [qw(Message Intent)], "Roles" );
 
 done_testing;

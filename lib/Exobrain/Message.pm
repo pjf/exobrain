@@ -54,10 +54,10 @@ after BUILD => sub {
     # Calculate our roles and attach them to the packet.
 
     unless ($self->roles) {
-        my @roles= $self->meta->calculate_all_roles;
+        my @roles = map { $_->name } $self->meta->calculate_all_roles;
 
         # Strip prefixes
-        @roles = map { $_->name =~ m{^Exobrain::(.*) } } @roles;
+        foreach (@roles) { s{^Exobrain::}{}; }
 
         $self->roles(\@roles);
     }
