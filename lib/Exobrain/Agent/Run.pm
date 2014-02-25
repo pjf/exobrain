@@ -5,7 +5,7 @@ use Try::Tiny;
 
 # ABSTRACT: Role for agents which run 'continously'
 
-with 'Exobrain::Source';
+with 'Exobrain::Agent';
 
 requires('run');
 excludes('poll');
