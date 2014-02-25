@@ -6,7 +6,6 @@ use warnings;
 
 use Ubic::Multiservice::Simple;
 use Ubic::Service::SimpleDaemon;
-use FindBin qw($RealScript);
 
 # PODNAME: exobrain
 # ABSTRACT: UBIC service file for exobrain
@@ -49,7 +48,11 @@ elsif ($command eq "run") {
     Exobrain->run($class);
 }
 else {
-    die "$0: Unknown command: $command\n";
+    # Apparently ubic calls us with service names when it wants
+    # to know stuff. So assume that a weird argument is ubic
+    # doing its thing
+    ubic_services();
+    # die "$0: Unknown command: $command @args\n";
 }
 
 sub daemon {
@@ -64,17 +67,12 @@ sub daemon {
 sub agent {
     my ($class) = @_;
 
-    # Name is our class with :: replaced with dashes
-    my $name = $class;
-    $name =~ s{::}{-}g;
-
     # Start is ourselves, with the start command.
-    my $start = "$RealScript start";
+    my @start = ( __FILE__ , "run" );
 
-    return Ubic::Service::SimpleDaemon->new(
-        common_options($class),
-        bin => "$start $class",
-    );
+    my @opts = ( common_options($class), bin => "@start $class" );
+
+    return Ubic::Service::SimpleDaemon->new( @opts );
 
 }
 
@@ -95,7 +93,7 @@ sub ubic_services {
     return Ubic::Multiservice::Simple->new({
 
         source => Ubic::Multiservice::Simple->new({
-            twitter  => daemon("twitter"),
+            twitter  => agent("Source::Twitter"),
             facebook => daemon("facebook"),
             beeminder => daemon("beeminder-callback"),
             foursquare => daemon("foursquare"),

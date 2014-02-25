@@ -108,7 +108,14 @@ method watch_loop(
         my $namespace = $event->namespace;
 
         if (grep { $_ eq $class } ($namespace, @{ $event->roles })) {
-            $event = $event->to_class($class);
+
+            # Note that we have to cast it to the namespace on the
+            # packet (which is a class), and not the $class argument
+            # (which could be a role!)
+            #
+            # Yes, this code should be simplified/improved!
+
+            $event = $event->to_class($namespace);
 
             $debug->($event) if $debug;
 
