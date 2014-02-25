@@ -93,7 +93,7 @@ sub ubic_services {
     return Ubic::Multiservice::Simple->new({
 
         source => Ubic::Multiservice::Simple->new({
-            twitter  => agent("Source::Twitter"),
+            twitter  => agent("Twitter::Source"),
             facebook => daemon("facebook"),
             beeminder => daemon("beeminder-callback"),
             foursquare => daemon("foursquare"),
@@ -112,7 +112,7 @@ sub ubic_services {
         }),
 
         sink => Ubic::Multiservice::Simple->new({
-            twitter  => daemon("twitter-send"),
+            twitter  => agent("Twitter::Sink"),
             habitrpg => daemon('habitrpg'),
             beeminder => daemon('beeminder'),
             idonethis => daemon('idone-send'),
