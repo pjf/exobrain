@@ -58,7 +58,7 @@ method _build_last_mention() {
 }
 
 method _cache_last_mention($new, $old?) {
-    say "Setting last mention to $new" if DEBUG;
+    print "Setting last mention to $new\n" if DEBUG;
     $self->cache->set( CACHE_LAST_MENTION, $new );
     return;
 }
