@@ -54,9 +54,12 @@ after BUILD => sub {
     # Calculate our roles and attach them to the packet.
 
     unless ($self->roles) {
-        $self->roles(
-            [ map { $_->name } $self->meta->calculate_all_roles ]
-        );
+        my @roles= $self->meta->calculate_all_roles;
+
+        # Strip prefixes
+        @roles = map { $_->name =~ m{^Exobrain::(.*) } } @roles;
+
+        $self->roles(\@roles);
     }
 
     # Send our packet, unless nosend is set.
@@ -197,11 +200,11 @@ method _frames() {
     my @frames;
 
     push(@frames, join("_", "EXOBRAIN", $self->namespace, $self->source));
-    push(@frames, $json->encode(
+    push(@frames, $json->encode( {
         timestamp => $self->timestamp,
         roles     => $self->roles,
         # TODO: Add some sort of version metadata
-    ));
+    } ) );
     push(@frames, $self->summary // "");
     push(@frames, $json->encode( $self->data ));
     push(@frames, $json->encode( $self->raw  || {} ));

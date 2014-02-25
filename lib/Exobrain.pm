@@ -76,6 +76,11 @@ sub _build_sub    { return Exobrain::Bus->new(type => 'SUB', exobrain => shift) 
     );
 
 When we see packets of a particular class, do a particular thing.
+The C<class> need not strictly be a class, but may also be a
+C<role>.
+
+The 'Exobrain::' prefix should not be supplied to the class/roles
+you are searching for.
 
 If the optional C<debug> option is passed with a coderef,  that will be run for
 every event in the desired class, before the filter is evaluated.
@@ -100,22 +105,24 @@ method watch_loop(
     $self->_load_component($class);
 
     while (my $event = $self->sub->get) {
-        next unless $event->namespace eq $class;
+        my $namespace = $event->namespace;
 
-        $event = $event->to_class($class);
+        if (grep { $_ eq $class } ($namespace, @{ $event->roles })) {
+            $event = $event->to_class($class);
 
-        $debug->($event) if $debug;
+            $debug->($event) if $debug;
 
-        if ($filter) {
+            if ($filter) {
 
-            # Check our filter, and skip if required
-            local $_ = $event;
-            next unless $filter->($event);
+                # Check our filter, and skip if required
+                local $_ = $event;
+                next unless $filter->($event);
 
+            }
+
+            # Everything passes! Trigger our callback
+            { local $_ = $event; $then->($event); }
         }
-
-        # Everything passes! Trigger our callback
-        { local $_ = $event; $then->($event); }
     }
 }
 
