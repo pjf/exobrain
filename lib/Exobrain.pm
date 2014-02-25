@@ -220,10 +220,31 @@ method intent($type, @args) {
     );
 }
 
-use constant CLASS_PREFIX => 'Exobrain::';
+=method run
+
+    $exobrain->run($agent);
+
+Runs the agent of the class specified. The agent name is
+automatically prepended with "Exobrain::Agent::" and loaded
+first. This method never returns.
+
+This is usually called from the C<exobrain> cmdline program.
+
+=cut
+
+use constant AGENT_PREFIX => 'Agent::';
+
+method run(Str $class) {
+    my $agent = $self->_load_component( AGENT_PREFIX . $class );
+
+    # This should never actually return.
+    return $agent->start();
+}
 
 # Loads a class, automatically adding Exobrain if
 # required. Returns the class loaded.
+
+use constant CLASS_PREFIX => 'Exobrain::';
 
 method _load_component(Str $class) {
     $class = CLASS_PREFIX . $class;
