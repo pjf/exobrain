@@ -3,6 +3,9 @@ Revision history for Exobrain
 {{$NEXT}}
 
     * BUILD: Re-ordered dist.ini for better release process.
+    * API: Implemented class-based agents.
+    * API: Split Twitter into its own Exobrain plug-in distro
+    * RUN: Updated 'exobrain' CLI to be more awesome.
 
 0.06      2014-02-11 04:46:19EST+1100 Australia/Melbourne
 
