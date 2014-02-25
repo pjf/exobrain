@@ -14,19 +14,36 @@ has exobrain => (
 
 sub _build_exobrain { return Exobrain->new; }
 
+# Our component name is by default the same as the class name,
+# but different modules can declare themselves to be part of the
+# same component, thereby sharing config and cache.
+
+has component => (
+    is => 'ro',
+    isa => 'Str',
+    lazy => 1,
+    builder => '_build_component',
+);
+
+method _build_component() {
+    if (my $method = $self->can("component_name") ) {
+        return $self->$method;
+    }
+    return ref($self);
+}
+
 has config => (
     is => 'ro',
     lazy => 1,
     builder => '_build_config',
 );
 
-# By using the class name as the heading for our config, it's easy
+# By using the component name as the heading for our config, it's easy
 # to clearly tell which config belongs where. Consumers can always
 # call $exobrain->config if they want to access the top-level one.
 
 method _build_config() {
-    my $class = ref($self);
-    return $self->exobrain->config->{$class};
+    return $self->exobrain->config->{ $self->component };
 }
 
 has cache => (
@@ -36,9 +53,7 @@ has cache => (
 );
 
 method _build_cache() {
-    my $class = ref($self);
-
-    return Exobrain::Cache->new( namespace => $class );
+    return Exobrain::Cache->new( namespace => $self->component );
 }
 
 1;

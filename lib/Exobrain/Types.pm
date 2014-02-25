@@ -10,7 +10,6 @@ my $json = JSON::Any->new( allow_blessed => 1 );
 use MooseX::Types -declare => [qw(
     JSON
     POI
-    TweetStr
     SmsStr
     PhoneNum
     Exobrain
@@ -35,11 +34,6 @@ subtype JSON,
 coerce JSON,
     from Ref,
     via { $json->encode($_) }
-;
-
-subtype TweetStr,
-    as Str,
-    where { length($_) <= 140 }
 ;
 
 subtype SmsStr,
