@@ -1,6 +1,7 @@
 package Exobrain::Source;
 use Moose::Role;
 use Exobrain;
+use Exobrain::Cache;
 use Method::Signatures;
 use Exobrain::Types qw(Exobrain);
 
@@ -36,6 +37,18 @@ has config => (
 method _build_config() {
     my $class = ref($self);
     return $self->exobrain->{$class};
+}
+
+has cache => (
+    is => 'ro',
+    lazy => 1,
+    builder => '_build_cache',
+);
+
+method _build_cache() {
+    my $class = ref($self);
+
+    return Exobrain::Cache->new( namespace => $class );
 }
 
 1;
