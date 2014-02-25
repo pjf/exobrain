@@ -14,12 +14,17 @@ use MooseX::Types -declare => [qw(
     SmsStr
     PhoneNum
     Exobrain
+    PosNum
+    PosInt
+    TimeOut
 )];
 
 use MooseX::Types::Moose qw(
     HashRef
     Ref
     Str
+    Num
+    Int
 );
 
 subtype JSON,
@@ -45,6 +50,21 @@ subtype SmsStr,
 # TODO: Properly define phone numbers
 subtype PhoneNum,
     as Str,
+    where { 1 },
+;
+
+subtype PosNum,
+    as Num,
+    where { $_ > 0 }
+;
+
+subtype PosInt,
+    as Int,
+    where { $_ > 0 }
+;
+
+subtype TimeOut,
+    as PosNum,
     where { 1 },
 ;
 
