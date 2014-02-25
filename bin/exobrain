@@ -109,7 +109,7 @@ sub ubic_services {
             'sentbox-reward'  => daemon('sentbox-reward'),
             'bee-notify' => daemon('bee-notify'),
             'geo-notify' => daemon('geo-notify'),
-            'tweet-notify' => daemon('tweet-notify'),
+            'social-notify' => daemon('social-notify'),
             'geo-personallog' => daemon('geo-personallog'),
         }),
 

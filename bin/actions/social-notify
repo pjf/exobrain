@@ -4,13 +4,13 @@ use strict;
 use warnings;
 use Exobrain;
 
-# PODNAME: tweet-notify
-# ABSTRACT: Send all tweets to the user to notify.
+# PODNAME: social-notify
+# ABSTRACT: notify the user of all personal messages
 
 my $exobrain = Exobrain->new;
 
 $exobrain->watch_loop(
-    class  => 'Measurement::Tweet',
+    class  => 'Measurement::Social',
     filter => sub { $_->to_me },
     then   => sub {
         $exobrain->notify( $_->summary );
