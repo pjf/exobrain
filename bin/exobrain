@@ -45,6 +45,7 @@ elsif ($command eq "run") {
     my ($class) = @args;
     $class or die "Usage: $0 run class";
 
+    require Exobrain;
     Exobrain->run($class);
 }
 else {
