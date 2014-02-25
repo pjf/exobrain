@@ -36,7 +36,7 @@ has config => (
 
 method _build_config() {
     my $class = ref($self);
-    return $self->exobrain->{$class};
+    return $self->exobrain->config->{$class};
 }
 
 has cache => (

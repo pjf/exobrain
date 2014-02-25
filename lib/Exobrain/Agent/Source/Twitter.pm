@@ -1,4 +1,5 @@
 package Exobrain::Agent::Source::Twitter;
+use v5.10.0;
 use Moose;
 use Net::Twitter;
 use Method::Signatures;
@@ -8,8 +9,8 @@ with 'Exobrain::Source::Poll';
 
 # Key used by the cache for our last Twitter ID.
 # Called 'last_check' for historical reasons.
-use constant CACHE_LAST_ID => 'last_check';
-use constant DEBUG         => 1;
+use constant CACHE_LAST_MENTION => 'last_mention';
+use constant DEBUG              => 0;
 
 has twitter => (
     is => 'ro',
@@ -31,24 +32,31 @@ method _build_twitter() {
     );
 }
 
-has last_id => (
+has last_mention => (
     is => 'rw',
     lazy => 1,
-    builder => '_build_last_id',
-    trigger => '_cache_last_id',
+    builder => '_build_last_mention',
+    trigger => \&_cache_last_mention,
 );
 
-method _build_last_id() {
-    return $self->cache->get( CACHE_LAST_ID ) || 0;
+method _build_last_mention() {
+    return $self->cache->get( CACHE_LAST_MENTION ) || 0;
 }
 
-method _cache_last_id($new, $old?) {
-    $self->cache->set( CACHE_LAST_ID, $new );
+method _cache_last_mention($new, $old?) {
+    say "Setting last mention to $new" if DEBUG;
+    $self->cache->set( CACHE_LAST_MENTION, $new );
     return;
 }
 
 method poll() {
-    my $statuses = $self->twitter->mentions({ since_id => $self->last_id });
+    my $last_mention = $self->last_mention;
+
+    my $statuses = 
+        $last_mention ?
+        $self->twitter->mentions({ since_id => $last_mention }) :
+        $self->twitter->mentions()
+    ;
 
     for my $status ( @$statuses ) {
         my $text = $status->{text};
@@ -81,7 +89,14 @@ method poll() {
             raw       => $status,
         );
 
-        $self->last_id( $status->{id} );
+        # We explicitly check to see if we have a newer last_mention
+        # because we don't want to rely upon the ordering in which
+        # tweets are returned. In fact, they're almost always in the
+        # order we don't want.
+
+        if ($status->{id} > $self->last_mention) {
+            $self->last_mention( $status->{id} );
+        }
     }
 }
 
