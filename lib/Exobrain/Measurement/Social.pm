@@ -16,5 +16,6 @@ payload from_me => ( isa => 'Bool', default => 0);
 payload to_me   => ( isa => 'Bool', default => 0);
 payload tags    => ( isa => 'ArrayRef[Str]', default => sub { [] } );
 payload text    => ( isa => 'Str' );
+payload private => ( isa => 'Bool', default => 0);
 
 1;
