@@ -4,6 +4,9 @@ use v5.10.0;
 use strict;
 use warnings;
 
+use Ubic::Multiservice::Simple;
+use Ubic::Service::SimpleDaemon;
+
 # PODNAME: exobrain
 # ABSTRACT: UBIC service file for exobrain
 
@@ -20,53 +23,105 @@ your F<~/ubic/service> directory to be operational.
 
 =cut
 
-use Ubic::Multiservice::Simple;
-use Ubic::Service::SimpleDaemon;
+# This file is both dispatcher and services file. When
+# called with no arguments, we provide UBIC services
+# info. When run with arguments, we start services.
+#
+# At some point it might make sense to split these functions.
+#
+# Commands:
+#
+#   - install      - Install exobrain services info
+#   - run [Class]  - Run a given class (presumably inside ubic)
+#   - start/stop   - If we provide these, aliases to ubic
 
-my $LOG_HOME = "$ENV{HOME}/ubic/log/exobrain";
+my ($command, @args) = @ARGV;
+
+if (not $command) {
+    ubic_services();
+}
+elsif ($command eq "run") {
+    my ($class) = @args;
+    $class or die "Usage: $0 run class";
+
+    require Exobrain;
+    Exobrain->run($class);
+}
+else {
+    # Apparently ubic calls us with service names when it wants
+    # to know stuff. So assume that a weird argument is ubic
+    # doing its thing
+    ubic_services();
+    # die "$0: Unknown command: $command @args\n";
+}
 
 sub daemon {
     my ($bin) = @_;
 
     return Ubic::Service::SimpleDaemon->new(
+        common_options($bin),
         bin      => $bin,
-        stdout   => "$LOG_HOME/$bin.stdout.log",
-        stderr   => "$LOG_HOME/$bin.stderr.log",
-        ubic_log => "$LOG_HOME/$bin.ubic.log",
     );
 }
 
-Ubic::Multiservice::Simple->new({
+sub agent {
+    my ($class) = @_;
 
-    source => Ubic::Multiservice::Simple->new({
-        twitter  => daemon("twitter"),
-        facebook => daemon("facebook"),
-        beeminder => daemon("beeminder-callback"),
-        foursquare => daemon("foursquare"),
-    }),
+    # Start is ourselves, with the start command.
+    my @start = ( __FILE__ , "run" );
 
-    action => Ubic::Multiservice::Simple->new({
-        'tweet-ping' => daemon('tweet-ping'),
-        'bee-habit'  => daemon('bee-habit'),
-        'bee-inbox'  => daemon('bee-inbox'),
-        'rtm-adder'  => daemon('rtm-adder'),
-        'sentbox-reward'  => daemon('sentbox-reward'),
-        'bee-notify' => daemon('bee-notify'),
-        'geo-notify' => daemon('geo-notify'),
-        'tweet-notify' => daemon('tweet-notify'),
-        'geo-personallog' => daemon('geo-personallog'),
-    }),
+    my @opts = ( common_options($class), bin => "@start $class" );
 
-    sink => Ubic::Multiservice::Simple->new({
-        twitter  => daemon("twitter-send"),
-        habitrpg => daemon('habitrpg'),
-        beeminder => daemon('beeminder'),
-        idonethis => daemon('idone-send'),
-        pushover  => daemon('pushover'),
-        sms       => daemon('sms'),
-    }),
+    return Ubic::Service::SimpleDaemon->new( @opts );
 
-    core => Ubic::Multiservice::Simple->new({
-        router => daemon("router"),
-    }),
-});
+}
+
+sub common_options {
+    my ($name) = @_;
+
+    my $LOG_HOME = "$ENV{HOME}/ubic/log/exobrain";
+
+    return (
+        stdout   => "$LOG_HOME/$name.stdout.log",
+        stderr   => "$LOG_HOME/$name.stderr.log",
+        ubic_log => "$LOG_HOME/$name.ubic.log",
+    );
+}
+
+sub ubic_services {
+
+    return Ubic::Multiservice::Simple->new({
+
+        source => Ubic::Multiservice::Simple->new({
+            twitter  => agent("Source::Twitter"),
+            facebook => daemon("facebook"),
+            beeminder => daemon("beeminder-callback"),
+            foursquare => daemon("foursquare"),
+        }),
+
+        action => Ubic::Multiservice::Simple->new({
+            'tweet-ping' => daemon('tweet-ping'),
+            'bee-habit'  => daemon('bee-habit'),
+            'bee-inbox'  => daemon('bee-inbox'),
+            'rtm-adder'  => daemon('rtm-adder'),
+            'sentbox-reward'  => daemon('sentbox-reward'),
+            'bee-notify' => daemon('bee-notify'),
+            'geo-notify' => daemon('geo-notify'),
+            'social-notify' => agent('Action::SocialNotify'),
+            'geo-personallog' => daemon('geo-personallog'),
+        }),
+
+        sink => Ubic::Multiservice::Simple->new({
+            twitter  => daemon("twitter-send"),
+            habitrpg => daemon('habitrpg'),
+            beeminder => daemon('beeminder'),
+            idonethis => daemon('idone-send'),
+            pushover  => daemon('pushover'),
+            sms       => daemon('sms'),
+        }),
+
+        core => Ubic::Multiservice::Simple->new({
+            router => daemon("router"),
+        }),
+    });
+}

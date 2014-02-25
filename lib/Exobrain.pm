@@ -76,6 +76,11 @@ sub _build_sub    { return Exobrain::Bus->new(type => 'SUB', exobrain => shift) 
     );
 
 When we see packets of a particular class, do a particular thing.
+The C<class> need not strictly be a class, but may also be a
+C<role>.
+
+The 'Exobrain::' prefix should not be supplied to the class/roles
+you are searching for.
 
 If the optional C<debug> option is passed with a coderef,  that will be run for
 every event in the desired class, before the filter is evaluated.
@@ -100,22 +105,31 @@ method watch_loop(
     $self->_load_component($class);
 
     while (my $event = $self->sub->get) {
-        next unless $event->namespace eq $class;
+        my $namespace = $event->namespace;
 
-        $event = $event->to_class($class);
+        if (grep { $_ eq $class } ($namespace, @{ $event->roles })) {
 
-        $debug->($event) if $debug;
+            # Note that we have to cast it to the namespace on the
+            # packet (which is a class), and not the $class argument
+            # (which could be a role!)
+            #
+            # Yes, this code should be simplified/improved!
 
-        if ($filter) {
+            $event = $event->to_class($namespace);
 
-            # Check our filter, and skip if required
-            local $_ = $event;
-            next unless $filter->($event);
+            $debug->($event) if $debug;
 
+            if ($filter) {
+
+                # Check our filter, and skip if required
+                local $_ = $event;
+                next unless $filter->($event);
+
+            }
+
+            # Everything passes! Trigger our callback
+            { local $_ = $event; $then->($event); }
         }
-
-        # Everything passes! Trigger our callback
-        { local $_ = $event; $then->($event); }
     }
 }
 
@@ -220,10 +234,30 @@ method intent($type, @args) {
     );
 }
 
-use constant CLASS_PREFIX => 'Exobrain::';
+=method run
+
+    $exobrain->run($agent);
+
+Runs the agent of the class specified. The agent name is
+automatically prepended with "Exobrain::Agent::" and loaded
+first. This method never returns.
+
+This is usually called from the C<exobrain> cmdline program.
+
+=cut
+
+use constant AGENT_PREFIX => 'Agent::';
+
+method run(Str $class) {
+    my $agent = $self->_load_component( AGENT_PREFIX . $class )->new;
+
+    return $agent->start;
+}
 
 # Loads a class, automatically adding Exobrain if
 # required. Returns the class loaded.
+
+use constant CLASS_PREFIX => 'Exobrain::';
 
 method _load_component(Str $class) {
     $class = CLASS_PREFIX . $class;
@@ -234,7 +268,7 @@ method _load_component(Str $class) {
     return $class;
 }
 
-=for Pod::Coverage BUILD DEMOLISH CLASS_PREFIX INTENT_PREFIX MEASURE_PREFIX NOTIFY
+=for Pod::Coverage BUILD DEMOLISH CLASS_PREFIX INTENT_PREFIX MEASURE_PREFIX NOTIFY AGENT_PREFIX
 
 =cut
 

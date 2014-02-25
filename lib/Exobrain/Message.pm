@@ -26,6 +26,7 @@ has raw       => ( is => 'ro', isa => 'Ref' );
 has source    => ( is => 'ro', isa => 'Str', default => "$0" );
 has nosend    => ( is => 'ro', isa => 'Bool', default => 0 );
 has _sent     => ( is => 'rw', isa => 'Bool', default => 0 );
+has roles     => ( is => 'rw', isa => 'ArrayRef[Str]' );
 
 # This can be used to explicitly set the data, ignoring the
 # payload attributes.
@@ -49,6 +50,17 @@ sub BUILD { }
 
 after BUILD => sub {
     my $self = shift;
+
+    # Calculate our roles and attach them to the packet.
+
+    unless ($self->roles) {
+        my @roles = map { $_->name } $self->meta->calculate_all_roles;
+
+        # Strip prefixes
+        foreach (@roles) { s{^Exobrain::}{}; }
+
+        $self->roles(\@roles);
+    }
 
     # Send our packet, unless nosend is set.
     unless ($self->nosend) {
@@ -188,7 +200,11 @@ method _frames() {
     my @frames;
 
     push(@frames, join("_", "EXOBRAIN", $self->namespace, $self->source));
-    push(@frames, "XXX - JSON - timestamp => " . $self->timestamp);
+    push(@frames, $json->encode( {
+        timestamp => $self->timestamp,
+        roles     => $self->roles,
+        # TODO: Add some sort of version metadata
+    } ) );
     push(@frames, $self->summary // "");
     push(@frames, $json->encode( $self->data ));
     push(@frames, $json->encode( $self->raw  || {} ));
@@ -208,7 +224,7 @@ Intended for debugging.
 method dump() {
     my $dumpstr = "";
 
-    foreach my $method ( qw(namespace timestamp source data raw summary)) {
+    foreach my $method ( qw(raw data namespace roles source summary)) {
         my $data = $self->$method // "";
         if (ref $data) { $data = Dumper $data };
         $dumpstr .= "$method : $data\n";
