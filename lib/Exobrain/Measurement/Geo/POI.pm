@@ -1,11 +1,10 @@
 package Exobrain::Measurement::Geo::POI;
 
-# ABSTRACT: Geo Point Of Interest class
-
-# VERSION
-
 use 5.010;
 use Moose;
+
+# ABSTRACT: Geo Point Of Interest class
+# VERSION
 
 with 'Exobrain::JSONify';
 

@@ -1,14 +1,13 @@
 package Exobrain::Measurement::Beeminder;
 
-# ABSTRACT: Mailbox measurement packet
-
-# VERSION
-
 use 5.010;
 use autodie;
 use Moose;
 use Carp qw(croak);
 use Method::Signatures;
+
+# ABSTRACT: Beeminder measurement packet
+# VERSION
 
 # Declare that we will have a summary attribute. This is to make
 # our roles happy.

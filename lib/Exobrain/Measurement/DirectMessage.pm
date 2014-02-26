@@ -1,11 +1,10 @@
 package Exobrain::Measurement::DirectMessage;
 
-# ABSTRACT: A direct message of any sort
-
-# VERSION
-
 use Moose;
 use Method::Signatures;
+
+# ABSTRACT: A direct message of any sort
+# VERSION
 
 # Declare that we will have a summary attribute. This is to make
 # our roles happy.

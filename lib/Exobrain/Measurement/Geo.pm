@@ -1,9 +1,5 @@
 package Exobrain::Measurement::Geo;
 
-# ABSTRACT: Geo measurement packet
-
-# VERSION
-
 use 5.010;
 use autodie;
 use Moose;
@@ -11,6 +7,9 @@ use Method::Signatures;
 
 use Exobrain::Measurement::Geo::POI;
 use Exobrain::Types qw(POI);
+
+# ABSTRACT: Geo measurement packet
+# VERSION
 
 # Declare that we will have a summary attribute. This is to make
 # our roles happy.
