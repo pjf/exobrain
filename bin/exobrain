@@ -6,6 +6,7 @@ use warnings;
 
 use Ubic::Multiservice::Simple;
 use Ubic::Service::SimpleDaemon;
+use Exobrain;
 
 # PODNAME: exobrain
 # ABSTRACT: UBIC service file for exobrain
@@ -31,7 +32,7 @@ your F<~/ubic/service> directory to be operational.
 #
 # Commands:
 #
-#   - install      - Install exobrain services info
+#   - install [Component] - Install exobrain component?
 #   - run [Class]  - Run a given class (presumably inside ubic)
 #   - start/stop   - If we provide these, aliases to ubic
 
@@ -44,7 +45,6 @@ elsif ($command eq "run") {
     my ($class) = @args;
     $class or die "Usage: $0 run class";
 
-    require Exobrain;
     Exobrain->run($class);
 }
 else {
@@ -90,17 +90,43 @@ sub common_options {
 
 sub ubic_services {
 
+    my $config = Exobrain->new->config;
+    my @component_services;
+
+    # Load optional components.
+    foreach my $component (keys %{ $config->{Components}}) {
+
+        my $class = 'Exobrain::'.$component;
+
+        # Magic component loading dance.
+        eval "require $class";
+        die $@ if $@;
+
+        my $namespace = $class->component;
+        my %services  = $class->services;
+
+        # Map each service into an agent object.
+        foreach my $key (keys %services) {
+            $services{$key} = agent( $services{$key} );
+        }
+
+        # Add these to the things we'll load
+        push(@component_services,
+            $namespace => Ubic::Multiservice::Simple->new(\%services)
+        );
+    }
+
     return Ubic::Multiservice::Simple->new({
 
+        @component_services,
+
         source => Ubic::Multiservice::Simple->new({
-            twitter  => agent("Twitter::Source"),
             facebook => daemon("facebook"),
             beeminder => daemon("beeminder-callback"),
             foursquare => daemon("foursquare"),
         }),
 
         action => Ubic::Multiservice::Simple->new({
-            'tweet-ping' => daemon('tweet-ping'),
             'bee-habit'  => daemon('bee-habit'),
             'bee-inbox'  => daemon('bee-inbox'),
             'rtm-adder'  => daemon('rtm-adder'),
@@ -112,7 +138,6 @@ sub ubic_services {
         }),
 
         sink => Ubic::Multiservice::Simple->new({
-            twitter  => agent("Twitter::Sink"),
             habitrpg => daemon('habitrpg'),
             beeminder => daemon('beeminder'),
             idonethis => daemon('idone-send'),
