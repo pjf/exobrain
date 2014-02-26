@@ -134,6 +134,7 @@ sub ubic_services {
             'bee-notify' => daemon('bee-notify'),
             'geo-notify' => daemon('geo-notify'),
             'social-notify' => agent('Action::SocialNotify'),
+            'ping'          => agent('Action::Ping'),
             'geo-personallog' => daemon('geo-personallog'),
         }),
 
