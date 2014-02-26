@@ -6,17 +6,15 @@ use autodie;
 use POSIX qw(strftime);
 
 use Exobrain;
-
-use Getopt::Std;
 use WebService::RTMAgent;
 
 # PODNAME: rtm-adder
-# ABSTRACT: Add TODO items to iDoneThis from twitter
+# ABSTRACT: Add TODO items to RememberTheMilk from twitter
 
 use constant DEBUG => 1;
 
 my $exobrain = Exobrain->new;
-my $config   = $exobrain->{config};
+my $config   = $exobrain->config;
 
 my $rtm = WebService::RTMAgent->new;
 my $list = $config->{'RTM-ADDER'}{list};
@@ -28,7 +26,7 @@ $rtm->api_secret( $config->{RTM}{api_secret} );
 $rtm->init;
 
 $exobrain->watch_loop(
-    class  => "Measurement::Tweet",        # TODO: Watch 'Any' later on
+    class  => "Measurement::Social",        # TODO: Watch 'Any' later on
     filter => sub { grep { $_ eq 'todo' } @{$_->{tags}} },
     then   => \&add_todo,
 );
@@ -41,15 +39,15 @@ sub add_todo {
     # Anti-troll. ;)
 
     if ($event->summary =~ /sudo make me a sandwich/i) {
-        respond($event, "User not in the sudoers file. This incident will be reported.");
+        $event->respond("User not in the sudoers file. This incident will be reported.");
         return;
     }
     elsif ($event->summary =~ /make me a sandwich/i) {
-        respond($event, "What? Make it yourself.");
+        $event->respond("What? Make it yourself.");
         return;
     }
     elsif ($event->summary =~ /dQw4w9WgXcQ/i) {
-        respond($event, "I'm never gonna let you down!");
+        $event->respond("I'm never gonna let you down!");
         return;
     }
 
@@ -66,34 +64,14 @@ sub add_todo {
     my $time = strftime("%Y-%m-%d %H:%M:%S UTC", gmtime($event->timestamp));
 
     if (not defined $res) { 
-        respond($event, "Sorry, I couldn't add your TODO item posted at $time");
+        $event->respond("Sorry, I couldn't add your TODO item posted at $time");
 
         $exobrain->notify("$user FAILED to add to your TODO list: $todo",
             priority => 1
         );
     }
     else { 
-        respond($event, "Thanks! I've added your TODO item posted at $time");
+        $event->respond("Thanks! I've added your TODO item posted at $time");
         $exobrain->notify("$user added to your TODO list: $todo");
     }
-}
-
-sub respond {
-    my ($event, $text) = @_;
-
-    say "Responding with $text" if DEBUG;
-
-    # We only respond to tweets right now
-    return if not $event->isa("Exobrain::Measurement::Tweet");
-
-    my $user = $event->from;
-    my $content = "@".$user.": $text";
-
-    say "Sending tweet: $content" if DEBUG;
-
-    $exobrain->intent("Tweet",
-        tweet => $content,
-    );
-
-    return;
 }
