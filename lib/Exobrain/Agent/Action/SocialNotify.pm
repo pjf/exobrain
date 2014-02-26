@@ -3,6 +3,7 @@ use Moose;
 use Method::Signatures;
 
 # ABSTRACT: Notify user of social events directed at them.
+# VERSION
 
 with 'Exobrain::Agent::Run';
 

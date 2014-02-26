@@ -9,7 +9,6 @@ use Method::Signatures;
     $exobrain->intent('HabitRPG',
         task      => $id,
         direction => 'up',
-        public    => 1,
     );
 
 =cut
@@ -22,6 +21,5 @@ BEGIN { with 'Exobrain::Intent'; };
 
 payload task      => ( isa => 'Str' , required => 1 );
 payload direction => ( isa => 'Str' , required => 1 );  # TODO - Restrict to up/down
-payload public    => ( isa => 'Bool', default => 0 );
 
 1;
