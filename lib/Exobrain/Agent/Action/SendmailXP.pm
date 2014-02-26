@@ -41,3 +41,5 @@ method run() {
 }
 
 1;
+
+=for Pod::Coverage DEBUG
