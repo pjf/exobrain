@@ -4,6 +4,8 @@ Revision history for Exobrain
 
     * META: Updated meta-info for distribution.
     * HRPG: Fixed handling of XP for Sending mail, and XP in general.
+    * FEATURE: Exobrain::Config supports writing of config files.
+    * FEATURE: Exobrain::Config supports ~/.config/exobrain directories.
 
 1.00      2014-02-26 02:44:28EST-0500 America/Montreal
 

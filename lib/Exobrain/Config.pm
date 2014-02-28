@@ -1,6 +1,7 @@
 package Exobrain::Config;
 use strict;
 use warnings;
+use autodie;
 use parent 'Config::Tiny';
 use Hash::Merge::Simple qw(merge);
 use File::XDG;
@@ -65,6 +66,48 @@ sub new {
     # This may change in the future, but for now we're still
     # acting a Config::Tiny object.
     return bless($config,$class);
+}
+
+=method write_config
+
+    Exobrain::Config->write_config('Example.ini', $contents);
+
+Writes the contents of a string to the config file specified in
+the first argument, in the appropriate Exobrain config directory.
+(Usually F<~/.config/exobrain>, which will be created if it does
+not exist.)
+
+Returns the filename written to on success.
+Raises an exception on failure.
+
+=cut
+
+sub write_config {
+    my ($class, $file, $contents) = @_;
+
+    my $config_file;
+
+    if ($ENV{EXOBRAIN_CONFIG}) {
+        $config_file = "ENV{EXOBRAIN_CONFIG}/$file";
+    }
+    else {
+        my $config_dir = File::XDG->new(name => 'exobrain')->config_home;
+
+        # Make our config dir if it doesn't exist.
+        if (not -e $config_dir) {
+            mkdir($config_dir)
+        }
+
+        $config_file = "$config_dir/$file";
+    }
+
+    open(my $fh, '>', $config_file);
+
+    print {$fh} $contents;
+
+    close($fh);
+
+    return $config_file;
 }
 
 1;
