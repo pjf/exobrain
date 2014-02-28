@@ -54,9 +54,13 @@ The following works for a fresh install of Ubuntu 13.10.
 
 Firstly, make sure you've got all the dependencies:
 
-    $ sudo apt-get install libzmq-dev libexpat-dev libnet-ssleay-perl \
+    $ sudo apt-get install libzmq3-dev libexpat-dev libnet-ssleay-perl \
         libnet-libidn-perl libcrypt-ssleay-perl cpanminus make \
         liblocal-lib-perl libmethod-signatures-perl
+
+Exobrain can use either ZMQ2 or ZMQ3, but we prefer ZMQ3:
+
+    export PERL_ZMQ_BACKEND=ZMQ::LibZMQ3
 
 Configure `local::lib` if you haven't already done so:
 
