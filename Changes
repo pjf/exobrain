@@ -2,6 +2,9 @@ Revision history for Exobrain
 
 {{$NEXT}}
 
+    * DISTRIBUTION: De-crufted distributed tarball.
+                    See GH #37, thanks to @tsibley for spotting this.
+
 1.02      2014-02-28 03:02:36EST-0500 America/Montreal
 
     * SERVICE: Removed not-yet-completed Facebook endpoint.
