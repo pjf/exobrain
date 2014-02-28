@@ -3,9 +3,12 @@
 use v5.10.0;
 use strict;
 use warnings;
+use autodie;
 
 use Ubic::Multiservice::Simple;
 use Ubic::Service::SimpleDaemon;
+use File::Copy qw(copy);
+use autodie qw(copy);
 use Exobrain;
 
 # PODNAME: exobrain
@@ -40,6 +43,33 @@ my ($command, @args) = @ARGV;
 
 if (not $command) {
     ubic_services();
+}
+elsif ($command eq 'setup') {
+    say "We're setting up exbrain for the first time.";
+    my $ubic = "$ENV{HOME}/ubic";
+    if (not -d $ubic) {
+        die "It doesn't look like ubic is installed; at least, I can't find $ubic. Halting\n";
+    }
+
+    my $exobrain_log = "$ubic/log/exobrain";
+
+    if (-d $exobrain_log) {
+        say "We already have $exobrain_log, skipping...";
+    }
+    else {
+        say "Creating $exobrain_log";
+        mkdir($exobrain_log);
+    }
+
+    my $exe     = $0;
+    my $service = "$ubic/service/";
+    
+    say "Copying $exe to $service";
+    copy($0, $service);
+
+    say "Done!";
+    say "\nYou should use 'ubic start exobrain.core' to start exobrain";
+
 }
 elsif ($command eq "run") {
     my ($class) = @args;
