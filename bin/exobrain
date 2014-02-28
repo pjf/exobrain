@@ -121,7 +121,6 @@ sub ubic_services {
         @component_services,
 
         source => Ubic::Multiservice::Simple->new({
-            facebook => daemon("facebook"),
             beeminder => daemon("beeminder-callback"),
             foursquare => daemon("foursquare"),
         }),
