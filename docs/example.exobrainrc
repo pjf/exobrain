@@ -9,7 +9,7 @@ api_secret =
 [Twitter]
 ; This is your main twitter account. You can use `twitter-auth`
 ; to generate the tokens, but you'll need to register an app
-; yourself at dev.twittr.com
+; yourself at apps.twitter.com
 
 consumer_key        =
 consumer_secret     =
