@@ -2,6 +2,8 @@ Revision history for Exobrain
 
 {{$NEXT}}
 
+1.03      2014-02-28 12:47:07EST-0500 America/Montreal
+
     * DISTRIBUTION: De-crufted distributed tarball.
                     See GH #37, thanks to @tsibley for spotting this.
 
