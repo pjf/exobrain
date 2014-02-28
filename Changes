@@ -2,6 +2,8 @@ Revision history for Exobrain
 
 {{$NEXT}}
 
+1.01      2014-02-28 02:30:43EST-0500 America/Montreal
+
     * META: Updated meta-info for distribution.
     * HRPG: Fixed handling of XP for Sending mail, and XP in general.
     * FEATURE: Exobrain::Config supports writing of config files.
