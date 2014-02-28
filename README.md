@@ -95,7 +95,10 @@ Copy the `exobrain` file into your ubic services:
 **Step 3: Add configuration**
 
 Exobrain uses a `~/.exobrainrc` file. You can copy the `example.exobrainrc`
-file from the `docs/` directory to get started.
+file from the `docs/` directory to get started. Exobrain will also use
+config files found in your `~/.config/exobrain` directory (or the XDG
+config directory on your system). Installable components will often write
+their configuration to this area.
 
 For RememberTheMilk integration, you'll need a valid `~/.rtmagent` file.
 
