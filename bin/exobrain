@@ -10,20 +10,25 @@ use Ubic::Service::SimpleDaemon;
 use File::Copy qw(copy);
 use autodie qw(copy);
 use Exobrain;
+use Getopt::Std;
 
 # PODNAME: exobrain
 # ABSTRACT: UBIC service file for exobrain
 
 =head1 SYNOPSIS
 
-    $ cp `which exobrain` ~/ubic/service
-    $ ubic start exobrain
+    $ exobrain setup        # Set up exobrain for use
+
+    $ exobrain debug        # See what's happening
+    $ exobrain debug -v     # See more of what's happening
 
 =head1 DESCRIPTION
 
 This is a service file for Ubic which allows for the
 control of exobrain services. It must be placed in
-your F<~/ubic/service> directory to be operational.
+your F<~/ubic/service> directory to be operational,
+which will happen as part of the C<exobrain setup>
+process which you should run.
 
 =cut
 
@@ -73,6 +78,29 @@ elsif ($command eq 'setup') {
     say "Done!\n";
     say "\nYou should use 'ubic start exobrain.core' to start exobrain.";
 
+}
+elsif ($command eq "debug") {
+    my $exobrain = Exobrain->new;
+
+    # Options handling
+
+    local @ARGV  = @args;
+    my %opts = ( v => 0 );
+    getopts('v', \%opts);
+
+    # Loop forever showing packets off the bus, either verbosely
+    # or not. These use the lowest-level functions available, so
+    # should catch even malformed packets.
+
+    while (1) {
+        if ($opts{v}) {
+            say $exobrain->sub->get->dump;
+            say "-" x 50;
+        }
+        else {
+            say $exobrain->sub->get->summary;
+        }
+    }
 }
 elsif ($command eq "run") {
     my ($class) = @args;
