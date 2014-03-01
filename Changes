@@ -2,8 +2,10 @@ Revision history for Exobrain
 
 {{$NEXT}}
 
-    * Added a `exobrain setup` command to do basic exobrain/ubic setup.
-    * Improved documentation in sample .exobrainrc file.
+    * FEATURE: Added a `exobrain setup` command to do basic exobrain/ubic setup.
+    * DOCS: Improved documentation in sample .exobrainrc file.
+    * DOCS: Expanded information in Exobrain.pm
+    * BUGFIX: Fixed bug where libraries were not packaged.
 
 1.03      2014-02-28 12:47:07EST-0500 America/Montreal
 
