@@ -45,10 +45,13 @@ if (not $command) {
     ubic_services();
 }
 elsif ($command eq 'setup') {
-    say "We're setting up exbrain for the first time.";
+    say "Setting up exobrain...";
+
     my $ubic = "$ENV{HOME}/ubic";
     if (not -d $ubic) {
-        die "It doesn't look like ubic is installed; at least, I can't find $ubic. Halting\n";
+        say "It doesn't look like ubic is installed; at least, I can't find $ubic.";
+        say "Have you run `cpanm Ubic` and `ubic-admin setup`?\n\n";
+        die "Halting (Ubic not found)\n";
     }
 
     my $exobrain_log = "$ubic/log/exobrain";
@@ -67,8 +70,8 @@ elsif ($command eq 'setup') {
     say "Copying $exe to $service";
     copy($0, $service);
 
-    say "Done!";
-    say "\nYou should use 'ubic start exobrain.core' to start exobrain";
+    say "Done!\n";
+    say "\nYou should use 'ubic start exobrain.core' to start exobrain.";
 
 }
 elsif ($command eq "run") {
