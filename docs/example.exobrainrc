@@ -1,3 +1,12 @@
+; This file is slowly being phased out in favour of component based
+; config files. For example, to install twitter, services, you can:
+;
+;   cpanm Exobrain::Twitter
+;
+;   exobrain-twitter-auth
+;
+; 
+
 [General]
 timezone = Australia/Melbourne
 
@@ -5,27 +14,6 @@ timezone = Australia/Melbourne
 ; RememberTheMilk
 api_key = 
 api_secret =
-
-[Twitter]
-; This is your main twitter account. You can use `twitter-auth`
-; to generate the tokens, but you'll need to register an app
-; yourself at dev.twittr.com
-
-consumer_key        =
-consumer_secret     =
-access_token        =
-access_token_secret =
-
-[TwitterSend]
-; If you want a second account to *send* tweets (eg: @pjf_exobrain)
-; you can configure it here. You can also copy/paste your main
-; [Twitter] details to have the same account used for sending
-; and receiving.
-
-consumer_key        = 
-consumer_secret     =
-access_token        =
-access_token_secret =
 
 [Foursquare]
 ; You can grab an auth token directly out of the API explorer.
