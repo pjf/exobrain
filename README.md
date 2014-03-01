@@ -56,7 +56,7 @@ Firstly, make sure you've got all the dependencies:
 
     $ sudo apt-get install libzmq3-dev libexpat-dev libnet-ssleay-perl \
         libnet-libidn-perl libcrypt-ssleay-perl cpanminus make \
-        liblocal-lib-perl libmethod-signatures-perl
+        liblocal-lib-perl
 
 Exobrain can use either ZMQ2 or ZMQ3, but we prefer ZMQ3:
 
