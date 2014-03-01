@@ -29,9 +29,9 @@ The core of exobrain is written in Perl, but uses a shared
 message bus (0MQ) and packet format (JSON) to make it easy to
 connect components from other languages.
 
-Writing an *action* is a very simple affair. @pjf has notifications
-configured to go to his pebble watch, and uses this code to send
-all tweets directed at him to said watch:
+Writing an *action* is a very simple affair. For example, @pjf has
+notifications configured to go to his pebble watch, and uses this code
+to send all tweets directed at him to said watch:
 
     #!/usr/bin/env perl
     use Exobrain;
@@ -90,13 +90,16 @@ installed!  However to use it properly, you'll want to manage it with `ubic`.
 
 Set up ubic (if you haven't already done so):
 
-    ubic-admin setup
+    $ ubic-admin setup
 
-Copy the `exobrain` file into your ubic services:
+Set up exobrain:
 
-    cp `which exobrain` ~/ubic/service
+    $ exobrain setup
 
 **Step 3: Add configuration**
+
+If you install the `Exobrain::Twitter` extension (you should) then you
+can run `exobrain-twitter-auth` to configure your Twitter endpoints.
 
 Exobrain uses a `~/.exobrainrc` file. You can copy the `example.exobrainrc`
 file from the `docs/` directory to get started. Exobrain will also use
@@ -106,26 +109,40 @@ their configuration to this area.
 
 For RememberTheMilk integration, you'll need a valid `~/.rtmagent` file.
 
-You can now start your exobrain. Start with the core:
+You can now start your exobrain. You can see what exobrain services
+you have available with:
 
-    ubic start exobrain.core
+    $ ubic status
 
-To get some data flowing through your exobrain, you can try starting
-the end-points:
+The exobrain core must *always* be running for anything to work.
+You can start it with:
 
-    ubic start exobrain.source
-    ubic start exobrain.sink
+    $ ubic start exobrain.core
 
-And to get intelligence, you can bring on-line the classifers:
+If you've configured Twitter, or another extension, you can start
+that with:
 
-    ubic start exobrain.classify
+    $ ubic start exobrain.twitter
 
-Of course, you can get *EVERYTHING* online in one go with just:
+While the `exobrain.action` services are slowly being replaced with
+dedicated agent classes, many of them are useful, especially for testing.
+You can start the ping service with:
 
-    ubic start exobrain
+    $ ubic start exobrain.action.ping
 
-You probably won't use all the components, though, so it's recommended
-that you only configure and switch on the ones you need.
+# DEBUGGING
+
+If things don't seem to be working right, you start up the debugger:
+
+    $ exobrain debug        # Watch the exobrain bus
+    $ exobrain debug -v     # Watch the exobrain bus verbosely
+
+These commands will show you what's happening *right now*. If
+things are quiet, then nothing will be shown.
+
+You can also look at the files in `~/ubic/log/exobrain`. Often
+these will reveal problems such as missing or incorrect configuration
+and the like.
 
 # GLOSSARY
 
@@ -147,6 +164,10 @@ components, and also the easiest to write.
 Heaps. Report and/or fix them at https://github.com/pjf/exobrain/issues/
 
 # SUPPORT
+
+You can join us on `#exobrain` on chat.freenode.net (IRC).
+
+We have a mailing list at http://groups.google.com/d/forum/exobrain .
 
 If you like my work, you can [tip me on gittip](https://gittip.com/pjf).
 
