@@ -74,3 +74,5 @@ sub seconds_until_tomorrow {
 }
 
 1;
+
+=for Pod::Coverage DEBUG seconds_until_tomorrow
