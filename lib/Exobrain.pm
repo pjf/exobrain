@@ -60,6 +60,9 @@ L<on github|https://github.com/pjf/exobrain>. In particular,
 L<the README|https://github.com/pjf/exobrain/blob/master/README.md>
 is strongly suggested reading.
 
+Using C<Exobrain> will automatically enable both C<strict> and
+C<warnings>.
+
 The following are methods provided by the top-level Exobrain object:
 
 =cut
@@ -95,6 +98,15 @@ has 'sub' => (
     builder => '_build_sub',
     lazy => 1,
 );
+
+# import is called when we load the Exobrain class, and lets us
+# automatically set strict and warnings by default.
+
+sub import {
+    strict->import();
+    warnings->import();
+    return;
+}
 
 # Right now we make sure anything using Exobrain is going to use
 # the user's timezone (if set).
@@ -322,7 +334,8 @@ method _load_component(Str $class) {
     return $class;
 }
 
-=for Pod::Coverage BUILD DEMOLISH CLASS_PREFIX INTENT_PREFIX MEASURE_PREFIX NOTIFY AGENT_PREFIX
+
+=for Pod::Coverage BUILD DEMOLISH CLASS_PREFIX INTENT_PREFIX MEASURE_PREFIX NOTIFY AGENT_PREFIX import
 
 =cut
 
