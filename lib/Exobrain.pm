@@ -3,6 +3,7 @@ package Exobrain;
 use v5.010;
 use strict;
 use warnings;
+use feature ();
 use autodie;
 use Moose;
 use Method::Signatures;
@@ -60,8 +61,8 @@ L<on github|https://github.com/pjf/exobrain>. In particular,
 L<the README|https://github.com/pjf/exobrain/blob/master/README.md>
 is strongly suggested reading.
 
-Using C<Exobrain> will automatically enable both C<strict> and
-C<warnings>.
+Using C<Exobrain> will automatically enable both C<strict>, C<warnings>,
+and Perl 5.10 features (such as C<say>).
 
 The following are methods provided by the top-level Exobrain object:
 
@@ -100,11 +101,13 @@ has 'sub' => (
 );
 
 # import is called when we load the Exobrain class, and lets us
-# automatically set strict and warnings by default.
+# automatically set strict, warnings, and 5.10 features by default.
 
 sub import {
     strict->import();
     warnings->import();
+    feature->import(':5.10');
+
     return;
 }
 
