@@ -14,9 +14,10 @@ has exobrain => (
 
 sub _build_exobrain { return Exobrain->new; }
 
-# Our component name is by default the same as the class name,
-# but different modules can declare themselves to be part of the
-# same component, thereby sharing config and cache.
+# Our component name is by default the same as the class name with
+# 'Exobrain::Agent::' stripped off. However different modules can
+# declare themselves to be part of the same component, thereby sharing
+# config and cache.
 
 has component => (
     is => 'ro',
@@ -29,7 +30,10 @@ method _build_component() {
     if (my $method = $self->can("component_name") ) {
         return $self->$method;
     }
-    return ref($self);
+
+    my $component = ref($self);
+    $component =~ s/Exobrain::Agent:://;
+    return $component;
 }
 
 has config => (

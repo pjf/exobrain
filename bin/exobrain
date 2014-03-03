@@ -188,7 +188,7 @@ sub ubic_services {
 
         action => Ubic::Multiservice::Simple->new({
             'bee-habit'  => daemon('bee-habit'),
-            'bee-inbox'  => daemon('bee-inbox'),
+            'bee-inbox'  => agent('Action::BeeInbox'),
             'rtm-adder'  => daemon('rtm-adder'),
             'sentbox-reward'  => agent('Action::SendmailXP'),
             'bee-notify' => daemon('bee-notify'),

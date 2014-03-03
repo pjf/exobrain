@@ -5,6 +5,10 @@ Revision history for Exobrain
     * FEATURE: Added a `exobrain debug` command for bus debugging.
                This obsoletes the old `debug.pl` command.
     * DOCS: Updated the README.md file with current insall instructions.
+    * INTERNAL: Improved internal agent handling.
+    * API: `use Exobrain` enables strict, warnings, 5.10 features.
+    * TESTS: Added tests for agents and strict, warnings, 5.10 features. :)
+    * DISTRO: Split `Exobrain::Beeminder` into its own separate distro.
 
 1.04      2014-02-28 23:18:32EST-0500 America/Montreal
 
