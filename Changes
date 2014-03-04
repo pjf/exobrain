@@ -9,6 +9,8 @@ Revision history for Exobrain
     * API: `use Exobrain` enables strict, warnings, 5.10 features.
     * TESTS: Added tests for agents and strict, warnings, 5.10 features. :)
     * DISTRO: Split `Exobrain::Beeminder` into its own separate distro.
+    * FEATURE: 'exobrain setup [Component]` now works!
+               Eg: `exobrain setup Beeminder`.
 
 1.04      2014-02-28 23:18:32EST-0500 America/Montreal
 
