@@ -3,7 +3,7 @@
 use v5.10.0;
 use strict;
 use warnings;
-use autodie;
+use autodie qw(:all);
 
 use Ubic::Multiservice::Simple;
 use Ubic::Service::SimpleDaemon;
@@ -17,10 +17,13 @@ use Getopt::Std;
 
 =head1 SYNOPSIS
 
-    $ exobrain setup        # Set up exobrain for use
+    $ exobrain setup           # Set up exobrain for use
 
-    $ exobrain debug        # See what's happening
-    $ exobrain debug -v     # See more of what's happening
+    $ cpanm Exobrain::Twitter; # Install Exobrain::Twitter
+    $ exobrain setup Twitter   # Set up Exobrain::Twitter
+
+    $ exobrain debug           # See what's happening
+    $ exobrain debug -v        # See more of what's happening
 
 =head1 DESCRIPTION
 
@@ -50,6 +53,27 @@ if (not $command) {
     ubic_services();
 }
 elsif ($command eq 'setup') {
+    my @comps = @args;
+    
+    # If there are components listed, set them up...
+    
+    if (@comps) {
+        my $exobrain = Exobrain->new;
+        foreach my $comp (@comps) {
+            my $comp_module = 'Exobrain::' . $comp;
+            eval "use $comp_module";
+
+            if ($@) { die "Loading $comp_module failed. Did you install it first? (cpanm $comp_module)\n"; }
+
+            say "Configuring $comp_module...\n";
+
+            $comp_module->new->setup;
+        }
+        exit 0;
+    }
+
+    # Otherwise, configure exobrain itself.
+
     say "Setting up exobrain...";
 
     my $ubic = "$ENV{HOME}/ubic";
