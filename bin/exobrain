@@ -214,7 +214,6 @@ sub ubic_services {
             'bee-inbox'  => agent('Action::BeeInbox'),
             'rtm-adder'  => daemon('rtm-adder'),
             'sentbox-reward'  => agent('Action::SendmailXP'),
-            'bee-notify' => daemon('bee-notify'),
             'geo-notify' => daemon('geo-notify'),
             'social-notify' => agent('Action::SocialNotify'),
             'ping'          => agent('Action::Ping'),
