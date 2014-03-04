@@ -2,6 +2,8 @@ Revision history for Exobrain
 
 {{$NEXT}}
 
+1.05      2014-03-03 17:35:59PST-0800 America/Los_Angeles
+
     * FEATURE: Added a `exobrain debug` command for bus debugging.
                This obsoletes the old `debug.pl` command.
     * DOCS: Updated the README.md file with current insall instructions.
