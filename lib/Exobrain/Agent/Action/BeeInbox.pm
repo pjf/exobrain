@@ -8,6 +8,20 @@ with 'Exobrain::Agent::Run';
 use constant DEBUG => 0;
 
 # ABSTRACT: Watch inbox and send low-water marks to beeminder
+# VERSION
+
+=head1 SYNOPSIS
+
+    ; In your ~/.exobrainrc file...
+    ; Everything in [Action::BeeInbox] is a key/value pair for
+    ; the server that has your mail, and the corresponding goal
+    ; in Beeminder.
+
+    [Action::BeeInbox]
+    perltraining.com.au = inbox
+    gmail.com           = gmail
+
+=cut
 
 method run() {
 
@@ -23,7 +37,7 @@ method run() {
     $exobrain->_load_component('Intent::Beeminder');
 
     # Our inbox goals are 'server => beeminder goal' pairs.
-    my $inbox_goals = $self->config->inbox_goals;
+    my $inbox_goals = $self->config;
 
     $exobrain->watch_loop(
         class  => 'Measurement::Mailbox',
