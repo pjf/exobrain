@@ -206,7 +206,6 @@ sub ubic_services {
         @component_services,
 
         source => Ubic::Multiservice::Simple->new({
-            beeminder => daemon("beeminder-callback"),
             foursquare => daemon("foursquare"),
         }),
 
@@ -224,7 +223,6 @@ sub ubic_services {
 
         sink => Ubic::Multiservice::Simple->new({
             habitrpg => daemon('habitrpg'),
-            beeminder => daemon('beeminder'),
             idonethis => daemon('idone-send'),
             pushover  => daemon('pushover'),
             sms       => daemon('sms'),
