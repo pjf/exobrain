@@ -2,6 +2,8 @@ Revision history for Exobrain
 
 {{$NEXT}}
 
+1.06      2014-03-04 14:28:43PST-0800 America/Los_Angeles
+
     * BUILD: Added dependency on IPC::System::Simple, which is
              needed for `exobrain setup`.
 
