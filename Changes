@@ -2,6 +2,11 @@ Revision history for Exobrain
 
 {{$NEXT}}
 
+    * DEBUG: Added 'inject-done' debugging scrip to generate
+             Intent::PersonalLog messages.
+    * DISTRO: Turned Idonethis into a separate component
+              (Exobrain::Idonethis)
+
 1.05      2014-03-03 17:35:59PST-0800 America/Los_Angeles
 
     * FEATURE: Added a `exobrain debug` command for bus debugging.

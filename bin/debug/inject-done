@@ -1,0 +1,15 @@
+#!/usr/bin/env perl
+use Exobrain;
+
+# ABSTRACT: Log personal entries via Exobrain
+# PODNAME: inject-done
+
+# This code is supplied for debugging purposes. It's name may
+# change in the future. (Or you can develop it into a full app,
+# which would be awesome!)
+
+@ARGV or die "Usage: $0 message\n";
+
+Exobrain->new->intent('PersonalLog',
+    message => "@ARGV"
+);
