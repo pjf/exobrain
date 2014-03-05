@@ -8,3 +8,7 @@ allow = refs
 
 ; Alas, Method::Signatures confuses perl critic on this one
 [-Perl::Critic::Policy::Modules::RequireEndWithOne]
+
+[TestingAndDebugging::RequireUseStrict]
+; Exobrain enables strict for you.
+equivalent_modules = Exobrain

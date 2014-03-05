@@ -3,6 +3,7 @@ use Exobrain;
 
 # ABSTRACT: Log personal entries via Exobrain
 # PODNAME: inject-done
+# VERSION
 
 # This code is supplied for debugging purposes. It's name may
 # change in the future. (Or you can develop it into a full app,
