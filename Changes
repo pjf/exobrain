@@ -2,6 +2,8 @@ Revision history for Exobrain
 
 {{$NEXT}}
 
+1.07      2014-03-04 22:46:36PST-0800 America/Los_Angeles
+
     * DEBUG: Added 'inject-done' debugging scrip to generate
              Intent::PersonalLog messages.
     * DISTRO: Turned Idonethis into a separate component
