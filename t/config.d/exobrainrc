@@ -44,10 +44,6 @@ app_id =
 secret = 
 access_token = 
 
-[Idonethis]
-user = 
-pass = 
-
 [Pushover]
 ; Pushover is amazing for notifications.
 api_token  = 

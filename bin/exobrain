@@ -222,7 +222,6 @@ sub ubic_services {
 
         sink => Ubic::Multiservice::Simple->new({
             habitrpg => daemon('habitrpg'),
-            idonethis => daemon('idone-send'),
             pushover  => daemon('pushover'),
             sms       => daemon('sms'),
         }),

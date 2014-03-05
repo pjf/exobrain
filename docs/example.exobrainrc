@@ -19,10 +19,6 @@ api_secret =
 ; You can grab an auth token directly out of the API explorer.
 auth_token =
 
-[Beeminder]
-auth_token = 
-callback_port = 3000
-
 [HabitRPG]
 user_id   = 
 api_token = 
@@ -31,10 +27,6 @@ api_token =
 app_id = 
 secret = 
 access_token = 
-
-[Idonethis]
-user = 
-pass = 
 
 [Pushover]
 ; Pushover is amazing for notifications.
