@@ -101,12 +101,28 @@ has 'sub' => (
 );
 
 # import is called when we load the Exobrain class, and lets us
-# automatically set strict, warnings, and 5.10 features by default.
+# automatically set strict, warnings, 5.10 features and Method::Signatures
+# by default.
 
 sub import {
+
     strict->import();
     warnings->import();
     feature->import(':5.10');
+
+    # Method::Signatures needs a little more magic.
+
+    my $caller = caller;
+
+    ## no critic (ProhibitStringyEval)
+
+    eval qq{
+        package $caller;
+        Method::Signatures->import;
+        1;
+    } or die $@;
+
+    ## use critic
 
     return;
 }
