@@ -19,10 +19,6 @@ api_secret =
 ; You can grab an auth token directly out of the API explorer.
 auth_token =
 
-[HabitRPG]
-user_id   = 
-api_token = 
-
 [Facebook]
 app_id = 
 secret = 

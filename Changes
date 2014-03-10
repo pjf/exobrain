@@ -3,6 +3,7 @@ Revision history for Exobrain
 {{$NEXT}}
 
     * API: `use Exobrain` automatically enables Method::Signatures.
+    * DISTRO: HabitRPG is now packaged separately as Exobrain::HabitRPG
 
 1.07      2014-03-04 22:46:36PST-0800 America/Los_Angeles
 
