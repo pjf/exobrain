@@ -12,7 +12,6 @@ use Exobrain::Bus;
 use Exobrain::Message;
 use JSON::Any;
 use Config::Tiny;
-use Date::Manip::Date;
 use Try::Tiny;
 
 my $bus  = Exobrain::Bus->new( type => 'PUB' );
