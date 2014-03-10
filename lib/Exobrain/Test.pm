@@ -19,11 +19,15 @@ This module may change functionality or be removed in the future.
 
 =cut
 
-# Right now we just set a variable to look for our config files in
+# Set a variable to look for our config files in
 # the same directory as our main program.
 
 use FindBin qw($Bin);
 
 $ENV{EXOBRAIN_CONFIG} = "$Bin/.exobrainrc";
+
+# Also, go looking for extra modules there.
+
+use lib "$Bin/lib";
 
 1;

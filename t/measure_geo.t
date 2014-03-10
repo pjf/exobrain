@@ -1,8 +1,3 @@
-#!/usr/bin/perl -w
-use 5.010;
-use strict;
-use warnings;
-use autodie;
 use Exobrain;
 use Exobrain::Test;
 use Test::More;
@@ -13,7 +8,7 @@ isa_ok($exobrain,'Exobrain');
 
 # Build a sample geo message and test
 
-my $message = $exobrain->measure('Geo',
+my $message = $exobrain->measure('Geo::Test',
     source => 'Foursquare',
     user    => 'pjf',
     user_name => 'Paul Fenwick',
@@ -27,7 +22,8 @@ my $message = $exobrain->measure('Geo',
 );
 
 ok($message->DOES('Exobrain::Message'), 'Does Exobrain::Message');
-isa_ok($message,'Exobrain::Measurement::Geo');
+ok($message->DOES('Exobrain::Measurement::Geo'), 'Does Exobrain::Measurement::Geo');
+isa_ok($message,  'Exobrain::Measurement::Geo::Test');
 
 is($message->user,'pjf','user field');
 ok($message->is_me,'self field');
@@ -37,6 +33,6 @@ is($message->poi->source, 'Foursquare', 'POI source');
 
 is($message->summary, qq{Paul Fenwick is at Some place with message: "Drinking a coffee" ( via Foursquare ) [Me]}, "Summary msg");
 
-is($message->namespace, 'Measurement::Geo');
+is($message->namespace, 'Measurement::Geo::Test');
 
 done_testing;

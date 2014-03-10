@@ -5,7 +5,9 @@ Revision history for Exobrain
     * API: `use Exobrain` automatically enables Method::Signatures.
     * DISTRO: HabitRPG is now packaged separately as Exobrain::HabitRPG
     * API: Exobrain::Agent has better documentation and functionality.
+    * API: Measurement::Geo is now a role, not a class.
     * TESTING: Better testing for Exobrain::Agent.
+    * TESTING: Exobrain::Test will load classes from t/lib
 
 1.07      2014-03-04 22:46:36PST-0800 America/Los_Angeles
 
