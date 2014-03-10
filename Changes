@@ -8,6 +8,7 @@ Revision history for Exobrain
     * API: Measurement::Geo is now a role, not a class.
     * TESTING: Better testing for Exobrain::Agent.
     * TESTING: Exobrain::Test will load classes from t/lib
+    * AGENTS: Ported `bee-habit` to Exobrain::Agent::Action::SimpleBeeHabit;
 
 1.07      2014-03-04 22:46:36PST-0800 America/Los_Angeles
 
