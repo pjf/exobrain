@@ -339,6 +339,25 @@ method run(Str $class) {
     return $agent->start;
 }
 
+=method can_run
+
+    if ($exobrain->can_run('Action::Foo') { ... }
+
+Checks to see if a given agent I<could> be run. (Ie, it can be loaded, and
+all its dependencies are satisified.)
+
+=cut
+
+method can_run(Str $class) {
+    my $agent = $self->_load_component( AGENT_PREFIX . $class );
+
+    if ($agent->DOES('Exobrain::Agent::Depends')) {
+        return $agent->check_dependencies;
+    }
+
+    return 1;
+}
+
 # Loads a class, automatically adding Exobrain if
 # required. Returns the class loaded.
 

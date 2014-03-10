@@ -150,14 +150,17 @@ sub daemon {
 }
 
 sub agent {
-    my ($class) = @_;
+    my ($name, $class) = @_;
 
-    # Start is ourselves, with the start command.
-    my @start = ( __FILE__ , "run" );
+    # If our class can't be run, then don't return anything
+    if (not Exobrain->can_run($class)) { return () }
 
-    my @opts = ( common_options($class), bin => "@start $class" );
+    # Run is ourselves, with the run command.
+    my @run = ( __FILE__ , "run" );
 
-    return Ubic::Service::SimpleDaemon->new( @opts );
+    my @opts = ( common_options($class), bin => "@run $class" );
+
+    return ($name => Ubic::Service::SimpleDaemon->new( @opts ) );
 
 }
 
@@ -190,14 +193,11 @@ sub ubic_services {
         my $namespace = $class->component;
         my %services  = $class->services;
 
-        # Map each service into an agent object.
-        foreach my $key (keys %services) {
-            $services{$key} = agent( $services{$key} );
-        }
+        my %runnable_services = map { agent($_, $services{$_} ) } keys %services;
 
         # Add these to the things we'll load
         push(@component_services,
-            $namespace => Ubic::Multiservice::Simple->new(\%services)
+            $namespace => Ubic::Multiservice::Simple->new(\%runnable_services)
         );
     }
 
@@ -205,19 +205,15 @@ sub ubic_services {
 
         @component_services,
 
-        source => Ubic::Multiservice::Simple->new({
-            foursquare => daemon("foursquare"),
-        }),
-
         action => Ubic::Multiservice::Simple->new({
-            'bee-habit'  => agent('Action::SimpleBeeHabit'),
-            'bee-inbox'  => agent('Action::BeeInbox'),
-            'rtm-adder'  => daemon('rtm-adder'),
-            'sentbox-reward'  => agent('Action::SendmailXP'),
-            'geo-notify' => daemon('geo-notify'),
-            'social-notify' => agent('Action::SocialNotify'),
-            'ping'          => agent('Action::Ping'),
-            'geo-personallog' => daemon('geo-personallog'),
+            agent('bee-habit'      => 'Action::SimpleBeeHabit'),
+            agent('bee-inbox'      => 'Action::BeeInbox'),
+            agent('sentbox-reward' => 'Action::SendmailXP'),
+            agent('social-notify'  => 'Action::SocialNotify'),
+            agent('ping'           => 'Action::Ping'),
+            'rtm-adder'            => daemon('rtm-adder'),
+            'geo-notify'           => daemon('geo-notify'),
+            'geo-personallog'      => daemon('geo-personallog'),
         }),
 
         sink => Ubic::Multiservice::Simple->new({

@@ -3,8 +3,10 @@ use Moose;
 use Method::Signatures;
 
 with 'Exobrain::Agent::Run';
+with 'Exobrain::Agent::Depends';
 
 # ABSTRACT: Update HabitRPG events from Beeminder
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -27,6 +29,10 @@ goals where the resulting actions should depend upon the direction of
 goal movement on Beeminder.
 
 =cut
+
+method depends() {
+    return qw(Measurement::Beeminder Intent::HabitRPG);
+}
 
 method run() {
 
