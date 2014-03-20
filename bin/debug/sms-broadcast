@@ -1,0 +1,42 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+use Exobrain;
+use Config::Tiny;
+
+# ABSTRACT: Broadcast people in your area
+# PODNAME: sms-broadcast
+
+# XXX - Total hack
+
+my $exobrain = Exobrain->new;
+
+my ($file, $area, @message) = @ARGV;
+
+@message or die "Usage: $0 file area message";
+
+# TODO: use File::XDG or Exobrain::Config or *something* that
+# abstracts away the location of our config file.
+
+my $config = Config::Tiny->read("$ENV{HOME}/.config/exobrain/$file.ini");
+
+# TODO: Configure area, either from tags in Geo packets, or actual
+# honest geolocation logic.
+
+# TODO: Only broadcast on seeing a tag in the geo packet indicating
+#       we should!
+
+my $message = "@message";
+
+my $phones = $config->{$area} or die "Cannot find people in $area";
+
+foreach my $person (keys %$phones) {
+    my $phone = $phones->{$person};
+
+    $exobrain->intent('SMS',
+        to => $phone,
+        text => $message,
+    );
+}
