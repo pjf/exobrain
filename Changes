@@ -4,6 +4,7 @@ Revision history for Exobrain
 
     * API: `use Exobrain` automatically enables Method::Signatures.
     * DISTRO: HabitRPG is now packaged separately as Exobrain::HabitRPG
+    * DISTRO: Foursquare is now packaged separately as Exobrain::Foursquare
     * API: Exobrain::Agent has better documentation and functionality.
     * API: Measurement::Geo is now a role, not a class.
     * API: Added a `can_run` method to Exobrain
