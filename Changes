@@ -2,6 +2,8 @@ Revision history for Exobrain
 
 {{$NEXT}}
 
+1.08      2014-04-30 00:39:57+08:00 Australia/Perth
+
     * API: `use Exobrain` automatically enables Method::Signatures.
     * DISTRO: HabitRPG is now packaged separately as Exobrain::HabitRPG
     * DISTRO: Foursquare is now packaged separately as Exobrain::Foursquare
