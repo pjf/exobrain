@@ -212,9 +212,9 @@ sub ubic_services {
             agent('sentbox-reward' => 'Action::SendmailXP'),
             agent('social-notify'  => 'Action::SocialNotify'),
             agent('ping'           => 'Action::Ping'),
+            agent('geo-personallog'=> 'Action::GeoLog'),
             'rtm-adder'            => daemon('rtm-adder'),
             'geo-notify'           => daemon('geo-notify'),
-            'geo-personallog'      => daemon('geo-personallog'),
         }),
 
         sink => Ubic::Multiservice::Simple->new({

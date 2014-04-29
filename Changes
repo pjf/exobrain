@@ -12,6 +12,8 @@ Revision history for Exobrain
     * TESTING: Better testing for Exobrain::Agent.
     * TESTING: Exobrain::Test will load classes from t/lib
     * AGENTS: Ported `bee-habit` to Exobrain::Agent::Action::SimpleBeeHabit;
+    * AGENTS: Ported `geo-personallog` to Exobrain::Agent::Action::GeoLog;
+    * AGENTS: Ported `sentbox-reward` to Exobrain::Agent::Action::SentmailXP;
     * DOCS: Much documentation added.
 
 1.07      2014-03-04 22:46:36PST-0800 America/Los_Angeles
