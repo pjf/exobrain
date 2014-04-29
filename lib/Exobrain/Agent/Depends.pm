@@ -57,7 +57,7 @@ no warnings 'redefine';
 
 sub BUILD {};
 
-after BUILD => method() {
+after BUILD => method(...) {
     $self->load_dependencies;
 };
 

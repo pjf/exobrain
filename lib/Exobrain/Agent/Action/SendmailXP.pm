@@ -12,7 +12,10 @@ use constant DEBUG => 0;
 
 method depends() { qw(Intent::HabitRPG Measurement::Mailbox) }
 
-method run() {
+# WTF exobrain, why do I need to use a (...) signature here?
+# What on earth are you being passed?
+
+method run(...) {
     my $task  = $self->config->{task} or die "No HabitRPG task";
     my $cache = $self->cache;
 
