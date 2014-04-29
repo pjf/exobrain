@@ -6,6 +6,7 @@ use autodie;
 
 # PODNAME: router
 # ABSTRACT: Exobrain router. This *must* be running for exobrain to work
+# VERSION
 
 use Exobrain::Router;
 

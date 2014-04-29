@@ -3,6 +3,7 @@ use Moose::Role;
 use Method::Signatures;
 
 # ABSTRACT: Allow agents to declare run-time dependencies
+# VERSION
 
 =head1 SYNOPSIS
 

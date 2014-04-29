@@ -1,13 +1,9 @@
-#!/usr/bin/perl -w
-use 5.010;
-use strict;
-use warnings;
-use autodie;
+#!/usr/bin/perl
+use Exobrain;
 
 # PODNAME: geo-personallog
 # ABSTRACT: Log our own check-ins to a personal log (such as idonethis).
-
-use Exobrain;
+# VERSION
 
 my $exobrain = Exobrain->new;
 

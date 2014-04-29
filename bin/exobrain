@@ -13,7 +13,8 @@ use Exobrain;
 use Getopt::Std;
 
 # PODNAME: exobrain
-# ABSTRACT: UBIC service file for exobrain
+# ABSTRACT: Exobrain cmdline tool and dispatcher
+# VERSION
 
 =head1 SYNOPSIS
 
