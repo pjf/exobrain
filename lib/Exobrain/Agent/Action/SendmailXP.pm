@@ -3,11 +3,14 @@ use Moose;
 use Method::Signatures;
 
 with 'Exobrain::Agent::Run';
+with 'Exobrain::Agent::Depends';
 
 # ABSTRACT: Reward users on HabitRPG for sending email.
 # VERSION
 
 use constant DEBUG => 0;
+
+method depends() { qw(Intent::HabitRPG Measurement::Mailbox) }
 
 method run() {
     my $task  = $self->config->{task} or die "No HabitRPG task";

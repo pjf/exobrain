@@ -4,6 +4,7 @@ use Method::Signatures;
 use Try::Tiny;
 
 # ABSTRACT: Role for agents which run 'continously'
+# VERSION
 
 with 'Exobrain::Agent';
 
