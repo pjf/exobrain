@@ -372,6 +372,7 @@ method _load_component(Str $class) {
     return $class;
 }
 
+__PACKAGE__->meta->make_immutable;
 
 =for Pod::Coverage BUILD DEMOLISH CLASS_PREFIX INTENT_PREFIX MEASURE_PREFIX NOTIFY AGENT_PREFIX import
 
