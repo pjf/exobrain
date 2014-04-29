@@ -11,6 +11,7 @@ use constant DEBUG => 1;
 
 # ABSTRACT: Text people when you're in their area.
 # PODNAME: geo-sms
+# VERSION
 
 my $exobrain = Exobrain->new;
 

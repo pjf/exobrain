@@ -5,14 +5,18 @@ use warnings;
 use utf8::all;
 use autodie qw(:all);
 
-# PODNAME: inject-todo
-# ABSTRACT: Inject TODO packets directly onto the exobrain bus
-
 use Exobrain::Bus;
 use Exobrain::Message;
 use JSON::Any;
 use Config::Tiny;
 use Date::Manip::Date;
+
+# PODNAME: inject-todo
+# ABSTRACT: Inject TODO packets directly onto the exobrain bus
+# VERSION
+
+# TODO : This is using an ancient interface. Either clean it up,
+#        or retire it.
 
 my $bus  = Exobrain::Bus->new( type => 'PUB' );
 

@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 # ABSTRACT: Establish test environment for Exobrain
+# VERSION
 
 =head1 SYNOPSIS
 

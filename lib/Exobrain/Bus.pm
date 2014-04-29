@@ -1,16 +1,27 @@
 package Exobrain::Bus;
 use v5.10.0;
-use strict;
-use warnings;
+use Moose;
 
 use ZMQ;
 use ZMQ::Constants qw(ZMQ_SUB ZMQ_PUB ZMQ_SUBSCRIBE ZMQ_RCVMORE);
 
-use Moose;
 use Method::Signatures;
 
 use Exobrain::Router;
 use Exobrain::Message::Raw;
+
+# ABSTRACT: Connection to the Exobrain bus
+# VERSION
+
+=head1 DESCRIPTION
+
+Messages in Exobrain are broadcasted on a bus, the low-level access to
+which is provided by this class.
+
+You probably don't want low-level access, and should be using the
+methods in the L<Exobrain> class instead.
+
+=cut
 
 my $context  = ZMQ::Context->new;           # Context is always shared.
 my $endpoint = 'tcp://localhost:3568/';     # TODO: From config file?

@@ -7,6 +7,7 @@ use Exobrain;
 
 # PODNAME: notify
 # ABSTRACT: Send an exobrain notify intent from the cmdline
+# VERSION
 
 @ARGV or die "Usage: $0 message\n";
 

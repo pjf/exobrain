@@ -6,6 +6,16 @@ use Method::Signatures;
 use Exobrain::Types qw(SmsStr PhoneNum);
 
 # ABSTRACT: Send an SMS intent via Exobrain
+# VERSION
+
+=head1 SYNOPSIS
+
+    $exobrain->intent('SMS',
+        to   => $your_number,
+        text => 'Hello World!',
+    );
+
+=cut
 
 method summary() { return 'SMS to ' . join(" : ", $self->to, $self->text); }
 

@@ -7,6 +7,18 @@ use Carp;
 
 use Moose::Util::TypeConstraints;
 
+# ABSTRACT: Raw, low-level access to Exobrain packets
+# VERSION
+
+=head1 DESCRIPTION
+
+This class provides low level access to exobrain packets.
+You probably want to use the C<intent>, C<measure>,
+C<notify> or other methods in L<Exobrain> rather than using
+this directly.
+
+=cut
+
 my $json = JSON::Any->new;
 
 # Summary declared early, so our role can see it.

@@ -14,9 +14,13 @@ use Data::Dumper;
 
 use Exobrain::Types qw(JSON);
 
+# ABSTRACT: Top-level role for all exobrain messages
+# VERSION
+
 =head1 DESCRIPTION
 
-Top-level I<role> for all exobrain messages.
+This is the base role upon which upon which all Exobrain messages
+adhere to.
 
 =cut
 

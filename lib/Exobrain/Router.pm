@@ -7,6 +7,19 @@ use Carp qw(croak);
 use ZMQ;
 use ZMQ::Constants qw(ZMQ_SUB ZMQ_SUBSCRIBE ZMQ_PUB ZMQ_FORWARDER);
 
+# ABSTRACT: Central hub for the exobrain bus
+# VERSION
+
+=head1 DESCRIPTION
+
+This is the central hub for the Exobrain bus. You should probably be
+starting this with C<ubic start exobrain.core> rather than calling
+it directly.
+
+=cut
+
+# TODO: Don't use hard-coded sockets. Seriously. Ugh.
+
 has subscriber => (is => 'ro', default => 'tcp://127.0.0.1:3546');     # Subscribers connect here
 has publisher  => (is => 'ro', default => 'tcp://127.0.0.1:3547');     # Publishers connect here
 has server     => (is => 'ro', isa => 'Bool', default => 0);

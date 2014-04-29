@@ -5,6 +5,9 @@ use v5.10.0;
 use Moose;
 use Method::Signatures;
 
+# ABSTRACT: Signal an intent to record a personal log event
+# VERSION
+
 =head1 SYNOPSIS
 
     my $msg = $exobrain->intent( 'PersonalLog',
