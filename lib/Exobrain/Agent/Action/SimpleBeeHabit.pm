@@ -10,7 +10,7 @@ with 'Exobrain::Agent::Depends';
 
 =head1 SYNOPSIS
 
-    [Action::BeeHabit]
+    [Action::SimpleBeeHabit]
 
     ; Every time the beeminder goal on the LHS is incremented, the
     ; habit on the RPG will gain XP.
@@ -41,8 +41,8 @@ method run() {
 
     $self->exobrain->watch_loop(
         class  => 'Measurement::Beeminder',
-        filter => { $hrpg_tasks->{ $_->goal } },
-        then  => sub {
+        filter => sub { $hrpg_tasks->{ $_->goal } },
+        then   => sub {
             $self->exobrain->intent('HabitRPG',
                 task      => $hrpg_tasks->{ $_->goal },
                 direction => 'up',
