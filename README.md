@@ -96,14 +96,22 @@ Set up exobrain:
 
     $ exobrain setup
 
-You can also install exobrain extensions, and configure them as well:
+It's a good idea to run `exobrain setup` any time you upgrade your
+version of Exobrain.
+
+**Step 3: Install extensions**
+
+Exobrain provides extensions to plug into third party services. They're
+bundled separately on the CPAN. After installing each one, you'll
+wish to use the `exobrain setup` command on its short name to configure
+it. For example, to install the Twitter extensions:
 
     $ cpanm Exobrain::Twitter
     $ exobrain setup Twitter
 
 You can find [Exobrain extensions on the CPAN](https://metacpan.org/search?q=Exobrain::)
 
-**Step 3: Add configuration**
+**Step 4: Add configuration**
 
 Exobrain uses a `~/.exobrainrc` file. You can copy the `example.exobrainrc`
 file from the `docs/` directory to get started. Exobrain will also use
