@@ -72,6 +72,7 @@ The following are methods provided by the top-level Exobrain object:
 # lazy attributes, and nice sugar for doing common operations.
 
 use Exobrain::Bus;
+use Exobrain::Logger;
 use Exobrain::Config;
 use Exobrain::Message;
 use Exobrain::Message::Raw;
@@ -80,6 +81,12 @@ has 'config' => (
     is => 'ro',
     isa => 'Exobrain::Config',
     builder => '_build_config',
+);
+
+has 'log' => (
+    is => 'ro',
+    isa => 'Log::Log4perl::Logger',
+    builder => '_build_logger',
 );
 
 # Pub/Sub interfaces to our bus. These don't get generated unless
@@ -148,6 +155,8 @@ method _set_timezone($tz?) {
     return;
 }
 
+sub _build_logger { my $log = Exobrain::Logger->new;
+                    return $log->log; };
 sub _build_config { return Exobrain::Config->new; };
 sub _build_pub    { return Exobrain::Bus->new(type => 'PUB', exobrain => shift) }
 sub _build_sub    { return Exobrain::Bus->new(type => 'SUB', exobrain => shift) }
