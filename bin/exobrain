@@ -224,6 +224,7 @@ sub ubic_services {
 
         core => Ubic::Multiservice::Simple->new({
             router => daemon("router"),
+            logging => daemon("logging"),
         }),
     });
 }
