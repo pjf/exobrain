@@ -29,6 +29,8 @@ or inside your own exobrain component
 
 All standard Log4perl methods are available.
 
+To see more verbose output, change Logger.ini level to DEBUG.
+
 =cut
 
 has log => (
