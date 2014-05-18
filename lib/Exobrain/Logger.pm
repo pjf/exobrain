@@ -41,6 +41,14 @@ has log => (
 method _build_log() {
   my $config = Exobrain::Config->new;
 
+  # Tests will fail if no config exists yet.
+  if (! $config->{Logger}{level}) {
+    $config->{Logger}{level} = 'INFO';
+  }
+  if (! $config->{Logger}{file}) {
+    $config->{Logger}{file} = '/tmp/exobrain.log';
+  }
+
   # In reality this whole lot could be loaded from a log.conf, but the above may be simpler.
   my $log_conf = qq(
     log4perl.rootLogger                  = $config->{Logger}{level}, Exobrain
