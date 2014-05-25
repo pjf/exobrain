@@ -228,12 +228,14 @@ prior to sending your first message will avoid it disappearing.
 =cut
 
 method zconnect() {
+    use Time::HiRes ('sleep');
     my $connect = Exobrain::Message::Raw->new(
+        exobrain => $self,
         data => { message => 'Starting Connection...' }, 
         summary => 'Starting Connection...', 
         namespace => 'Exobrain'
     );
-    select(undef, undef, undef, 0.1); # sleep for 100ms
+    sleep(0.1);
     return $connect;
 }
 
