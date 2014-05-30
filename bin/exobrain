@@ -8,6 +8,7 @@ use autodie qw(:all);
 use Ubic::Multiservice::Simple;
 use Ubic::Service::SimpleDaemon;
 use File::Copy qw(copy);
+use File::Path qw(make_path);
 use autodie qw(copy);
 use Exobrain;
 use Getopt::Std;
@@ -91,7 +92,7 @@ elsif ($command eq 'setup') {
     }
     else {
         say "Creating $exobrain_log";
-        mkdir($exobrain_log);
+        make_path($exobrain_log);
     }
 
     my $exe     = $0;
