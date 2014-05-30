@@ -5,6 +5,7 @@ use autodie;
 use parent 'Config::Tiny';
 use Hash::Merge::Simple qw(merge);
 use File::XDG;
+use File::Path qw(make_path);
 
 # ABSTRACT: Reads exobrain config
 
@@ -95,7 +96,7 @@ sub write_config {
 
         # Make our config dir if it doesn't exist.
         if (not -e $config_dir) {
-            mkdir($config_dir)
+            make_path("$config_dir");
         }
 
         $config_file = "$config_dir/$file";
