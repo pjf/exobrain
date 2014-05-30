@@ -96,7 +96,7 @@ sub write_config {
 
         # Make our config dir if it doesn't exist.
         if (not -e $config_dir) {
-            make_path($config_dir)
+            make_path("$config_dir");
         }
 
         $config_file = "$config_dir/$file";

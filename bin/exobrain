@@ -92,7 +92,7 @@ elsif ($command eq 'setup') {
     }
     else {
         say "Creating $exobrain_log";
-        make_path($exobrain_log);
+        make_path("$exobrain_log");
     }
 
     my $exe     = $0;
