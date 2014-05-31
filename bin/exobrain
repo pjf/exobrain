@@ -134,10 +134,17 @@ elsif ($command eq "run") {
 
     Exobrain->run($class);
 }
+elsif ($command eq "version") {
+    say $Exobrain::VERSION || "development";
+}
 else {
     # Apparently ubic calls us with service names when it wants
     # to know stuff. So assume that a weird argument is ubic
-    # doing its thing
+    # doing its thing.
+
+    # TODO: This also meas we totally suck when called by the user
+    # with an incorrect argument. Is there a way to check?
+
     ubic_services();
     # die "$0: Unknown command: $command @args\n";
 }
