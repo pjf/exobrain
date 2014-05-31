@@ -1,0 +1,24 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+use autodie;
+
+# PODNAME: logging
+# ABSTRACT: Exobrain logging. Provides informational or debug logging of the exobrain bus
+# VERSION
+
+use Exobrain;
+
+my $exobrain = Exobrain->new;
+$exobrain->log->info("Starting Exobrain Bus Logger");
+
+while (1) {
+    if ($exobrain->log->is_debug()) {
+        $exobrain->log->debug($exobrain->sub->get->dump);
+    }
+    else {
+        $exobrain->log->info($exobrain->sub->get->summary);
+    }
+}
+
