@@ -38,6 +38,7 @@ has log => (
     isa => 'Log::Log4perl::Logger',
     lazy => 1,
     builder => '_build_log',
+    handles => [qw(debug info warn error fatal)],
 );
 
 method _build_log() {
