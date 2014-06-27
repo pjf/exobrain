@@ -27,7 +27,7 @@ $rtm->init;
 
 $exobrain->watch_loop(
     class  => "Measurement::Social",        # TODO: Watch 'Any' later on
-    filter => sub { grep { $_ eq 'todo' } @{$_->{tags}} },
+    filter => sub { grep { lc($_) eq 'todo' } @{$_->{tags}} },
     then   => \&add_todo,
 );
 
