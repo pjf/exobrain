@@ -4,6 +4,8 @@ Revision history for Exobrain
 
     * API: Exobrain::Agent now provides the 'cached' keyword for
       declaring persistent attributes.
+    * API: Added basic exercise measurements
+      (see Exobrain::Measurement::Exercise::Cardio)
 
 1.08      2014-04-30 00:39:57+08:00 Australia/Perth
 
