@@ -54,7 +54,6 @@ part of a specific component should override this attribute
 
 =cut
 
-
 has component => (
     is => 'ro',
     isa => 'Str',
@@ -132,6 +131,83 @@ has json => (
 method _build_json() {
     eval "use JSON::Any; 1;" or die $@;
     return JSON::Any->new;
+}
+
+=method cached
+
+    BEGIN { with 'Exobrain::Agent'; }
+
+    cached last_status => (
+        isa => 'Int',
+        default => 0,
+    );
+
+This keyword marks an attribute as I<cached>. It will persist between
+runs of the agent, and updating the attribute will update its value
+in the cache.
+
+A default I<must> be provided so the cache can be populated the first
+time. The attribute will default to 'rw'. You can override this, but
+I don't know why you would.
+
+You may have to load C<Exobrain::Agent> (or derived role) inside a
+C<BEGIN> block for this keyword to be properly available.
+
+The cache key will always be the fully qualified (class + attribute)
+name of the *derived* class, but you probably don't care about such
+internal minutiaes.
+
+NOTE: This code currently does not check the difference between attributes
+which do not exist, and those that have been cached as undef. If 'undef'
+is a valid value, then do your caching manually (or submit a patch
+for this keyword!).
+
+=cut
+
+func cached($name, %args) {
+
+    if (not exists $args{default}) {
+        require Carp;
+        Carp::croak "cached '$name' called with no 'default' attribute";
+    }
+
+    my $default = delete $args{default};
+
+    # Find the 'has' function in the caller's namespace.
+    # TODO: Merge this with identical code from Exobrain::Message
+
+    my ($uplevel) = caller();
+    my $uphas     = join('::', $uplevel, 'has');
+    my $cache_key = join('::', $uplevel, $name);
+
+    # Coderef to read the value out of the cache.
+
+    my $read_cache_sub = sub {
+        my ($self) = @_;
+
+        return $self->cache->get( $cache_key ) // $default;
+    };
+
+    # Coderef to put values back in the cache.
+
+    my $write_cache_sub = sub {
+        my ($self, $new, $old) = @_;
+
+        $self->cache->set( $cache_key, $new );
+
+        return;
+    };
+
+    no strict 'refs';   # Using a string as a subref is cool, Perl.
+
+    return $uphas->(
+        $name => (
+            is      => 'rw',
+            default => $read_cache_sub,
+            trigger => $write_cache_sub,
+            %args,
+        )
+    );
 }
 
 1;

@@ -7,9 +7,14 @@ use Moose;
 use Test::More;
 use Exobrain::Test;
 
-with 'Exobrain::Agent';
+BEGIN { with 'Exobrain::Agent'; }
 
 ::ok(1, "Can consume Exobrain::Agent");
+
+cached cached_value => (
+    isa => 'Int',
+    default => 0,
+);
 
 package main;
 
@@ -18,6 +23,17 @@ my $agent = Exobrain::Agent::Testing->new;
 isa_ok($agent->exobrain,  'Exobrain');
 isa_ok($agent->json,      'JSON::Any');
 is(    $agent->component, 'Testing');
+
+# Set our cached value on our original object,
+# and test newly minted objects pick that up.
+
+foreach my $v (0..2) {
+    $agent->cached_value($v);
+
+    my $agent2 = Exobrain::Agent::Testing->new;
+
+    is($agent2->cached_value, $v, "Cached value test");
+}
 
 TODO: {
     local $TODO = "Because this returns a sub-hash, of our config, it's not an obejct";

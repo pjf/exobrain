@@ -2,6 +2,9 @@ Revision history for Exobrain
 
 {{$NEXT}}
 
+    * API: Exobrain::Agent now provides the 'cached' keyword for
+      declaring persistent attributes.
+
 1.08      2014-04-30 00:39:57+08:00 Australia/Perth
 
     * API: `use Exobrain` automatically enables Method::Signatures.
