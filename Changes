@@ -6,6 +6,7 @@ Revision history for Exobrain
       declaring persistent attributes.
     * API: Added basic exercise measurements
       (see Exobrain::Measurement::Exercise::Cardio)
+    * Dockerfile added in development repo.
 
 1.08      2014-04-30 00:39:57+08:00 Australia/Perth
 
