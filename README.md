@@ -46,6 +46,15 @@ to send all tweets directed at him to said watch:
         },
     );
 
+# Docker support
+
+Docker support is still experimental, but the following should let you skip
+steps 1-3 of the installation instructions below. An Ubuntu host is
+assumed.
+
+    $ sudo apt-get install docker.io
+    $ sudo docker.io run -i -t pjf0/exobrain sudo -i -u exobrain
+
 # Installation
 
 **Step 1: Install exobrain**
