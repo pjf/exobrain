@@ -32,6 +32,38 @@ payload is_me    => ( isa => 'Bool' );  # Is this the current user?
 payload calories => ( isa => 'Num', required => 0 );
 payload seconds  => ( isa => 'Num', required => 0 );
 
+=method activity
+
+    my $activity = $self->activity;
+
+Returns a string with a description of the activity performed.
+
+=method is_me
+
+    if ($self->is_me) { ... }
+
+Returns true if the active user is the one performing the exercise.
+
+=method seconds
+
+    my $seconds = $self->seconds;
+
+Returns the duration in seconds of the exercise.
+
+=method calories
+
+    my $cal = $self->cal;
+
+Returns energy spent in calories.
+
+=method kj
+
+    my $kj = $self->kj;
+
+Returns energy spent in kilojoules.
+
+=cut
+
 method kj() {
     my $cal = $self->calories;
 
@@ -40,4 +72,4 @@ method kj() {
 
 1;
 
-=for Pod::Coverage
+=for Pod::Coverage summary
