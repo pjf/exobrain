@@ -6,7 +6,7 @@ use autodie;
 use POSIX qw(strftime);
 
 use Exobrain;
-use WebService::RTMAgent;
+use WebService::RTMAgent 0.600;
 
 # PODNAME: rtm-adder
 # ABSTRACT: Add TODO items to RememberTheMilk from twitter
