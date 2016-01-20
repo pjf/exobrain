@@ -224,7 +224,7 @@ method watch_loop(
         priority => -1,
     );
 
-Takes a mandatory message, and any arguments that can be passeed to
+Takes a mandatory message, and any arguments that can be passed to
 L<Exobrain::Intent::Notify>, and notifies the user.  At the time of
 writing, notifications are done by the pushover end-point by default.
 
