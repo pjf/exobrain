@@ -58,10 +58,11 @@ subtype SmsStr,
     where { length($_) <= 160 }
 ;
 
-# TODO: Properly define phone numbers
+# Phone number type. Consists of only digits
+#   Example: 18005555555 or 1234567
 subtype PhoneNum,
     as Str,
-    where { 1 },
+    where { $_ =~ /\d+/ },
 ;
 
 subtype PosNum,
