@@ -97,6 +97,9 @@ elsif ($command eq 'setup') {
 
     my $exe     = $0;
     my $service = "$ubic/service/";
+
+    use Exobrain::Logger;
+    Exobrain::Logger->new->setup;
     
     say "Copying $exe to $service";
     copy($0, $service);
@@ -232,6 +235,7 @@ sub ubic_services {
 
         core => Ubic::Multiservice::Simple->new({
             router => daemon("router"),
+            logging => daemon("logging"),
         }),
     });
 }
