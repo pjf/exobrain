@@ -48,6 +48,16 @@ sub BUILD {
     elsif ($type eq 'PUB') {
         my $socket = $context->socket(ZMQ_PUB);
         $socket->connect($self->router->publisher);
+        
+        # Unfortunately ZMQ in some scenarios will try to send
+        # data to a socket that isn't ready. ZMQ_EVENTS looked
+        # interesting however seems to respond the same
+        # regardless of it being ready. This is quite brute force
+        # but solves it. We could make this configurable and
+        # possibly utilise Time::HiRes to tune it to be faster. 
+        # 2014-09-23 - Leon Wright < leon@cpan.org >
+        sleep 1;
+
         $self->_socket($socket);
     }
     else {
