@@ -89,7 +89,7 @@ sub write_config {
     my $config_file;
 
     if ($ENV{EXOBRAIN_CONFIG}) {
-        $config_file = "ENV{EXOBRAIN_CONFIG}/$file";
+        $config_file = "$ENV{EXOBRAIN_CONFIG}/$file";
     }
     else {
         my $config_dir = File::XDG->new(name => 'exobrain')->config_home;
