@@ -1,5 +1,8 @@
 language: perl
 perl:
+    - "5.24"
+    - "5.22"
+    - "5.20"
     - "5.18"
     - "5.16"
     - "5.14"
@@ -33,6 +36,12 @@ install:
     # See miyagawa/cpanminus#291 for details
 
     - cpanm --notest ExtUtils::MakeMaker
+
+    # Current versions of Dist::Zilla need Perl 5.016 or newer
+    # but for this distribution travis Dist::Zilla works but 
+    # needs Test::TCP installed on Perls 5.014 or older
+
+    - cpanm --notest Test::TCP
 
     - dzil authordeps         | cpanm --notest --skip-satisfied
     - dzil listdeps --author  | cpanm --notest --skip-satisfied
