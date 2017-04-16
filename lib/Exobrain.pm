@@ -218,6 +218,25 @@ method watch_loop(
     }
 }
 
+=method zconnect
+
+    $exobrain->zconnect();
+
+ZeroMQ takes some time to setup the initial connection. Calling connect
+prior to sending your first message will avoid it disappearing.
+
+=cut
+
+method zconnect() {
+    my $connect = Exobrain::Message::Raw->new(
+        data => { message => 'Starting Connection...' }, 
+        summary => 'Starting Connection...', 
+        namespace => 'Exobrain'
+    );
+    select(undef, undef, undef, 0.1); # sleep for 100ms
+    return $connect;
+}
+
 =method notify
 
     $exobrain->notify($msg
